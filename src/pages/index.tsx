@@ -1,7 +1,26 @@
-import type { NextPage } from "next";
+import { useState, useEffect } from "react";
+import { supabase } from "../utils/supabaseClient";
+import Account from "../components/Account";
+import Login from "../components/Login";
 
-const Home: NextPage = () => {
-  return <h1 className="text-3xl font-bold underline">Hello world!</h1>;
-};
+export default function Home() {
+  const [session, setSession] = useState(null);
 
-export default Home;
+  useEffect(() => {
+    setSession(supabase.auth.session());
+
+    supabase.auth.onAuthStateChange((_event, session) => {
+      setSession(session);
+    });
+  }, []);
+
+  return (
+    <div className="container" style={{ padding: "50px 0 100px 0" }}>
+      {!session ? (
+        <Login />
+      ) : (
+        <Account key={session.user.id} session={session} />
+      )}
+    </div>
+  );
+}
