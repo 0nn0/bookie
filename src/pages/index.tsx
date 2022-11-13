@@ -19,7 +19,9 @@ export default function Home() {
       {!session ? (
         <Login />
       ) : (
-        <Account key={session.user.id} session={session} />
+        <>
+          <Account key={session.user.id} session={session} />
+        </>
       )}
     </div>
   );
