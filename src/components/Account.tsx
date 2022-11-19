@@ -97,15 +97,6 @@ export default function Account({ session }) {
           {loading ? "Loading ..." : "Update"}
         </button>
       </div>
-
-      <div>
-        <button
-          className="button block"
-          onClick={() => supabase.auth.signOut()}
-        >
-          Sign Out
-        </button>
-      </div>
     </div>
   );
 }

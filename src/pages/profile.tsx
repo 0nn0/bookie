@@ -1,16 +1,21 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
 import { useSupabaseClient } from "@supabase/auth-helpers-react";
 import Account from "../components/Account";
+import Header from "../components/Header";
+import Layout from "../components/Layout";
+import Main from "../components/Main";
+import { NextPageWithLayout } from "./_app";
 
-export default function AccountPage({ user, initialSession }) {
+const AccountPage: NextPageWithLayout = ({ user, initialSession }) => {
   console.log({ user });
   const supabase = useSupabaseClient();
   return (
-    <div>
+    <Layout>
+      <Header />
       <Account session={initialSession} />
-    </div>
+    </Layout>
   );
-}
+};
 
 export const getServerSideProps = async (ctx) => {
   console.log("getServerSideProps", getServerSideProps);
@@ -36,3 +41,14 @@ export const getServerSideProps = async (ctx) => {
     },
   };
 };
+
+AccountPage.getLayout = function getLayout(page: React.ReactElement) {
+  return (
+    <Layout>
+      <Header />
+      <Main>{page}</Main>
+    </Layout>
+  );
+};
+
+export default AccountPage;
