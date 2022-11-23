@@ -1,11 +1,11 @@
 import { createServerSupabaseClient } from "@supabase/auth-helpers-nextjs";
-import type { NextPage } from "next";
+import type { GetServerSideProps, NextPage } from "next";
 
 const Logout: NextPage = () => {
   return <h1 className="text-3xl font-bold underline">Loading</h1>;
 };
 
-export const getServerSideProps = async (ctx) => {
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx);
 
   const { error } = await supabase.auth.signOut();

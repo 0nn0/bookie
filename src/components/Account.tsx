@@ -1,7 +1,15 @@
 import { useState, useEffect } from "react";
-import { useUser, useSupabaseClient } from "@supabase/auth-helpers-react";
+import {
+  useUser,
+  useSupabaseClient,
+  Session,
+} from "@supabase/auth-helpers-react";
 
-export default function Account({ session }) {
+interface Props {
+  session: Session;
+}
+
+const Account: React.FC<Props> = ({ session }) => {
   const supabase = useSupabaseClient();
   const user = useUser();
   const [loading, setLoading] = useState(true);
@@ -14,6 +22,10 @@ export default function Account({ session }) {
   }, [session]);
 
   async function getProfile() {
+    if (user === null) {
+      throw new Error("User is null");
+    }
+
     try {
       setLoading(true);
 
@@ -41,6 +53,10 @@ export default function Account({ session }) {
   }
 
   async function updateProfile({ username, website, avatar_url }) {
+    if (user === null) {
+      throw new Error("User is null");
+    }
+
     try {
       setLoading(true);
 
@@ -99,4 +115,6 @@ export default function Account({ session }) {
       </div>
     </div>
   );
-}
+};
+
+export default Account;
