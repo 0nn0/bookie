@@ -1,4 +1,5 @@
 import React from "react";
+import Container from "./Container";
 
 interface Props {
   children: React.ReactNode;
@@ -7,7 +8,7 @@ interface Props {
 const Main: React.FC<Props> = ({ children }) => {
   return (
     <main>
-      <div className="mx-auto max-w-7xl py-6 sm:px-6 lg:px-8">{children}</div>
+      <Container>{children}</Container>
     </main>
   );
 };
