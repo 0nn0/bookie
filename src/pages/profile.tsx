@@ -18,8 +18,20 @@ const AccountPage: NextPage<Props> = ({ user, initialSession }) => {
 
   return (
     <Layout>
-      <Header />
-      <Account session={initialSession} />
+      <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+        <div className="mx-auto max-w-3xl">
+          <div className="overflow-hidden rounded-lg bg-white shadow">
+            <div className="px-4 py-5 sm:p-6">
+              <header>
+                <h1 className="mb-4 text-3xl font-bold leading-tight tracking-tight text-gray-900">
+                  Account
+                </h1>
+              </header>
+              <Account session={initialSession} />
+            </div>
+          </div>
+        </div>
+      </div>
     </Layout>
   );
 };

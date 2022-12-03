@@ -6,6 +6,7 @@ interface Props extends React.ComponentPropsWithoutRef<"input"> {
   label: string;
   id: string;
   register: any;
+  type?: string;
   errors: any;
 }
 
@@ -14,9 +15,9 @@ const FormInput: React.FC<Props> = ({
   id,
   register,
   errors,
+  type = "text",
   ...rest
 }) => {
-  console.log({ errors });
   return (
     <div>
       <FormLabel id={id}>{label}</FormLabel>
@@ -24,6 +25,7 @@ const FormInput: React.FC<Props> = ({
         <input
           id={id}
           name={id}
+          type={type}
           className="block w-full rounded-md border-gray-300 shadow-sm focus:border-indigo-500 focus:ring-indigo-500 disabled:cursor-not-allowed disabled:border-gray-200 disabled:bg-gray-50 disabled:text-gray-500 sm:text-sm"
           {...rest}
           {...register(id)}
