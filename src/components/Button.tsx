@@ -1,16 +1,46 @@
 import React from "react";
+import { cva } from "class-variance-authority";
+import type { VariantProps } from "class-variance-authority";
 
-interface Props extends React.ComponentPropsWithoutRef<"button"> {
+const buttonStyles = cva(
+  [
+    "flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-400",
+  ],
+  {
+    variants: {
+      intent: {
+        primary: ["bg-indigo-600"],
+        secondary: ["bg-gray-600"],
+        error: ["bg-red-600"],
+      },
+      fullWidth: {
+        true: ["w-full"],
+      },
+    },
+    defaultVariants: {
+      intent: "primary",
+    },
+  }
+);
+
+// export type ButtonProps = VariantProps<typeof button>;
+
+interface Props
+  extends React.ComponentPropsWithoutRef<"button">,
+    VariantProps<typeof buttonStyles> {
   children: React.ReactNode;
   loading: boolean;
 }
 
-const Button: React.FC<Props> = ({ children, loading, ...rest }) => {
+const Button: React.FC<Props> = ({
+  intent,
+  fullWidth,
+  children,
+  loading,
+  ...rest
+}) => {
   return (
-    <button
-      {...rest}
-      className="flex w-full justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-400"
-    >
+    <button {...rest} className={buttonStyles({ intent, fullWidth })}>
       {loading && (
         <svg
           className="mr-3 h-5 w-5 animate-spin text-white"

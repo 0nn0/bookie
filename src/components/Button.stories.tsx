@@ -18,6 +18,12 @@ const Template: ComponentStory<typeof Button> = (args) => <Button {...args} />;
 export const Default = Template.bind({});
 // // More on args: https://storybook.js.org/docs/react/writing-stories/args
 Default.args = {
-  loading: true,
-  children: "Button",
+  loading: false,
+  children: "Submit",
+};
+
+export const Disabled = Template.bind({});
+Disabled.args = {
+  disabled: true,
+  children: "Submit",
 };

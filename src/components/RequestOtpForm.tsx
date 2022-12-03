@@ -55,7 +55,12 @@ const RequestOtpForm: React.FC<Props> = ({ onSubmitSuccess }) => {
       </div>
 
       <div>
-        <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          loading={isSubmitting}
+          fullWidth
+        >
           Continue with email
         </Button>
       </div>

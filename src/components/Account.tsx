@@ -133,7 +133,12 @@ const Account: React.FC<Props> = ({ session }) => {
         </div>
 
         <div>
-          <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+          <Button
+            type="submit"
+            disabled={isSubmitting}
+            loading={isSubmitting}
+            fullWidth
+          >
             {isSubmitting ? "Updating ..." : "Update"}
           </Button>
         </div>

@@ -84,7 +84,12 @@ const VerifyOtpForm: React.FC<Props> = ({ email }) => {
       </div>
 
       <div>
-        <Button type="submit" disabled={isSubmitting} loading={isSubmitting}>
+        <Button
+          type="submit"
+          disabled={isSubmitting}
+          loading={isSubmitting}
+          fullWidth
+        >
           Continue with login code
         </Button>
       </div>
