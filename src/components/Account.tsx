@@ -1,28 +1,29 @@
-import { useState, useEffect } from "react";
+import { zodResolver } from '@hookform/resolvers/zod';
 import {
-  useUser,
-  useSupabaseClient,
   Session,
-} from "@supabase/auth-helpers-react";
-import { useForm } from "react-hook-form";
-import { z } from "zod";
-import { zodResolver } from "@hookform/resolvers/zod";
-import FormInput from "./FormInput";
-import Button from "./Button";
+  useSupabaseClient,
+  useUser,
+} from '@supabase/auth-helpers-react';
+import { useEffect, useState } from 'react';
+import { useForm } from 'react-hook-form';
+import { z } from 'zod';
+
+import DeleteAccountButton from './DeleteAccountButton';
+import Button from './ui/Button';
+import FormInput from './ui/FormInput';
 
 interface Props {
   session: Session;
 }
 
 const Account: React.FC<Props> = ({ session }) => {
-  console.log("Account");
   const supabase = useSupabaseClient();
   const user = useUser();
   const [loading, setLoading] = useState(true);
 
   const schema = z.object({
-    username: z.string().min(3, "Username must be at least 3 characters"),
-    website: z.string({ invalid_type_error: "Website can not be empty" }),
+    firstName: z.string().min(2, 'First name must be at least 2 characters'),
+    lastName: z.string().min(2, 'Last name must be at least 2 characters'),
   });
 
   type FormSchema = z.infer<typeof schema>;
@@ -42,16 +43,16 @@ const Account: React.FC<Props> = ({ session }) => {
 
   async function getProfile() {
     if (user === null) {
-      throw new Error("User is null");
+      throw new Error('User is null');
     }
 
     try {
       setLoading(true);
 
       let { data, error, status } = await supabase
-        .from("profiles")
-        .select(`username, website, avatar_url`)
-        .eq("id", user.id)
+        .from('profiles')
+        .select(`first_name, last_name`)
+        .eq('id', user.id)
         .single();
 
       if (error && status !== 406) {
@@ -60,12 +61,12 @@ const Account: React.FC<Props> = ({ session }) => {
 
       if (data) {
         reset({
-          username: data.username,
-          website: data.website,
+          firstName: data.first_name,
+          lastName: data.last_name,
         });
       }
     } catch (error) {
-      alert("Error loading user data!");
+      alert('Error loading user data!');
       console.log(error);
     } finally {
       setLoading(false);
@@ -73,12 +74,12 @@ const Account: React.FC<Props> = ({ session }) => {
   }
 
   const submit = async (data: FormSchema) => {
-    console.log("onSubmit", data);
+    console.log('onSubmit', data);
 
-    const { username, website } = data;
+    const { firstName, lastName } = data;
 
     if (user === null) {
-      throw new Error("User is null");
+      throw new Error('User is null');
     }
 
     try {
@@ -86,16 +87,16 @@ const Account: React.FC<Props> = ({ session }) => {
 
       const updates = {
         id: user.id,
-        username,
-        website,
+        first_name: firstName,
+        last_name: lastName,
         updated_at: new Date().toISOString(),
       };
 
-      let { error } = await supabase.from("profiles").upsert(updates);
+      let { error } = await supabase.from('profiles').upsert(updates);
       if (error) throw error;
-      alert("Profile updated!");
+      alert('Profile updated!');
     } catch (error) {
-      alert("Error updating the data!");
+      alert('Error updating the data!');
       console.log(error);
     } finally {
       setLoading(false);
@@ -103,47 +104,56 @@ const Account: React.FC<Props> = ({ session }) => {
   };
 
   return (
-    <form onSubmit={handleSubmit(submit)}>
-      <div className="grid grid-cols-1 gap-y-6">
-        <div>
-          <FormInput
-            id="email"
-            label="Email address"
-            value={session.user.email}
-            register={register}
-            errors={errors}
-            disabled
-          />
+    <>
+      <form onSubmit={handleSubmit(submit)}>
+        <div className="grid grid-cols-1 gap-y-6">
+          <div>
+            <FormInput
+              id="email"
+              label="Email address"
+              value={session.user.email}
+              register={register}
+              errors={errors}
+              disabled
+            />
+          </div>
+          <div>
+            <FormInput
+              id="firstName"
+              label="First name"
+              register={register}
+              errors={errors}
+              autoComplete="given-name"
+            />
+          </div>
+          <div>
+            <FormInput
+              id="lastName"
+              label="Last name"
+              register={register}
+              errors={errors}
+              autoComplete="family-name"
+            />
+          </div>
+          <br />
+          <div>
+            <Button
+              type="submit"
+              disabled={isSubmitting}
+              loading={isSubmitting}
+              fullWidth
+            >
+              {isSubmitting ? 'Updating ...' : 'Update'}
+            </Button>
+          </div>
+          <br />
+          <br />
+          <br />
         </div>
-        <div>
-          <FormInput
-            id="username"
-            label="Username"
-            register={register}
-            errors={errors}
-          />
-        </div>
-        <div>
-          <FormInput
-            id="website"
-            label="Website"
-            register={register}
-            errors={errors}
-          />
-        </div>
+      </form>
 
-        <div>
-          <Button
-            type="submit"
-            disabled={isSubmitting}
-            loading={isSubmitting}
-            fullWidth
-          >
-            {isSubmitting ? "Updating ..." : "Update"}
-          </Button>
-        </div>
-      </div>
-    </form>
+      <DeleteAccountButton />
+    </>
   );
 };
 

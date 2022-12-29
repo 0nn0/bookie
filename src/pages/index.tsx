@@ -1,22 +1,36 @@
-import { useSession } from "@supabase/auth-helpers-react";
-import Container from "../components/Container";
-import Layout from "../components/Layout";
-import Login from "../components/Login";
+import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import { GetServerSideProps } from 'next';
+
+import Layout from '@/components/Layout';
+import Overview from '@/components/Overview';
 
 export default function Home() {
-  const session = useSession();
-
   return (
-    <>
-      {!session ? (
-        <Login />
-      ) : (
-        <>
-          <Layout>
-            <Container>Home</Container>
-          </Layout>
-        </>
-      )}
-    </>
+    <Layout title="Home">
+      <Overview />
+    </Layout>
   );
 }
+
+export const getServerSideProps: GetServerSideProps = async (ctx) => {
+  const supabase = createServerSupabaseClient(ctx);
+
+  const {
+    data: { session },
+  } = await supabase.auth.getSession();
+
+  if (!session)
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
+
+  return {
+    props: {
+      initialSession: session,
+      user: session.user,
+    },
+  };
+};

@@ -1,19 +1,18 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import React, { useState } from 'react';
+import { useRouter } from 'next/router';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import Button from './ui/Button';
 import FormInput from './ui/FormInput';
 
-interface Props {
-  onSubmitSuccess: (email: string) => void;
-  isSignUp: boolean;
-}
+interface Props {}
 
-const RequestOtpForm: React.FC<Props> = ({ onSubmitSuccess, isSignUp }) => {
+const SignUpForm: React.FC<Props> = () => {
   const supabase = useSupabaseClient();
+  const router = useRouter();
 
   const schema = z.object({
     email: z.string().email('Please enter a valid email address'),
@@ -29,38 +28,30 @@ const RequestOtpForm: React.FC<Props> = ({ onSubmitSuccess, isSignUp }) => {
     resolver: zodResolver(schema),
   });
 
-  const onSubmit = async (formData: FormSchema) => {
+  const submit = async (formData: FormSchema) => {
     try {
-      const { data, error } = await supabase.auth.signInWithOtp({
+      const { data, error } = await supabase.auth.signUp({
         email: formData.email,
-        options: {
-          emailRedirectTo: isSignUp ? 'http://localhost:3000/login' : undefined,
-          shouldCreateUser: isSignUp,
-        },
       });
-      if (error) {
-        throw error;
-      }
-      console.log({ data });
 
-      onSubmitSuccess(formData.email);
-    } catch (error: any) {
-      console.log({ error });
-      if (error.status === 400) {
-        onSubmitSuccess(formData.email);
-      } else {
-        console.log({ error });
+      if (error) {
+        console.log({ data, error });
       }
+
+      router.push('/');
+    } catch (error: any) {
+      alert(error.error_description || error.message);
     }
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+    <form className="space-y-6" onSubmit={handleSubmit(submit)}>
       <div>
         <FormInput
           label="Email address"
           id="email"
           type="email"
+          disabled
           register={register}
           errors={errors}
         />
@@ -73,11 +64,16 @@ const RequestOtpForm: React.FC<Props> = ({ onSubmitSuccess, isSignUp }) => {
           loading={isSubmitting}
           fullWidth
         >
-          Continue with email
+          Create account
         </Button>
       </div>
+      {/* <div>
+        {errorMessage && (
+          <div className="text-sm text-red-500">{errorMessage}</div>
+        )}
+      </div> */}
     </form>
   );
 };
 
-export default RequestOtpForm;
+export default SignUpForm;

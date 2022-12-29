@@ -1,8 +1,9 @@
-import React from "react";
-import FormErrorMessage from "./FormErrorMessage";
-import FormLabel from "./FormLabel";
+import React from 'react';
 
-interface Props extends React.ComponentPropsWithoutRef<"input"> {
+import FormErrorMessage from './FormErrorMessage';
+import FormLabel from './FormLabel';
+
+interface Props extends React.ComponentPropsWithoutRef<'input'> {
   label: string;
   id: string;
   register: any;
@@ -15,7 +16,7 @@ const FormInput: React.FC<Props> = ({
   id,
   register,
   errors,
-  type = "text",
+  type = 'text',
   ...rest
 }) => {
   return (

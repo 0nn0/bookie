@@ -1,23 +1,24 @@
 import {
-  createServerSupabaseClient,
   Session,
   User,
-} from "@supabase/auth-helpers-nextjs";
-import { GetServerSideProps, NextPage } from "next";
-import Account from "../components/Account";
-import Header from "../components/Header";
-import Layout from "../components/Layout";
+  createServerSupabaseClient,
+} from '@supabase/auth-helpers-nextjs';
+import { GetServerSideProps, NextPage } from 'next';
+
+import Account from '@/components/Account';
+
+import Layout from '../components/Layout';
 
 interface Props {
   user: User;
   initialSession: Session;
 }
 
-const AccountPage: NextPage<Props> = ({ user, initialSession }) => {
+const Profile: NextPage<Props> = ({ user, initialSession }) => {
   console.log({ user });
 
   return (
-    <Layout>
+    <Layout title="Profile">
       <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
         <div className="mx-auto max-w-3xl">
           <div className="overflow-hidden rounded-lg bg-white shadow">
@@ -36,11 +37,11 @@ const AccountPage: NextPage<Props> = ({ user, initialSession }) => {
   );
 };
 
+export default Profile;
+
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  console.log("getServerSideProps", getServerSideProps);
-  // Create authenticated Supabase Client
   const supabase = createServerSupabaseClient(ctx);
-  // Check if we have a session
+
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -48,7 +49,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (!session)
     return {
       redirect: {
-        destination: "/",
+        destination: '/login',
         permanent: false,
       },
     };
@@ -60,5 +61,3 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     },
   };
 };
-
-export default AccountPage;
