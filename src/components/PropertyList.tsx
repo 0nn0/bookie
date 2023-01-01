@@ -3,6 +3,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import React from 'react';
 
+import type { Database } from '@/lib/database.types';
+
 const DeleteButton: React.FC<{
   children: React.ReactNode;
   propertyId: string;
@@ -20,9 +22,7 @@ const DeleteButton: React.FC<{
         .select()
         .eq('property_id', propertyId)
         .eq('profile_id', user.id)
-        .eq('role', 'owner');
-
-      console.log({ data });
+        .eq('role', 'OWNER');
 
       if (data && data.length > 0) {
         // delete all guests_owners records for this property
@@ -68,7 +68,29 @@ const DeleteButton: React.FC<{
   );
 };
 
-const PropertyList = ({ data = [] }) => {
+const PropertyList = ({
+  data,
+}: {
+  data: {
+    id: string;
+    role: string;
+    properties:
+      | {
+          id: string;
+          name: string;
+        }
+      | { id: string; name: string }[]
+      | null;
+    profiles:
+      | {
+          email: string;
+        }
+      | {
+          email: string;
+        }[]
+      | null;
+  }[];
+}) => {
   if (data.length === 0) {
     return <div>No properties listed</div>;
   }
@@ -85,21 +107,29 @@ const PropertyList = ({ data = [] }) => {
       <tbody>
         {data.map((item) => {
           const { id, role, properties } = item;
-          return (
-            <tr key={id}>
-              <td>
-                <Link href={`/properties/${properties.id}`}>
-                  <a className="text-blue-600">{properties.name}</a>
-                </Link>
-              </td>
-              <td>{role}</td>
-              <td>
-                {role === 'owner' && (
-                  <DeleteButton propertyId={properties.id}>Delete</DeleteButton>
-                )}
-              </td>
-            </tr>
-          );
+          if (
+            properties &&
+            typeof properties === 'object' &&
+            'id' in properties
+          ) {
+            return (
+              <tr key={id}>
+                <td>
+                  <Link href={`/properties/${properties.id}`}>
+                    <a className="text-blue-600">{properties.name}</a>
+                  </Link>
+                </td>
+                <td>{role}</td>
+                <td>
+                  {role === 'OWNER' && (
+                    <DeleteButton propertyId={properties.id}>
+                      Delete
+                    </DeleteButton>
+                  )}
+                </td>
+              </tr>
+            );
+          }
         })}
       </tbody>
     </table>

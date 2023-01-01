@@ -1,6 +1,8 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 
+import { Database } from '@/lib/database.types';
+
 interface Props {
   propertyId: string;
 }
@@ -10,8 +12,9 @@ const DeleteButton: React.FC<{
   propertyId: string;
   guestId: string;
 }> = ({ children, propertyId, guestId }) => {
-  const supabase = useSupabaseClient();
+  const supabase = useSupabaseClient<Database>();
   const queryClient = useQueryClient();
+
   const mutation = useMutation({
     mutationFn: async (propertyId: string) => {
       // delete guest
@@ -47,7 +50,6 @@ const GuestList: React.FC<Props> = ({ propertyId }) => {
   const supabase = useSupabaseClient();
 
   const fetchGuests = async () => {
-    console.log({ propertyId });
     const { data, error } = await supabase
       .from('guests_owners')
       .select('id, role, profiles(id, email, last_sign_in_at)')
@@ -65,12 +67,26 @@ const GuestList: React.FC<Props> = ({ propertyId }) => {
     queryFn: fetchGuests,
   });
 
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
+
+  if (error instanceof Error) {
+    return <p>Error: {error.message}</p>;
+  }
+
   // exclude yourself from the list
   const filteredGuests =
-    (data && data.filter((guest) => guest.profiles.id !== user.id)) || [];
+    data?.filter((guest) => {
+      return (
+        guest.profiles &&
+        typeof guest.profiles === 'object' &&
+        guest.profiles.id !== user?.id
+      );
+    }) || [];
 
   if (filteredGuests.length === 0) {
-    return <p>No guests have been invite yet</p>;
+    return <p>No guests have been invited yet</p>;
   }
 
   return (

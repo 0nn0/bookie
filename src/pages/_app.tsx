@@ -5,12 +5,14 @@ import { ReactQueryDevtools } from '@tanstack/react-query-devtools';
 import type { AppProps } from 'next/app';
 import { useState } from 'react';
 
+import { Database } from '@/lib/database.types';
+
 import '../styles/globals.css';
 
 const queryClient = new QueryClient();
 
 function MyApp({ Component, pageProps }: AppProps) {
-  const [supabase] = useState(() => createBrowserSupabaseClient());
+  const [supabase] = useState(() => createBrowserSupabaseClient<Database>());
 
   return (
     <SessionContextProvider

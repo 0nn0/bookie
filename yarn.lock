@@ -2519,17 +2519,17 @@
   dependencies:
     "cross-fetch" "^3.1.5"
 
-"@supabase/gotrue-js@^2.3.0":
-  "integrity" "sha512-e50w8LkfbxtI2SJxUbuQNM7pN+Yu3HYkvCLsidwBgivTdcoFOkhFodwLvWSVdeaxY1mH6Gm66RiKeUMn1+BAow=="
-  "resolved" "https://registry.npmjs.org/@supabase/gotrue-js/-/gotrue-js-2.3.0.tgz"
-  "version" "2.3.0"
+"@supabase/gotrue-js@^2.6.1":
+  "integrity" "sha512-ez40a1TORJIlF6xlA8oALx8W8vneyInz77+Hmlt2qJvKGF4LhhbBN/YI7FYmxJ8KMUaDZeWJzUwTNNOIQhE6Vg=="
+  "resolved" "https://registry.npmjs.org/@supabase/gotrue-js/-/gotrue-js-2.6.1.tgz"
+  "version" "2.6.1"
   dependencies:
     "cross-fetch" "^3.1.5"
 
-"@supabase/postgrest-js@^1.1.0":
-  "integrity" "sha512-qkY8TqIu5sJuae8gjeDPjEqPrefzcTraW9PNSVJQHq4TEv98ZmwaXGwBGz0bVL63bqrGA5hqREbQHkANUTXrvA=="
-  "resolved" "https://registry.npmjs.org/@supabase/postgrest-js/-/postgrest-js-1.1.0.tgz"
-  "version" "1.1.0"
+"@supabase/postgrest-js@^1.1.1":
+  "integrity" "sha512-jhdBah1JIxkZUp+5QH5JS7Uq9teGwh0Bs3FzbhnVlH619FSUFquTpHuNDxLsJmqEe8r3Wcnw19Dz0t3wEpkfug=="
+  "resolved" "https://registry.npmjs.org/@supabase/postgrest-js/-/postgrest-js-1.1.1.tgz"
+  "version" "1.1.1"
   dependencies:
     "cross-fetch" "^3.1.5"
 
@@ -2541,23 +2541,23 @@
     "@types/phoenix" "^1.5.4"
     "websocket" "^1.0.34"
 
-"@supabase/storage-js@^2.0.0":
-  "integrity" "sha512-7kXThdRt/xqnOOvZZxBqNkeX1CFNUWc0hYBJtNN/Uvt8ok9hD14foYmroWrHn046wEYFqUrB9U35JYsfTrvltA=="
-  "resolved" "https://registry.npmjs.org/@supabase/storage-js/-/storage-js-2.0.0.tgz"
-  "version" "2.0.0"
+"@supabase/storage-js@^2.1.0":
+  "integrity" "sha512-bRMLWCbkkx84WDAtHAAMN7FAWuayrGZtTHj/WMUK6PsAWuonovvEa5s34a5iux61qJSn+ls3tFkyQgqxunl5ww=="
+  "resolved" "https://registry.npmjs.org/@supabase/storage-js/-/storage-js-2.1.0.tgz"
+  "version" "2.1.0"
   dependencies:
     "cross-fetch" "^3.1.5"
 
-"@supabase/supabase-js@^2.0.4", "@supabase/supabase-js@^2.1.0":
-  "integrity" "sha512-hODrAUDSC6RV6EhwuSMyhaQCF32gij0EBTceuDR+8suJsg7XcyUG0fYgeYecWIvt0nz61xAMY6E+Ywb0tJaAng=="
-  "resolved" "https://registry.npmjs.org/@supabase/supabase-js/-/supabase-js-2.1.0.tgz"
-  "version" "2.1.0"
+"@supabase/supabase-js@^2.0.4", "@supabase/supabase-js@^2.2.2":
+  "integrity" "sha512-xwuaSYghC5GkV/Pj4lzXbC8RnFxpPh5FO6nVMcbQbpGJDduiMyr2PCq3+hinWKmsFBBXvq+UioOZQIWUzVRoYg=="
+  "resolved" "https://registry.npmjs.org/@supabase/supabase-js/-/supabase-js-2.2.2.tgz"
+  "version" "2.2.2"
   dependencies:
     "@supabase/functions-js" "^2.0.0"
-    "@supabase/gotrue-js" "^2.3.0"
-    "@supabase/postgrest-js" "^1.1.0"
+    "@supabase/gotrue-js" "^2.6.1"
+    "@supabase/postgrest-js" "^1.1.1"
     "@supabase/realtime-js" "^2.1.0"
-    "@supabase/storage-js" "^2.0.0"
+    "@supabase/storage-js" "^2.1.0"
     "cross-fetch" "^3.1.5"
 
 "@swc/helpers@0.4.3":
@@ -2762,7 +2762,7 @@
     "@types/node" "*"
     "form-data" "^3.0.0"
 
-"@types/node@*", "@types/node@18.6.2":
+"@types/node@*", "@types/node@^18.6.2":
   "integrity" "sha512-KcfkBq9H4PI6Vpu5B/KoPeuVDAbmi+2mDBqGPGUgoL7yXQtcWGu2vJWmmRkneWK3Rh0nIAX192Aa87AqKHYChQ=="
   "resolved" "https://registry.npmjs.org/@types/node/-/node-18.6.2.tgz"
   "version" "18.6.2"

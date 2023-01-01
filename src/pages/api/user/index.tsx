@@ -33,7 +33,7 @@ export default async function handler(
     const ownedPropertyIds =
       userData &&
       userData
-        .filter((item) => item.role === 'owner')
+        .filter((item) => item.role === 'OWNER')
         .map((item) => item.property_id);
 
     // 3. delete all guests/owners for any property that they own
@@ -55,6 +55,7 @@ export default async function handler(
     // 5. delete properties for which they are the owner
     if (ownedPropertyIds) {
       for (const propertyId of ownedPropertyIds) {
+        console.log('delete property with id: ', propertyId);
         const { error } = await supabase
           .from('properties')
           .delete()

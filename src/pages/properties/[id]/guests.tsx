@@ -96,7 +96,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     .select()
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)
-    .eq('role', 'owner')
+    .eq('role', 'OWNER')
     .single();
 
   if (!data) {

@@ -2,6 +2,8 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 
+import type { Database } from '@/lib/database.types';
+
 import PropertyForm, { FormSchema } from './PropertyForm';
 import PropertyList from './PropertyList';
 import Headline from './ui/Headline';
@@ -9,7 +11,7 @@ import Headline from './ui/Headline';
 const Overview = () => {
   const user = useUser();
   const userId = user?.id;
-  const supabase = useSupabaseClient();
+  const supabase = useSupabaseClient<Database>();
   const queryClient = useQueryClient();
 
   const mutation = useMutation({
@@ -40,7 +42,7 @@ const Overview = () => {
           {
             profile_id: user.id,
             property_id: propertyId,
-            role: 'owner',
+            role: 'OWNER',
           },
         ]);
 
@@ -69,7 +71,17 @@ const Overview = () => {
     return data;
   };
 
-  const { isLoading, isError, data, error } = useQuery({
+  // type PropertiesResponse = Awaited<ReturnType<typeof fetchProperties>>;
+  // type PropertiesResponseSuccess = PropertiesResponse['data'];
+  // type PropertiesResponseError = PropertiesResponse['error'];
+
+  // <
+  //   unknown,
+  //   PropertiesResponseError,
+  //   PropertiesResponseSuccess
+  // >
+
+  const { isLoading, data, error } = useQuery({
     queryKey: ['properties'],
     queryFn: fetchProperties,
   });
@@ -77,6 +89,16 @@ const Overview = () => {
   const onSubmit = async (formData: FormSchema) => {
     mutation.mutate(formData);
   };
+
+  console.log({ data });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error instanceof Error) {
+    return <div>Error: {error?.message}</div>;
+  }
 
   return (
     <>
