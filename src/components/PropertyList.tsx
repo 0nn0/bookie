@@ -3,7 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
 import React from 'react';
 
-import type { Database } from '@/lib/database.types';
+import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
 
 const DeleteButton: React.FC<{
   children: React.ReactNode;
@@ -68,29 +68,19 @@ const DeleteButton: React.FC<{
   );
 };
 
-const PropertyList = ({
-  data,
-}: {
-  data: {
-    id: string;
-    role: string;
-    properties:
-      | {
-          id: string;
-          name: string;
-        }
-      | { id: string; name: string }[]
-      | null;
-    profiles:
-      | {
-          email: string;
-        }
-      | {
-          email: string;
-        }[]
-      | null;
-  }[];
-}) => {
+const PropertyList = () => {
+  const { isLoading, data, error } = useGetPropertiesQuery();
+
+  console.log({ isLoading, data, error });
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
+
+  if (error instanceof Error) {
+    return <div>Error: {error?.message}</div>;
+  }
+
   if (data.length === 0) {
     return <div>No properties listed</div>;
   }

@@ -5,13 +5,13 @@ import { useRouter } from 'next/router';
 import Layout from '@/components/Layout';
 import PropertyNav from '@/components/PropertyNav';
 import Headline from '@/components/ui/Headline';
-import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
+import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 
 const PropertyPage = () => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
-  const { isLoading, data, error } = useGetPropertiesQuery({
+  const { isLoading, data, error } = useGetPropertyQuery({
     propertyId,
   });
 

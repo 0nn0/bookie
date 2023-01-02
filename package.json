@@ -7,12 +7,15 @@
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
-    "prettier:write": "prettier --write ./src/**/*.{js,jsx,ts,tsx}"
+    "prettier:write": "prettier --write ./src/**/*.{js,jsx,ts,tsx}",
+    "prisma:generate": "prisma generate",
+    "prisma:studio": "prisma studio"
   },
   "dependencies": {
     "@headlessui/react": "^1.7.4",
     "@heroicons/react": "^2.0.13",
     "@hookform/resolvers": "^2.9.10",
+    "@prisma/client": "^4.8.0",
     "@supabase/auth-helpers-nextjs": "^0.5.2",
     "@supabase/auth-helpers-react": "^0.3.1",
     "@supabase/supabase-js": "^2.2.2",

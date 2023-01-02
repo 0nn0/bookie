@@ -2,12 +2,18 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 
 import Layout from '@/components/Layout';
-import Overview from '@/components/Overview';
+import PropertyForm from '@/components/PropertyForm';
+import PropertyList from '@/components/PropertyList';
+import Headline from '@/components/ui/Headline';
 
 export default function Home() {
   return (
     <Layout title="Home">
-      <Overview />
+      <Headline level={1}>Properties</Headline>
+      <PropertyList />
+      <br />
+      <br />
+      <PropertyForm />
     </Layout>
   );
 }
