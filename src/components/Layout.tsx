@@ -13,7 +13,7 @@ export default function Layout({ title, children }: LayoutProps) {
   return (
     <>
       <Head>
-        <title>{title} | Bookie</title>
+        <title>{`${title} | Bookie`}</title>
       </Head>
       {session && <Header />}
       <main>{children}</main>
