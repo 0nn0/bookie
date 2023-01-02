@@ -1,14 +1,25 @@
-import { useUser } from '@supabase/auth-helpers-react';
 import Link from 'next/link';
 import React from 'react';
 
+const links = [
+  { href: '/', label: 'Home' },
+  { href: '/profile', label: 'Profile' },
+  { href: '/logout', label: 'Logout' },
+];
+
 const Header = () => {
-  const user = useUser();
   return (
     <header className="bg-slate-400">
       <nav>
-        <Link href="/">Home</Link> <Link href="/profile">Profile</Link>{' '}
-        <Link href="/logout">Logout</Link>
+        <ul className="flex items-center justify-between p-4">
+          {links.map(({ href, label }) => (
+            <li key={href}>
+              <Link href={href}>
+                <a className="text-white">{label}</a>
+              </Link>
+            </li>
+          ))}
+        </ul>
       </nav>
     </header>
   );
