@@ -15,8 +15,10 @@ const PropertyPage = () => {
     propertyId,
   });
 
+  const title = data?.name || '';
+
   return (
-    <Layout title={data.name}>
+    <Layout title={title}>
       {isLoading && <p>Loading...</p>}
       {error instanceof Error && <p>{error.message}</p>}
       {data && (
