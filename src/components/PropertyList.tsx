@@ -1,3 +1,4 @@
+import type { properties as Properties } from '@prisma/client';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';
@@ -71,8 +72,6 @@ const DeleteButton: React.FC<{
 const PropertyList = () => {
   const { isLoading, data, error } = useGetPropertiesQuery();
 
-  console.log({ isLoading, data, error });
-
   if (isLoading) {
     return <div>Loading...</div>;
   }
@@ -81,7 +80,7 @@ const PropertyList = () => {
     return <div>Error: {error?.message}</div>;
   }
 
-  if (data.length === 0) {
+  if (!data || data.length === 0) {
     return <div>No properties listed</div>;
   }
 
@@ -97,11 +96,7 @@ const PropertyList = () => {
       <tbody>
         {data.map((item) => {
           const { id, role, properties } = item;
-          if (
-            properties &&
-            typeof properties === 'object' &&
-            'id' in properties
-          ) {
+          if (properties) {
             return (
               <tr key={id}>
                 <td>
