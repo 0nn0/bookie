@@ -1,12 +1,10 @@
-import type {
-  guests_owners as GuestsOwners,
-  properties as Properties,
-} from '@prisma/client';
 import { useQuery } from '@tanstack/react-query';
 
-type QueryData = Pick<GuestsOwners, 'id' | 'role'> & {
-  properties: Pick<Properties, 'id' | 'name'>;
-};
+import { PropertiesByUser } from '@/pages/api/properties';
+
+// type QueryData = Pick<GuestsOwners, 'id' | 'role'> & {
+//   properties: Pick<Properties, 'id' | 'name'>;
+// };
 
 const useGetPropertiesQuery = () => {
   const fetchProperties = async () => {
@@ -17,7 +15,7 @@ const useGetPropertiesQuery = () => {
     return await result.json();
   };
 
-  return useQuery<unknown, unknown, QueryData[]>({
+  return useQuery<unknown, unknown, PropertiesByUser>({
     queryKey: ['properties'],
     queryFn: () => fetchProperties(),
   });

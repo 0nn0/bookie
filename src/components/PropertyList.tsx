@@ -1,4 +1,3 @@
-import type { properties as Properties } from '@prisma/client';
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import Link from 'next/link';

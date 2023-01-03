@@ -1,8 +1,41 @@
 import { Prisma, PrismaClient } from '@prisma/client';
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import {
+  Session,
+  createServerSupabaseClient,
+} from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
 
 const prisma = new PrismaClient();
+
+const fetchProperties = async (session: Session) => {
+  return await prisma.guests_owners.findMany({
+    include: {
+      properties: true,
+    },
+    where: {
+      profile_id: session.user.id,
+    },
+  });
+};
+
+export type PropertiesByUser = Prisma.PromiseReturnType<typeof fetchProperties>;
+
+// const a: PropertiesByUser = [
+//   {
+//     id: '1',
+//     created_at: new Date(),
+//     profile_id: '1',
+//     property_id: '1',
+//     role: 'owner',
+//     updated_at: new Date(),
+//     properties: {
+//       id: '1',
+//       name: 'a',
+//       created_at: new Date(),
+//       updated_at: new Date(),
+//     },
+//   },
+// ];
 
 const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   const supabase = createServerSupabaseClient({ req, res });
@@ -17,14 +50,7 @@ const handler = async (req: NextApiRequest, res: NextApiResponse) => {
   }
 
   try {
-    const response = await prisma.guests_owners.findMany({
-      include: {
-        properties: true,
-      },
-      where: {
-        profile_id: session.user.id,
-      },
-    });
+    const response = await fetchProperties(session);
 
     res.status(200).json(response);
   } catch (e) {
