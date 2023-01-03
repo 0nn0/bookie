@@ -29,7 +29,7 @@ interface Props
   extends React.ComponentPropsWithoutRef<'button'>,
     VariantProps<typeof buttonStyles> {
   children: React.ReactNode;
-  loading: boolean;
+  loading?: boolean;
 }
 
 const Button: React.FC<Props> = ({

@@ -2,6 +2,7 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
+import BookingForm from '@/components/BookingForm';
 import Layout from '@/components/Layout';
 import PropertyNav from '@/components/PropertyNav';
 import Headline from '@/components/ui/Headline';
@@ -28,7 +29,7 @@ const PropertyPage = () => {
             <PropertyNav propertyId={propertyId} />
           </div>
           <br />
-          <p>Calendar coming soon...</p>
+          <BookingForm propertyId={propertyId} />
         </>
       )}
     </Layout>
