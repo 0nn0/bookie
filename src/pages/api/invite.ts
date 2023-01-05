@@ -32,7 +32,7 @@ export default async function handler(
       .select()
       .eq('property_id', propertyId)
       .eq('profile_id', session.user.id)
-      .eq('role', 'OWNER')
+      .eq('role_id', 'OWNER')
       .single();
 
     console.log({ ownerData });
@@ -85,7 +85,7 @@ export default async function handler(
         created_at: new Date(),
         profile_id: profileId,
         property_id: propertyId,
-        role: 'GUEST',
+        role_id: 'GUEST',
       });
     } else {
       return res.status(409).json({ error: 'User is already a guest' });

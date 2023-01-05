@@ -1,12 +1,11 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  Session,
-  useSupabaseClient,
-  useUser,
-} from '@supabase/auth-helpers-react';
-import { useEffect, useState } from 'react';
+import { Session } from '@supabase/auth-helpers-react';
+import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import useGetProfileQuery from '@/hooks/useGetProfileQuery';
+import useUpdateProfileMutation from '@/hooks/useUpdateProfileMutation';
 
 import DeleteAccountButton from './DeleteAccountButton';
 import Button from './ui/Button';
@@ -17,10 +16,6 @@ interface Props {
 }
 
 const Account: React.FC<Props> = ({ session }) => {
-  const supabase = useSupabaseClient();
-  const user = useUser();
-  const [loading, setLoading] = useState(true);
-
   const schema = z.object({
     firstName: z.string().min(2, 'First name must be at least 2 characters'),
     lastName: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -37,71 +32,27 @@ const Account: React.FC<Props> = ({ session }) => {
     resolver: zodResolver(schema),
   });
 
+  const { isLoading, data } = useGetProfileQuery();
+
   useEffect(() => {
-    getProfile();
-  }, [session]);
-
-  async function getProfile() {
-    if (user === null) {
-      throw new Error('User is null');
+    if (data) {
+      reset({
+        firstName: data.first_name,
+        lastName: data.last_name,
+      });
     }
+  }, [data, reset]);
 
-    try {
-      setLoading(true);
-
-      let { data, error, status } = await supabase
-        .from('profiles')
-        .select(`first_name, last_name`)
-        .eq('id', user.id)
-        .single();
-
-      if (error && status !== 406) {
-        throw error;
-      }
-
-      if (data) {
-        reset({
-          firstName: data.first_name,
-          lastName: data.last_name,
-        });
-      }
-    } catch (error) {
-      alert('Error loading user data!');
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
-  }
+  const mutation = useUpdateProfileMutation();
 
   const submit = async (data: FormSchema) => {
-    console.log('onSubmit', data);
-
     const { firstName, lastName } = data;
-
-    if (user === null) {
-      throw new Error('User is null');
-    }
-
-    try {
-      setLoading(true);
-
-      const updates = {
-        id: user.id,
-        first_name: firstName,
-        last_name: lastName,
-        updated_at: new Date().toISOString(),
-      };
-
-      let { error } = await supabase.from('profiles').upsert(updates);
-      if (error) throw error;
-      alert('Profile updated!');
-    } catch (error) {
-      alert('Error updating the data!');
-      console.log(error);
-    } finally {
-      setLoading(false);
-    }
+    mutation.mutate({ first_name: firstName, last_name: lastName });
   };
+
+  if (isLoading) {
+    return <div>Loading...</div>;
+  }
 
   return (
     <>
@@ -139,8 +90,8 @@ const Account: React.FC<Props> = ({ session }) => {
           <div>
             <Button
               type="submit"
-              disabled={isSubmitting}
-              loading={isSubmitting}
+              disabled={isSubmitting || mutation.isLoading}
+              loading={isSubmitting || mutation.isLoading}
               fullWidth
             >
               {isSubmitting ? 'Updating ...' : 'Update'}

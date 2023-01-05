@@ -1,11 +1,8 @@
-import { Prisma, PrismaClient } from '@prisma/client';
 import {
   Session,
   createServerSupabaseClient,
 } from '@supabase/auth-helpers-nextjs';
 import { NextApiRequest, NextApiResponse } from 'next';
-
-const prisma = new PrismaClient();
 
 const fetchProperties = async (session: Session) => {
   return await prisma.guests_owners.findMany({

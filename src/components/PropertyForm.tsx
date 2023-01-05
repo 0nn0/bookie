@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
-import useAddGuestMutation from '@/hooks/useAddGuestMutation';
+import useAddPropertyMutation from '@/hooks/useAddPropertyMutation';
 
 const schema = z.object({
   name: z.string().min(3, 'Please enter a valid name'),
@@ -14,7 +14,7 @@ const schema = z.object({
 export type FormSchema = z.infer<typeof schema>;
 
 const PropertyForm: React.FC = () => {
-  const addGuestMutation = useAddGuestMutation();
+  const addGuestMutation = useAddPropertyMutation();
 
   const {
     register,

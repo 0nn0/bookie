@@ -11,32 +11,30 @@ export interface Database {
     Tables: {
       guests_owners: {
         Row: {
-          created_at: string
+          created_at: string | null
           id: string
           profile_id: string
           property_id: string
-          role: string
-          updated_at: string | null
+          role_id: string
         }
         Insert: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           profile_id: string
           property_id: string
-          role: string
-          updated_at?: string | null
+          role_id: string
         }
         Update: {
-          created_at?: string
+          created_at?: string | null
           id?: string
           profile_id?: string
           property_id?: string
-          role?: string
-          updated_at?: string | null
+          role_id?: string
         }
       }
       profiles: {
         Row: {
+          created_at: string | null
           email: string
           first_name: string | null
           id: string
@@ -45,6 +43,7 @@ export interface Database {
           updated_at: string | null
         }
         Insert: {
+          created_at?: string | null
           email: string
           first_name?: string | null
           id: string
@@ -53,6 +52,7 @@ export interface Database {
           updated_at?: string | null
         }
         Update: {
+          created_at?: string | null
           email?: string
           first_name?: string | null
           id?: string
@@ -65,20 +65,17 @@ export interface Database {
         Row: {
           created_at: string
           id: string
-          name: string
-          updated_at: string | null
+          name: string | null
         }
         Insert: {
           created_at?: string
           id?: string
-          name: string
-          updated_at?: string | null
+          name?: string | null
         }
         Update: {
           created_at?: string
           id?: string
-          name?: string
-          updated_at?: string | null
+          name?: string | null
         }
       }
       roles: {

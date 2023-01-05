@@ -1,8 +1,9 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useMutation, useQueryClient } from '@tanstack/react-query';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import useAddGuestMutation from '@/hooks/useAddGuestMutation';
 
 import Button from './ui/Button';
 import FormInput from './ui/FormInput';
@@ -19,8 +20,6 @@ const schema = z.object({
 export type FormSchema = z.infer<typeof schema>;
 
 const InviteGuestForm: React.FC<Props> = ({ propertyId }) => {
-  const queryClient = useQueryClient();
-
   const {
     register,
     handleSubmit,
@@ -30,41 +29,7 @@ const InviteGuestForm: React.FC<Props> = ({ propertyId }) => {
     resolver: zodResolver(schema),
   });
 
-  console.log({ errors });
-
-  const mutation = useMutation({
-    mutationFn: async (formData: { email: string }) => {
-      try {
-        const result = await fetch('/api/invite', {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-          },
-          body: JSON.stringify({
-            email: formData.email,
-            propertyId: propertyId,
-          }),
-        });
-
-        const body = await result.json();
-
-        if (result.status === 409) {
-          // console.log('body.message', body.message);
-          setError('singleErrorInput', {
-            type: 'custom',
-            message: body.error,
-          });
-        }
-
-        return body;
-      } catch (error) {
-        console.error(error);
-      }
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries(['guests', propertyId]);
-    },
-  });
+  const mutation = useAddGuestMutation({ propertyId });
 
   const onSubmit = async (formData: FormSchema) => {
     mutation.mutate(formData);
@@ -89,11 +54,11 @@ const InviteGuestForm: React.FC<Props> = ({ propertyId }) => {
         <br />
         <div>
           <div>
-            {errors.singleErrorInput && (
+            {/* {errors.singleErrorInput && (
               <div className="text-sm text-red-500">
                 {errors.singleErrorInput.message}
               </div>
-            )}
+            )} */}
           </div>
           <Button
             type="submit"

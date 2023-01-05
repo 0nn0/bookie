@@ -33,7 +33,7 @@ export default async function handler(
     const ownedPropertyIds =
       userData &&
       userData
-        .filter((item) => item.role === 'OWNER')
+        .filter((item) => item.role_id === 'OWNER')
         .map((item) => item.property_id);
 
     // 3. delete all guests/owners for any property that they own

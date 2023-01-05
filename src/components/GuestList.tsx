@@ -1,7 +1,5 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
-import { useMutation, useQuery, useQueryClient } from '@tanstack/react-query';
-
-import { Database } from '@/lib/database.types';
+import useDeleteGuestMutation from '@/hooks/useDeleteGuestMutation';
+import useGetGuestsQuery from '@/hooks/useGetGuestsQuery';
 
 interface Props {
   propertyId: string;
@@ -12,27 +10,7 @@ const DeleteButton: React.FC<{
   propertyId: string;
   guestId: string;
 }> = ({ children, propertyId, guestId }) => {
-  const supabase = useSupabaseClient<Database>();
-  const queryClient = useQueryClient();
-
-  const mutation = useMutation({
-    mutationFn: async (propertyId: string) => {
-      // delete guest
-      const { data, error } = await supabase
-        .from('guests_owners')
-        .delete()
-        .eq('id', guestId);
-
-      if (error) {
-        throw new Error(error.message);
-      }
-
-      return data;
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['guests', propertyId] });
-    },
-  });
+  const mutation = useDeleteGuestMutation({ propertyId, guestId });
 
   return (
     <button
@@ -46,26 +24,7 @@ const DeleteButton: React.FC<{
 };
 
 const GuestList: React.FC<Props> = ({ propertyId }) => {
-  const user = useUser();
-  const supabase = useSupabaseClient();
-
-  const fetchGuests = async () => {
-    const { data, error } = await supabase
-      .from('guests_owners')
-      .select('id, role, profiles(id, email, last_sign_in_at)')
-      .eq('property_id', propertyId);
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return data;
-  };
-
-  const { isLoading, isError, data, error } = useQuery({
-    queryKey: ['guests', propertyId],
-    queryFn: fetchGuests,
-  });
+  const { isLoading, data, error } = useGetGuestsQuery({ propertyId });
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -75,17 +34,7 @@ const GuestList: React.FC<Props> = ({ propertyId }) => {
     return <p>Error: {error.message}</p>;
   }
 
-  // exclude yourself from the list
-  const filteredGuests =
-    data?.filter((guest) => {
-      return (
-        guest.profiles &&
-        typeof guest.profiles === 'object' &&
-        guest.profiles.id !== user?.id
-      );
-    }) || [];
-
-  if (filteredGuests.length === 0) {
+  if (data.length === 0) {
     return <p>No guests have been invited yet</p>;
   }
 
@@ -104,25 +53,22 @@ const GuestList: React.FC<Props> = ({ propertyId }) => {
             <td colSpan={3}>Loading...</td>
           </tr>
         )}
-        {isError && (
+        {error instanceof Error && (
           <tr>
             <td colSpan={3}>Error: {error.message}</td>
           </tr>
         )}
-        {data &&
-          filteredGuests.map((guest) => (
-            <tr key={guest.id}>
-              <td>{guest.profiles.email}</td>
-              <td>
-                {guest.profiles.last_sign_in_at ? 'Active' : 'Invite sent'}
-              </td>
-              <td>
-                <DeleteButton propertyId={propertyId} guestId={guest.id}>
-                  Delete
-                </DeleteButton>
-              </td>
-            </tr>
-          ))}
+        {data.map((guest) => (
+          <tr key={guest.id}>
+            <td>{guest.profiles.email}</td>
+            <td>{guest.profiles.last_sign_in_at ? 'Active' : 'Invite sent'}</td>
+            <td>
+              <DeleteButton propertyId={propertyId} guestId={guest.id}>
+                Delete
+              </DeleteButton>
+            </td>
+          </tr>
+        ))}
       </tbody>
     </table>
   );

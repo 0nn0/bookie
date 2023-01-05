@@ -1,54 +1,40 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { Database } from '@/lib/database.types';
-
-const useAddGuestMutation = () => {
-  const user = useUser();
-  const supabase = useSupabaseClient<Database>();
+const useAddGuestMutation = ({ propertyId }: { propertyId: string }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({ name }: { name: string }) => {
-      if (!user?.id) throw new Error('User not logged in');
-
-      const { data, error } = await supabase
-        .from('properties')
-        .insert([
-          {
-            name,
+    mutationFn: async (formData: { email: string }) => {
+      try {
+        const result = await fetch('/api/invite', {
+          method: 'POST',
+          headers: {
+            'Content-Type': 'application/json',
           },
-        ])
-        .select('*');
+          body: JSON.stringify({
+            email: formData.email,
+            propertyId: propertyId,
+          }),
+        });
 
-      if (error) {
-        throw new Error(error.message);
+        const body = await result.json();
+
+        if (result.status === 409) {
+          throw new Error(body.message);
+          // console.log('body.message', body.message);
+          //   setError('singleErrorInput', {
+          //     type: 'custom',
+          //     message: body.error,
+          //   });
+        }
+
+        return body;
+      } catch (error) {
+        console.error(error);
       }
-
-      if (data && data.length === 0) {
-        throw new Error('No data returned');
-      }
-
-      const propertyId = data[0].id;
-
-      const { data: dataNewGuestsOwners, error: errorNewGuestsOwners } =
-        await supabase.from('guests_owners').insert([
-          {
-            profile_id: user.id,
-            property_id: propertyId,
-            role: 'OWNER',
-          },
-        ]);
-
-      if (errorNewGuestsOwners) {
-        throw new Error(errorNewGuestsOwners.message);
-      }
-
-      return dataNewGuestsOwners;
     },
-
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['properties'] });
+      queryClient.invalidateQueries(['guests', propertyId]);
     },
   });
 };

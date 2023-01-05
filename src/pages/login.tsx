@@ -4,7 +4,6 @@ import Link from 'next/link';
 import { useState } from 'react';
 
 import Layout from '@/components/Layout';
-import LoginComponent from '@/components/Login';
 import RequestOtpForm from '@/components/RequestOtpForm';
 import VerifyOtpForm from '@/components/VerifyOtpForm';
 

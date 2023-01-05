@@ -1,15 +1,15 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 
-const useGetPropertyQuery = ({ propertyId }: { propertyId: string }) => {
+const useGetOwnedPropertyQuery = ({ propertyId }: { propertyId: string }) => {
   const supabaseClient = useSupabaseClient();
   const user = useUser();
 
-  const fetchProperty = async (propertyId: string) => {
+  const fetchOwnedProperty = async (propertyId: string) => {
     if (!user?.id) throw new Error('User not logged in');
 
     // check if user is owner or guest of property
-    const { data } = await supabaseClient
+    const { data, error } = await supabaseClient
       .from('guests_owners')
       .select()
       .eq('property_id', propertyId)
@@ -29,15 +29,15 @@ const useGetPropertyQuery = ({ propertyId }: { propertyId: string }) => {
 
       return propertyData;
     } else {
-      throw new Error('User is not owner or guest of property');
+      throw new Error('User is not authorized to view property');
     }
   };
 
   return useQuery({
     queryKey: ['property', propertyId],
-    queryFn: () => fetchProperty(propertyId),
+    queryFn: () => fetchOwnedProperty(propertyId),
     enabled: !!propertyId,
   });
 };
 
-export default useGetPropertyQuery;
+export default useGetOwnedPropertyQuery;

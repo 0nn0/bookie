@@ -49,6 +49,8 @@ const BookingForm: React.FC<Props> = ({
     resolver: zodResolver(schema),
   });
 
+  console.log({ errors });
+
   const onSubmit = async (formData: FormSchema) => {
     console.log({ formData });
   };

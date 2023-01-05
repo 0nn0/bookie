@@ -3,15 +3,17 @@ import { useQuery } from '@tanstack/react-query';
 
 import { PropertiesByUser } from '@/pages/api/properties';
 
-const useGetPropertiesQuery = () => {
+const useGetGuestsQuery = ({ propertyId }: { propertyId: string }) => {
   const user = useUser();
   const supabaseClient = useSupabaseClient();
 
-  const fetchProperties = async () => {
+  const fetchGuests = async () => {
     const { data, error } = await supabaseClient
       .from('guests_owners')
-      .select('id, role_id, properties(id, name)')
-      .eq('profile_id', user?.id);
+      .select('id, role_id, profiles(id, email, last_sign_in_at)')
+      .eq('property_id', propertyId)
+      // exclude the current user
+      .neq('profile_id', user?.id);
 
     if (error) {
       throw new Error(error.message);
@@ -21,9 +23,9 @@ const useGetPropertiesQuery = () => {
   };
 
   return useQuery<unknown, unknown, PropertiesByUser>({
-    queryKey: ['properties'],
-    queryFn: () => fetchProperties(),
+    queryKey: ['guests', propertyId],
+    queryFn: () => fetchGuests(),
   });
 };
 
-export default useGetPropertiesQuery;
+export default useGetGuestsQuery;
