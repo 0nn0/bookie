@@ -9,6 +9,32 @@ export type Json =
 export interface Database {
   public: {
     Tables: {
+      bookings: {
+        Row: {
+          created_at: string | null
+          end_date: string
+          guests_owners_id: string
+          id: string
+          property_id: string
+          start_date: string
+        }
+        Insert: {
+          created_at?: string | null
+          end_date: string
+          guests_owners_id: string
+          id?: string
+          property_id: string
+          start_date: string
+        }
+        Update: {
+          created_at?: string | null
+          end_date?: string
+          guests_owners_id?: string
+          id?: string
+          property_id?: string
+          start_date?: string
+        }
+      }
       guests_owners: {
         Row: {
           created_at: string | null

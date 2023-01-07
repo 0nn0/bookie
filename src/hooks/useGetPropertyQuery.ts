@@ -11,7 +11,7 @@ const useGetPropertyQuery = ({ propertyId }: { propertyId: string }) => {
     // check if user is owner or guest of property
     const { data } = await supabaseClient
       .from('guests_owners')
-      .select()
+      .select('id, role_id')
       .eq('property_id', propertyId)
       .eq('profile_id', user.id)
       .single();
@@ -27,7 +27,11 @@ const useGetPropertyQuery = ({ propertyId }: { propertyId: string }) => {
         throw new Error(propertyError.message);
       }
 
-      return propertyData;
+      return {
+        guest_owners_id: data.id,
+        role_id: data.role_id,
+        ...propertyData,
+      };
     } else {
       throw new Error('User is not owner or guest of property');
     }

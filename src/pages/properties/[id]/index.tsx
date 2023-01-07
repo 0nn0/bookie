@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import BookingForm from '@/components/BookingForm';
+import BookingList from '@/components/BookingList';
 import Layout from '@/components/Layout';
 import PropertyNav from '@/components/PropertyNav';
 import Headline from '@/components/ui/Headline';
@@ -25,11 +26,26 @@ const PropertyPage = () => {
       {data && (
         <>
           <div className="mt-4 mb-4">
-            <Headline level={1}>{data.name}</Headline>
-            <PropertyNav propertyId={propertyId} />
+            <Headline level={1}>
+              {data.name} ({data.role_id})
+            </Headline>
+            <PropertyNav propertyId={propertyId} roleId={data.role_id} />
           </div>
           <br />
-          <BookingForm propertyId={propertyId} />
+          {data.role_id && (
+            <>
+              <Headline level={2}>
+                {data.role_id === 'OWNER' ? 'All' : 'Your'} Bookings
+              </Headline>
+
+              <BookingList
+                roleId={data.role_id}
+                guestsOwnersId={data.guest_owners_id}
+                propertyId={propertyId}
+              />
+              <BookingForm propertyId={propertyId} />
+            </>
+          )}
         </>
       )}
     </Layout>

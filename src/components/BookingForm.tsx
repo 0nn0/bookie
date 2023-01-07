@@ -3,6 +3,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import useAddBookingMutation from '@/hooks/useAddBookingMutation';
+
 import Button from './ui/Button';
 import FormInput from './ui/FormInput';
 import Headline from './ui/Headline';
@@ -49,16 +51,19 @@ const BookingForm: React.FC<Props> = ({
     resolver: zodResolver(schema),
   });
 
-  console.log({ errors });
+  const mutation = useAddBookingMutation({ propertyId });
 
   const onSubmit = async (formData: FormSchema) => {
-    console.log({ formData });
+    mutation.mutate({
+      startDate: formData.startDate,
+      endDate: formData.endDate,
+    });
   };
 
   return (
     <>
       <div className="mb-4">
-        <Headline level={4}>Make a reservation</Headline>
+        <Headline level={4}>Make a booking</Headline>
       </div>
 
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
@@ -84,8 +89,8 @@ const BookingForm: React.FC<Props> = ({
         <div>
           <Button
             type="submit"
-            // disabled={mutation.isLoading || isSubmitting}
-            // loading={mutation.isLoading || isSubmitting}
+            disabled={mutation.isLoading || isSubmitting}
+            loading={mutation.isLoading || isSubmitting}
             fullWidth
           >
             Make reservation

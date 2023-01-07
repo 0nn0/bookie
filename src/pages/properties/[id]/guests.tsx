@@ -7,13 +7,13 @@ import InviteGuestForm from '@/components/InviteGuestForm';
 import Layout from '@/components/Layout';
 import PropertyNav from '@/components/PropertyNav';
 import Headline from '@/components/ui/Headline';
-import useGetOwnedPropertyQuery from '@/hooks/useGetOwnedPropertyQuery';
+import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 
 const Guests = () => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
-  const { isLoading, data, error } = useGetOwnedPropertyQuery({
+  const { isLoading, data, error } = useGetPropertyQuery({
     propertyId,
   });
 
@@ -28,11 +28,14 @@ const Guests = () => {
   return (
     <Layout title={data.name}>
       <div className="mt-4 mb-4">
-        <Headline level={1}>{data.name}</Headline>
-        <PropertyNav propertyId={propertyId} />
+        <Headline level={1}>
+          {data.name} ({data.role_id})
+        </Headline>
+        <PropertyNav propertyId={propertyId} roleId={data.role_id} />
         <br />
       </div>
       <div className="mb-8">
+        <Headline level={2}>Guests</Headline>
         <GuestList propertyId={propertyId} />
       </div>
       <InviteGuestForm propertyId={propertyId} />
