@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -43,6 +44,7 @@ const BookingForm: React.FC<Props> = ({
 }: {
   propertyId: string;
 }) => {
+  const supabaseClient = useSupabaseClient();
   const {
     register,
     handleSubmit,
@@ -54,10 +56,23 @@ const BookingForm: React.FC<Props> = ({
   const mutation = useAddBookingMutation({ propertyId });
 
   const onSubmit = async (formData: FormSchema) => {
-    mutation.mutate({
-      startDate: formData.startDate,
-      endDate: formData.endDate,
+    let { data, error } = await supabaseClient.rpc('booking_exists', {
+      sdate: formData.startDate,
+      edate: formData.endDate,
+      propid: propertyId,
     });
+
+    if (error) console.log(error);
+
+    if (data?.length === 0) {
+      mutation.mutate({
+        startDate: formData.startDate,
+        endDate: formData.endDate,
+      });
+    } else {
+      console.log({ data });
+      window.alert('Booking already exists');
+    }
   };
 
   return (
