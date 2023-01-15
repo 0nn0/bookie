@@ -1,3 +1,5 @@
+import { useState } from 'react';
+
 import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
 
 // const DeleteButton: React.FC<{
@@ -29,10 +31,12 @@ const BookingList = ({
   roleId: 'OWNER';
   guestsOwnersId: string;
 }) => {
+  const [filter, setFilter] = useState<'UPCOMING' | 'ALL'>('UPCOMING');
   const { isLoading, data, error } = useGetBookingsQuery({
     propertyId,
     roleId,
     guestsOwnersId,
+    filter,
   });
 
   if (isLoading) {
@@ -48,38 +52,56 @@ const BookingList = ({
   }
 
   return (
-    <table border={1} cellPadding={10}>
-      <thead>
-        <tr>
-          <th>Name</th>
-          <th>Start date</th>
-          <th>End date</th>
-          <th>Role</th>
-          <th>Actions</th>
-        </tr>
-      </thead>
-      <tbody>
-        {data.map((item) => {
-          console.log({ item });
-          const { id, start_date, end_date, guests_owners } = item;
-          const { first_name, last_name } = guests_owners.profiles;
+    <>
+      <button
+        onClick={() => {
+          setFilter('UPCOMING');
+        }}
+      >
+        Upcoming
+      </button>
+      <button
+        onClick={() => {
+          setFilter('ALL');
+        }}
+      >
+        All
+      </button>
+      <br />
+      <br />
+      <table border={1} cellPadding={10}>
+        <thead>
+          <tr>
+            <th>Name</th>
+            <th>Start date</th>
+            <th>End date</th>
+            <th>Role</th>
+            <th>Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {data.map((item) => {
+            console.log({ item });
+            const { id, start_date, end_date, guests_owners } = item;
+            const { first_name, last_name } = guests_owners.profiles;
 
-          return (
-            <tr key={id}>
-              <td>
-                {first_name} {last_name}
-              </td>
-              <td>{start_date}</td>
-              <td>{end_date}</td>
-              <td>{guests_owners.role_id}</td>
-              <td>
-                <button>Cancel (coming soon)</button>
-              </td>
-            </tr>
-          );
-        })}
-      </tbody>
-    </table>
+            return (
+              <tr key={id}>
+                <td>
+                  {first_name} {last_name}
+                </td>
+                <td>{start_date}</td>
+                <td>{end_date}</td>
+                <td>{guests_owners.role_id}</td>
+                <td>
+                  <button>Cancel (coming soon)</button>
+                </td>
+              </tr>
+            );
+          })}
+        </tbody>
+      </table>
+    </>
   );
 };
 

@@ -5,37 +5,42 @@ const useGetBookingsQuery = ({
   propertyId,
   guestsOwnersId,
   roleId,
+  filter,
 }: {
   propertyId: string;
   roleId: 'OWNER' | 'GUEST';
   guestsOwnersId: string;
+  filter: 'ALL' | 'UPCOMING';
 }) => {
   const supabaseClient = useSupabaseClient();
 
   const fetchBookings = async () => {
     console.log('fetchBookings', { propertyId, guestsOwnersId, roleId });
-    // const { data: dataRole, error: errorRole } = await supabaseClient
-    //   .from('guests_owners')
-    //   .select('id, role_id')
-    //   .eq('property_id', propertyId)
-    //   .eq('profile_id', user?.id)
-    //   .single();
-
-    // console.log({
-    //   dataRole,
-    //   errorRole,
-    // });
 
     if (roleId === 'OWNER') {
-      // Get all bookings for this property
-      const { data, error } = await supabaseClient
-        .from('bookings')
-        .select(
-          'id, start_date, end_date, guests_owners(id, role_id, profiles(id, first_name, last_name))'
-        )
-        .eq('property_id', propertyId);
+      // Get bookings for this property
+      if (filter === 'ALL') {
+        const { data, error } = await supabaseClient
+          .from('bookings')
+          .select(
+            'id, start_date, end_date, guests_owners(id, role_id, profiles(id, first_name, last_name))'
+          )
+          .eq('property_id', propertyId)
+          .order('start_date', { ascending: true });
 
-      return data;
+        return data;
+      } else if (filter === 'UPCOMING') {
+        const { data, error } = await supabaseClient
+          .from('bookings')
+          .select(
+            'id, start_date, end_date, guests_owners(id, role_id, profiles(id, first_name, last_name))'
+          )
+          .eq('property_id', propertyId)
+          .gte('end_date', new Date().toISOString())
+          .order('start_date', { ascending: true });
+
+        return data;
+      }
     } else {
       // Get only your own bookings
       const { data, error } = await supabaseClient
@@ -43,7 +48,8 @@ const useGetBookingsQuery = ({
         .select(
           'id, start_date, end_date, guests_owners(id, role_id, profiles(id, first_name, last_name))'
         )
-        .eq('guests_owners_id', guestsOwnersId);
+        .eq('guests_owners_id', guestsOwnersId)
+        .order('start_date', { ascending: true });
 
       return data;
     }
@@ -58,7 +64,7 @@ const useGetBookingsQuery = ({
   };
 
   return useQuery({
-    queryKey: ['bookings', propertyId],
+    queryKey: ['bookings', propertyId, filter],
     queryFn: () => fetchBookings(),
   });
 };
