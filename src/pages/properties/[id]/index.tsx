@@ -38,11 +38,13 @@ const PropertyPage = () => {
                 {data.role_id === 'OWNER' ? 'All' : 'Your'} Bookings
               </Headline>
 
-              <BookingList
-                roleId={data.role_id}
-                guestsOwnersId={data.guest_owners_id}
-                propertyId={propertyId}
-              />
+              {data.role_id === 'OWNER' && (
+                <BookingList
+                  roleId={data.role_id}
+                  guestsOwnersId={data.guest_owners_id}
+                  propertyId={propertyId}
+                />
+              )}
               <BookingForm propertyId={propertyId} />
             </>
           )}
