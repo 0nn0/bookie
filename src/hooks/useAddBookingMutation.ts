@@ -37,6 +37,7 @@ const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
               guests_owners_id: guestsOwnersData.id,
               start_date: startDate,
               end_date: endDate,
+              status: 'BOOKED',
             },
           ])
           .select('*');

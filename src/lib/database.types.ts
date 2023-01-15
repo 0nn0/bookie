@@ -17,6 +17,7 @@ export interface Database {
           id: string
           property_id: string
           start_date: string
+          status: string
         }
         Insert: {
           created_at?: string | null
@@ -25,6 +26,7 @@ export interface Database {
           id?: string
           property_id: string
           start_date: string
+          status: string
         }
         Update: {
           created_at?: string | null
@@ -33,6 +35,7 @@ export interface Database {
           id?: string
           property_id?: string
           start_date?: string
+          status?: string
         }
       }
       guests_owners: {
@@ -120,7 +123,10 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      [_ in never]: never
+      booking_exists: {
+        Args: { sdate: string; edate: string; propid: string }
+        Returns: { property_id: string; start_date: string; end_date: string }[]
+      }
     }
     Enums: {
       [_ in never]: never

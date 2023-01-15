@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useState } from 'react';
 
 import BookingForm from '@/components/BookingForm';
 import BookingList from '@/components/BookingList';
@@ -13,6 +14,9 @@ const PropertyPage = () => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
+  const [filter, setFilter] = useState<'UPCOMING' | 'CANCELED' | 'ALL'>(
+    'UPCOMING'
+  );
   const { isLoading, data, error } = useGetPropertyQuery({
     propertyId,
   });
@@ -39,11 +43,35 @@ const PropertyPage = () => {
               </Headline>
 
               {data.role_id === 'OWNER' && (
-                <BookingList
-                  roleId={data.role_id}
-                  guestsOwnersId={data.guest_owners_id}
-                  propertyId={propertyId}
-                />
+                <>
+                  <button
+                    onClick={() => {
+                      setFilter('UPCOMING');
+                    }}
+                  >
+                    Upcoming
+                  </button>
+                  <button
+                    onClick={() => {
+                      setFilter('CANCELED');
+                    }}
+                  >
+                    Canceled
+                  </button>
+                  <button
+                    onClick={() => {
+                      setFilter('ALL');
+                    }}
+                  >
+                    All
+                  </button>
+                  <BookingList
+                    roleId={data.role_id}
+                    guestsOwnersId={data.guest_owners_id}
+                    propertyId={propertyId}
+                    filter={filter}
+                  />
+                </>
               )}
               <BookingForm propertyId={propertyId} />
             </>

@@ -10,7 +10,7 @@ const useGetBookingsQuery = ({
   propertyId: string;
   roleId: 'OWNER' | 'GUEST';
   guestsOwnersId: string;
-  filter: 'ALL' | 'UPCOMING';
+  filter: 'ALL' | 'UPCOMING' | 'CANCELED';
 }) => {
   const supabaseClient = useSupabaseClient();
 
@@ -23,7 +23,7 @@ const useGetBookingsQuery = ({
         const { data, error } = await supabaseClient
           .from('bookings')
           .select(
-            'id, start_date, end_date, guests_owners(id, role_id, profiles(id, first_name, last_name))'
+            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name))'
           )
           .eq('property_id', propertyId)
           .order('start_date', { ascending: true });
@@ -33,10 +33,22 @@ const useGetBookingsQuery = ({
         const { data, error } = await supabaseClient
           .from('bookings')
           .select(
-            'id, start_date, end_date, guests_owners(id, role_id, profiles(id, first_name, last_name))'
+            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name))'
           )
+          .neq('status', 'CANCELED')
           .eq('property_id', propertyId)
           .gte('end_date', new Date().toISOString())
+          .order('start_date', { ascending: true });
+
+        return data;
+      } else if (filter === 'CANCELED') {
+        const { data, error } = await supabaseClient
+          .from('bookings')
+          .select(
+            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name))'
+          )
+          .eq('property_id', propertyId)
+          .eq('status', 'CANCELED')
           .order('start_date', { ascending: true });
 
         return data;
@@ -46,7 +58,7 @@ const useGetBookingsQuery = ({
       const { data, error } = await supabaseClient
         .from('bookings')
         .select(
-          'id, start_date, end_date, guests_owners(id, role_id, profiles(id, first_name, last_name))'
+          'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name))'
         )
         .eq('guests_owners_id', guestsOwnersId)
         .order('start_date', { ascending: true });
