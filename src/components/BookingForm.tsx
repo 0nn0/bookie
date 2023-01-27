@@ -1,12 +1,22 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import {
+  CalendarDate,
+  getLocalTimeZone,
+  parseDate,
+  today,
+} from '@internationalized/date';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import React from 'react';
-import { useForm } from 'react-hook-form';
+import React, { useState } from 'react';
+import { useLocale } from 'react-aria';
+import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import useAddBookingMutation from '@/hooks/useAddBookingMutation';
+import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
 
+import RangeCalendar from './RangeCalendar';
 import Button from './ui/Button';
+import FormErrorMessage from './ui/FormErrorMessage';
 import FormInput from './ui/FormInput';
 import Headline from './ui/Headline';
 
@@ -14,26 +24,36 @@ interface Props {
   propertyId: string;
 }
 
+const dateSchema = z.object({
+  calendar: z.object({ identifier: z.string() }),
+  day: z.number().int().min(1).max(31),
+  month: z.number().min(1).max(12),
+  year: z.number().min(new Date().getFullYear()),
+  era: z.string().optional(),
+});
+
 const schema = z
   .object({
-    startDate: z.string().refine((value) => {
-      const date = new Date(value);
-      return date.getTime() > new Date().getTime();
-    }, 'Start date must be in the future'),
-    endDate: z.string().refine((value) => {
-      const date = new Date(value);
-      return date.getTime() > new Date().getTime();
-    }, 'End date must be in the future'),
+    rangeCalendar: z.object(
+      {
+        start: dateSchema,
+        end: dateSchema,
+      },
+      { required_error: 'Please select a date range' }
+    ),
   })
   .refine(
-    ({ startDate, endDate }) => {
-      const startDateValue = new Date(startDate);
-      const endDateValue = new Date(endDate);
+    ({ rangeCalendar }) => {
+      const { start, end } = rangeCalendar;
+      const startDateValue = new Date(
+        `${start.year}-${start.month}-${start.day}`
+      );
+      const endDateValue = new Date(`${end.year}-${end.month}-${end.day}`);
       return endDateValue.getTime() > startDateValue.getTime();
     },
     {
       message: 'End date must be after start date',
-      path: ['endDate'],
+      path: ['rangeCalendar'],
     }
   );
 
@@ -45,9 +65,18 @@ const BookingForm: React.FC<Props> = ({
   propertyId: string;
 }) => {
   const supabaseClient = useSupabaseClient();
+  const { isLoading, data, error } = useGetBookingsQuery({
+    propertyId,
+    guestsOwnersId: '',
+    roleId: 'OWNER',
+    filter: 'UPCOMING',
+  });
+
   const {
-    register,
+    control,
     handleSubmit,
+    setValue,
+    reset,
     formState: { isSubmitting, errors },
   } = useForm<FormSchema>({
     resolver: zodResolver(schema),
@@ -56,9 +85,15 @@ const BookingForm: React.FC<Props> = ({
   const mutation = useAddBookingMutation({ propertyId });
 
   const onSubmit = async (formData: FormSchema) => {
+    console.log('SUBMIT', { formData });
+
+    const { start, end } = formData.rangeCalendar;
+    const startDate = `${start.year}-${start.month}-${start.day}`;
+    const endDate = `${end.year}-${end.month}-${end.day}`;
+
     let { data, error } = await supabaseClient.rpc('booking_exists', {
-      sdate: formData.startDate,
-      edate: formData.endDate,
+      sdate: startDate,
+      edate: endDate,
       propid: propertyId,
     });
 
@@ -66,14 +101,40 @@ const BookingForm: React.FC<Props> = ({
 
     if (data?.length === 0) {
       mutation.mutate({
-        startDate: formData.startDate,
-        endDate: formData.endDate,
+        startDate: startDate,
+        endDate: endDate,
       });
+
+      // reset form
+      // setValue('rangeCalendar', undefined);
+      // reset();
     } else {
       console.log({ data });
       window.alert('Booking already exists');
     }
   };
+
+  // let now = today(getLocalTimeZone());
+  // let disabledRanges = [
+  //   [now, now.add({ days: 5 })],
+  //   [now.add({ days: 14 }), now.add({ days: 16 })],
+  //   [now.add({ days: 23 }), now.add({ days: 24 })],
+  // ];
+
+  let disabledRanges = data?.map((item) => {
+    return [parseDate(item.start_date), parseDate(item.end_date)];
+  });
+
+  // let { locale } = useLocale();
+  let isDateUnavailable = (date) =>
+    disabledRanges?.some(
+      (interval) =>
+        date.compare(interval[0]) >= 0 && date.compare(interval[1]) <= 0
+    );
+
+  if (isLoading) {
+    return <p>Loading...</p>;
+  }
 
   return (
     <>
@@ -83,23 +144,24 @@ const BookingForm: React.FC<Props> = ({
 
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <div>
-          <FormInput
-            label="Start date"
-            id="startDate"
-            type="date"
-            register={register}
-            errors={errors}
+          <Controller
+            name="rangeCalendar"
+            control={control}
+            rules={{ required: true }}
+            render={({ field }) => (
+              <RangeCalendar
+                aria-label="Trip dates"
+                minValue={today(getLocalTimeZone())}
+                isDateUnavailable={isDateUnavailable}
+                value={field.value}
+                onChange={field.onChange}
+              />
+            )}
           />
         </div>
-        <div>
-          <FormInput
-            label="End date"
-            id="endDate"
-            type="date"
-            register={register}
-            errors={errors}
-          />
-        </div>
+        {errors?.rangeCalendar && (
+          <FormErrorMessage>{errors?.rangeCalendar.message}</FormErrorMessage>
+        )}
         <br />
         <div>
           <Button

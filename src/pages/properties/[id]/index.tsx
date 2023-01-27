@@ -7,6 +7,7 @@ import BookingForm from '@/components/BookingForm';
 import BookingList from '@/components/BookingList';
 import Layout from '@/components/Layout';
 import PropertyNav from '@/components/PropertyNav';
+import Container from '@/components/ui/Container';
 import Headline from '@/components/ui/Headline';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 
@@ -25,24 +26,26 @@ const PropertyPage = () => {
 
   return (
     <Layout title={title}>
-      {isLoading && <p>Loading...</p>}
-      {error instanceof Error && <p>{error.message}</p>}
-      {data && (
-        <>
-          <div className="mt-4 mb-4">
-            <Headline level={1}>
-              {data.name} ({data.role_id})
-            </Headline>
-            <PropertyNav propertyId={propertyId} roleId={data.role_id} />
-          </div>
-          <br />
-          {data.role_id && (
-            <>
-              <Headline level={2}>
-                {data.role_id === 'OWNER' ? 'All' : 'Your'} Bookings
+      <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
+        {isLoading && <p>Loading...</p>}
+        {error instanceof Error && <p>{error.message}</p>}
+        {data && (
+          <>
+            <div className="mt-4 mb-4">
+              <Headline level={1}>
+                {data.name} ({data.role_id})
               </Headline>
+              <PropertyNav propertyId={propertyId} roleId={data.role_id} />
+            </div>
+            <br />
 
-              {data.role_id === 'OWNER' && (
+            {data.role_id && (
+              <>
+                {/* <Headline level={2}>
+                {data.role_id === 'OWNER' ? 'All' : 'Your'} Bookings
+              </Headline> */}
+
+                {/* {data.role_id === 'OWNER' && (
                 <>
                   <button
                     onClick={() => {
@@ -72,12 +75,14 @@ const PropertyPage = () => {
                     filter={filter}
                   />
                 </>
-              )}
-              <BookingForm propertyId={propertyId} />
-            </>
-          )}
-        </>
-      )}
+              )} */}
+
+                <BookingForm propertyId={propertyId} />
+              </>
+            )}
+          </>
+        )}
+      </div>
     </Layout>
   );
 };

@@ -43,7 +43,7 @@ const GuestList: React.FC<Props> = ({ propertyId }) => {
       <thead>
         <tr>
           <th>Email</th>
-          <th>User account status</th>
+          <th>Has account</th>
           <th></th>
         </tr>
       </thead>
@@ -61,7 +61,11 @@ const GuestList: React.FC<Props> = ({ propertyId }) => {
         {data.map((guest) => (
           <tr key={guest.id}>
             <td>{guest.profiles.email}</td>
-            <td>{guest.profiles.last_sign_in_at ? 'Active' : 'Invite sent'}</td>
+            <td>
+              {guest.profiles.last_sign_in_at
+                ? 'Active'
+                : 'Invite sent to create account'}
+            </td>
             <td>
               <DeleteButton propertyId={propertyId} guestId={guest.id}>
                 Delete
