@@ -1,13 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import {
-  CalendarDate,
-  getLocalTimeZone,
-  parseDate,
-  today,
-} from '@internationalized/date';
+import { getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import React, { useState } from 'react';
-import { useLocale } from 'react-aria';
+import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -17,8 +11,6 @@ import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
 import RangeCalendar from './RangeCalendar';
 import Button from './ui/Button';
 import FormErrorMessage from './ui/FormErrorMessage';
-import FormInput from './ui/FormInput';
-import Headline from './ui/Headline';
 
 interface Props {
   propertyId: string;
@@ -59,12 +51,10 @@ const schema = z
 
 export type FormSchema = z.infer<typeof schema>;
 
-const BookingForm: React.FC<Props> = ({
-  propertyId,
-}: {
-  propertyId: string;
-}) => {
+const BookingForm = ({ propertyId }: { propertyId: string }) => {
   const supabaseClient = useSupabaseClient();
+  const router = useRouter();
+
   const { isLoading, data, error } = useGetBookingsQuery({
     propertyId,
     guestsOwnersId: '',
@@ -75,18 +65,20 @@ const BookingForm: React.FC<Props> = ({
   const {
     control,
     handleSubmit,
-    setValue,
-    reset,
+    // setValue,
+    // getValues,
+    // reset,
+    watch,
     formState: { isSubmitting, errors },
   } = useForm<FormSchema>({
     resolver: zodResolver(schema),
   });
 
+  const rangeCalendar = watch('rangeCalendar');
+
   const mutation = useAddBookingMutation({ propertyId });
 
   const onSubmit = async (formData: FormSchema) => {
-    console.log('SUBMIT', { formData });
-
     const { start, end } = formData.rangeCalendar;
     const startDate = `${start.year}-${start.month}-${start.day}`;
     const endDate = `${end.year}-${end.month}-${end.day}`;
@@ -108,8 +100,9 @@ const BookingForm: React.FC<Props> = ({
       // reset form
       // setValue('rangeCalendar', undefined);
       // reset();
+
+      router.push(`/properties/${propertyId}/calendar`);
     } else {
-      console.log({ data });
       window.alert('Booking already exists');
     }
   };
@@ -121,16 +114,17 @@ const BookingForm: React.FC<Props> = ({
   //   [now.add({ days: 23 }), now.add({ days: 24 })],
   // ];
 
-  let disabledRanges = data?.map((item) => {
+  const disabledRanges = data?.map((item) => {
     return [parseDate(item.start_date), parseDate(item.end_date)];
   });
 
   // let { locale } = useLocale();
-  let isDateUnavailable = (date) =>
-    disabledRanges?.some(
+  const isDateUnavailable = (date: any) => {
+    return disabledRanges?.some(
       (interval) =>
         date.compare(interval[0]) >= 0 && date.compare(interval[1]) <= 0
     );
+  };
 
   if (isLoading) {
     return <p>Loading...</p>;
@@ -138,10 +132,6 @@ const BookingForm: React.FC<Props> = ({
 
   return (
     <>
-      <div className="mb-4">
-        <Headline level={4}>Make a booking</Headline>
-      </div>
-
       <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
         <div>
           <Controller
@@ -159,6 +149,18 @@ const BookingForm: React.FC<Props> = ({
             )}
           />
         </div>
+        {rangeCalendar?.start && rangeCalendar?.end && (
+          <div className="flex justify-between">
+            <div className="flex flex-col space-y-2">
+              {rangeCalendar.start.day}-{rangeCalendar.start.month}-
+              {rangeCalendar.start.year}
+            </div>
+            <div className="flex flex-col space-y-2">
+              {rangeCalendar.end.day}-{rangeCalendar.end.month}-
+              {rangeCalendar.end.year}
+            </div>
+          </div>
+        )}
         {errors?.rangeCalendar && (
           <FormErrorMessage>{errors?.rangeCalendar.message}</FormErrorMessage>
         )}

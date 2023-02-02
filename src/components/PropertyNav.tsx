@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Tabs from './Tabs';
 
 const PropertyNav = ({
   propertyId,
@@ -7,14 +7,25 @@ const PropertyNav = ({
   propertyId: string;
   roleId: 'OWNER' | 'GUEST';
 }) => {
-  return (
-    <nav>
-      <Link href={`/properties/${propertyId}/`}>Calendar</Link>{' '}
-      {roleId === 'OWNER' && (
-        <Link href={`/properties/${propertyId}/guests`}>Guests</Link>
-      )}
-    </nav>
-  );
+  const tabs = [
+    {
+      name: 'Calendar',
+      href: `/properties/${propertyId}/calendar`,
+      current: true,
+    },
+    {
+      name: 'Guests',
+      href: `/properties/${propertyId}/guests`,
+      current: false,
+    },
+    {
+      name: 'Settings',
+      href: `/properties/${propertyId}/settings`,
+      current: false,
+    },
+  ];
+
+  return <Tabs items={tabs} />;
 };
 
 export default PropertyNav;

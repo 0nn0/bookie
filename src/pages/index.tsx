@@ -1,13 +1,14 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { GetServerSideProps } from 'next';
+import { GetServerSideProps, NextPage } from 'next';
+import Link from 'next/link';
+import { useRouter } from 'next/router';
 
 import Layout from '@/components/Layout';
-import PropertyForm from '@/components/PropertyForm';
 import PropertyList from '@/components/PropertyList';
+import Container from '@/components/ui/Container';
 import Headline from '@/components/ui/Headline';
 
-export default function Home({ user }) {
-  console.log({ user });
+const Home: NextPage = ({ user }) => {
   if (!user)
     return (
       <Layout title="Home">
@@ -31,18 +32,37 @@ export default function Home({ user }) {
       </Layout>
     );
 
+  const action = {
+    href: '/properties/new',
+    label: 'Create property',
+  };
+
   return (
     <Layout title="Home">
-      <div className="mx-auto max-w-7xl px-4 py-7 sm:px-6 lg:px-8">
-        <Headline level={1}>Properties</Headline>
+      <Container>
+        <div className="mb-6 flex flex-wrap items-center justify-between sm:flex-nowrap">
+          <Headline level={1}>Properties</Headline>
+          <div className="ml-4 mt-2 flex-shrink-0">
+            {action && (
+              <Link href={action.href}>
+                <button
+                  type="button"
+                  className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                >
+                  {action.label}
+                </button>
+              </Link>
+            )}
+          </div>
+        </div>
+
         <PropertyList />
-        <br />
-        <br />
-        <PropertyForm />
-      </div>
+      </Container>
     </Layout>
   );
-}
+};
+
+export default Home;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx);

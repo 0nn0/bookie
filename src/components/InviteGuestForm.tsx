@@ -7,11 +7,6 @@ import useAddGuestMutation from '@/hooks/useAddGuestMutation';
 
 import Button from './ui/Button';
 import FormInput from './ui/FormInput';
-import Headline from './ui/Headline';
-
-interface Props {
-  propertyId: string;
-}
 
 const schema = z.object({
   email: z.string().email('Please enter a valid email address'),
@@ -19,7 +14,7 @@ const schema = z.object({
 
 export type FormSchema = z.infer<typeof schema>;
 
-const InviteGuestForm: React.FC<Props> = ({ propertyId }) => {
+const InviteGuestForm = ({ propertyId }: { propertyId: string }) => {
   const {
     register,
     handleSubmit,
@@ -36,41 +31,35 @@ const InviteGuestForm: React.FC<Props> = ({ propertyId }) => {
   };
 
   return (
-    <>
-      <div className="mb-4">
-        <Headline level={4}>Invite a guest</Headline>
+    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+      <div>
+        <FormInput
+          label="Email address"
+          id="email"
+          type="email"
+          register={register}
+          errors={errors}
+        />
       </div>
-
-      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+      <br />
+      <div>
         <div>
-          <FormInput
-            label="Email address"
-            id="email"
-            type="email"
-            register={register}
-            errors={errors}
-          />
-        </div>
-        <br />
-        <div>
-          <div>
-            {/* {errors.singleErrorInput && (
+          {/* {errors.singleErrorInput && (
               <div className="text-sm text-red-500">
                 {errors.singleErrorInput.message}
               </div>
             )} */}
-          </div>
-          <Button
-            type="submit"
-            disabled={mutation.isLoading || isSubmitting}
-            loading={mutation.isLoading || isSubmitting}
-            fullWidth
-          >
-            Send invite
-          </Button>
         </div>
-      </form>
-    </>
+        <Button
+          type="submit"
+          disabled={mutation.isLoading || isSubmitting}
+          loading={mutation.isLoading || isSubmitting}
+          fullWidth
+        >
+          Send invite
+        </Button>
+      </div>
+    </form>
   );
 };
 

@@ -15,7 +15,7 @@ interface Props {
   session: Session;
 }
 
-const Account: React.FC<Props> = ({ session }) => {
+const AccountDetails = ({ session }: Props) => {
   const schema = z.object({
     firstName: z.string().min(2, 'First name must be at least 2 characters'),
     lastName: z.string().min(2, 'Last name must be at least 2 characters'),
@@ -108,4 +108,4 @@ const Account: React.FC<Props> = ({ session }) => {
   );
 };
 
-export default Account;
+export default AccountDetails;

@@ -12,7 +12,7 @@ interface Props {
   isSignUp: boolean;
 }
 
-const RequestOtpForm: React.FC<Props> = ({ onSubmitSuccess, isSignUp }) => {
+const RequestOtpForm = ({ onSubmitSuccess, isSignUp }: Props) => {
   const supabase = useSupabaseClient();
 
   const schema = z.object({

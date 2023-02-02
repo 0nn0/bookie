@@ -4,7 +4,7 @@ import React, { ElementType } from 'react';
 const headlineStyles = cva(['flex'], {
   variants: {
     h1: {
-      true: ['text-4xl'],
+      true: ['text-4xl font-bold'],
     },
     h2: {
       true: ['text-3xl'],
@@ -33,12 +33,7 @@ interface Props {
   bold?: boolean;
 }
 
-const Headline: React.FC<Props> = ({
-  level,
-  children,
-  bold,
-  ...otherProps
-}) => {
+const Headline = ({ level, children, bold, ...otherProps }: Props) => {
   const HeadingTag = `h${level}` as ElementType;
   return (
     <HeadingTag

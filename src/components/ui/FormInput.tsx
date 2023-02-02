@@ -11,14 +11,14 @@ interface Props extends React.ComponentPropsWithoutRef<'input'> {
   errors: any;
 }
 
-const FormInput: React.FC<Props> = ({
+const FormInput = ({
   label,
   id,
   register,
   errors,
   type = 'text',
   ...rest
-}) => {
+}: Props) => {
   return (
     <div>
       <FormLabel id={id}>{label}</FormLabel>

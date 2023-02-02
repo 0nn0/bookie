@@ -1,4 +1,4 @@
-import { useSession, useUser } from '@supabase/auth-helpers-react';
+import { useUser } from '@supabase/auth-helpers-react';
 import Head from 'next/head';
 
 import Header from './Header';
@@ -8,10 +8,7 @@ type LayoutProps = {
   children: React.ReactNode;
 };
 
-export default function Layout({ title, children }: LayoutProps) {
-  const session = useSession();
-
-  console.log({ session });
+const Layout = ({ title, children }: LayoutProps) => {
   const user = useUser();
 
   return (
@@ -20,7 +17,9 @@ export default function Layout({ title, children }: LayoutProps) {
         <title>{`${title} | Bookie`}</title>
       </Head>
       {user && <Header />}
-      <main>{children}</main>
+      <main className="py-8">{children}</main>
     </>
   );
-}
+};
+
+export default Layout;

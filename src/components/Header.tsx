@@ -9,7 +9,7 @@ const Header = () => {
 
   const links = [
     { href: '/', label: 'Home' },
-    { href: '/profile', label: 'Profile' },
+    { href: '/account', label: 'Account' },
   ];
   return (
     <header className="bg-slate-400">

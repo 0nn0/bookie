@@ -14,7 +14,7 @@ interface Props {
   // verifyOtpType: 'magiclink' | 'signup';
 }
 
-const VerifyOtpForm: React.FC<Props> = ({ email, isSignUp }) => {
+const VerifyOtpForm = ({ email, isSignUp }: Props) => {
   const supabase = useSupabaseClient();
   const router = useRouter();
 

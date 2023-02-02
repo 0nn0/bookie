@@ -1,5 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import React from 'react';
+import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -13,8 +13,9 @@ const schema = z.object({
 
 export type FormSchema = z.infer<typeof schema>;
 
-const PropertyForm: React.FC = () => {
-  const addGuestMutation = useAddPropertyMutation();
+const PropertyForm = () => {
+  const addPropertyMutation = useAddPropertyMutation();
+  const router = useRouter();
 
   const {
     register,
@@ -28,7 +29,9 @@ const PropertyForm: React.FC = () => {
   });
 
   const onSubmit = async (formData: FormSchema) => {
-    addGuestMutation.mutate({ name: formData.name });
+    addPropertyMutation.mutate({ name: formData.name });
+
+    router.push('/');
   };
 
   return (
@@ -40,11 +43,10 @@ const PropertyForm: React.FC = () => {
       <div>
         <Button
           type="submit"
-          disabled={addGuestMutation.isLoading || isSubmitting}
-          loading={addGuestMutation.isLoading || isSubmitting}
-          fullWidth
+          disabled={addPropertyMutation.isLoading || isSubmitting}
+          loading={addPropertyMutation.isLoading || isSubmitting}
         >
-          Create
+          Create property
         </Button>
       </div>
     </form>

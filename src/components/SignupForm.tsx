@@ -8,9 +8,7 @@ import { z } from 'zod';
 import Button from './ui/Button';
 import FormInput from './ui/FormInput';
 
-interface Props {}
-
-const SignUpForm: React.FC<Props> = () => {
+const SignUpForm = () => {
   const supabase = useSupabaseClient();
   const router = useRouter();
 

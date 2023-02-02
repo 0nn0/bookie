@@ -1,5 +1,6 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { useRouter } from 'next/router';
 
 import { Database } from '@/lib/database.types';
 
@@ -7,6 +8,7 @@ const useAddPropertyMutation = () => {
   const user = useUser();
   const supabase = useSupabaseClient<Database>();
   const queryClient = useQueryClient();
+  const router = useRouter();
 
   return useMutation({
     mutationFn: async ({ name }: { name: string }) => {
@@ -32,7 +34,6 @@ const useAddPropertyMutation = () => {
       }
 
       const propertyId = data[0].id;
-      console.log({ propertyId });
 
       const { data: dataNewGuestsOwners, error: errorNewGuestsOwners } =
         await supabase.from('guests_owners').insert([
@@ -52,6 +53,8 @@ const useAddPropertyMutation = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
+
+      router.push('/');
     },
   });
 };

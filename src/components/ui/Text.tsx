@@ -1,9 +1,5 @@
-import { cva } from 'class-variance-authority';
+import { VariantProps, cva } from 'class-variance-authority';
 import React from 'react';
-
-interface Props {
-  children: React.ReactNode;
-}
 
 const textStyles = cva(['flex'], {
   variants: {
@@ -13,9 +9,14 @@ const textStyles = cva(['flex'], {
   },
 });
 
-const Text: React.FC<Props> = ({ children, bold, ...rest }) => {
+type Props = React.ComponentPropsWithoutRef<'span'> &
+  VariantProps<typeof textStyles> & {
+    children: React.ReactNode;
+  };
+
+const Text = ({ children, bold, ...rest }: Props) => {
   return (
-    <span className={textStyles(bold)} {...rest}>
+    <span className={textStyles({ bold })} {...rest}>
       {children}
     </span>
   );

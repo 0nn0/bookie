@@ -3,6 +3,8 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import Button from './ui/Button';
+
 const DeleteAccountButton = () => {
   const router = useRouter();
   const supabase = useSupabaseClient();
@@ -35,9 +37,9 @@ const DeleteAccountButton = () => {
   };
 
   return (
-    <button onClick={handleClick} disabled={mutation.isLoading}>
+    <Button intent="error" onClick={handleClick} disabled={mutation.isLoading}>
       Delete account
-    </button>
+    </Button>
   );
 };
 
