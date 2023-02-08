@@ -14,6 +14,8 @@
     "@heroicons/react": "^2.0.13",
     "@hookform/resolvers": "^2.9.10",
     "@internationalized/date": "^3.0.2",
+    "@radix-ui/react-avatar": "^1.0.1",
+    "@radix-ui/react-dropdown-menu": "^2.0.2",
     "@react-spectrum/button": "^3.11.2",
     "@react-spectrum/calendar": "^3.1.5",
     "@supabase/auth-helpers-nextjs": "^0.5.2",

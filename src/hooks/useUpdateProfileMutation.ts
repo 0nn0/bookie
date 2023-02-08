@@ -6,12 +6,18 @@ const useUpdateProfileMutation = () => {
   const user = useUser();
 
   return useMutation({
-    mutationFn: async (formData: { first_name: string; last_name: string }) => {
+    mutationFn: async (formData: {
+      first_name: string;
+      last_name: string;
+      avatar_url?: string;
+    }) => {
+      console.log('UPDATE');
       const { data, error } = await supabaseClient
         .from('profiles')
         .update({
           first_name: formData.first_name,
           last_name: formData.last_name,
+          avatar_url: formData.avatar_url,
           updated_at: new Date().toISOString(),
         })
         .eq('id', user?.id);
