@@ -12,13 +12,13 @@ import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 
-const PropertyPage: NextPage = () => {
+export type CalendarFilter = 'UPCOMING' | 'ALL';
+
+const CalendarPage: NextPage = () => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
-  const [filter, setFilter] = useState<'UPCOMING' | 'CANCELED' | 'ALL'>(
-    'UPCOMING'
-  );
+  const [filter, setFilter] = useState<CalendarFilter>('UPCOMING');
 
   const { isLoading, data, error } = useGetPropertyQuery({
     propertyId,
@@ -65,17 +65,12 @@ const PropertyPage: NextPage = () => {
             {data.role_id === 'OWNER' && (
               <div className="mt-10">
                 <TabsInPils
-                  onClick={(id: string) => setFilter(id)}
+                  onClick={(id: CalendarFilter) => setFilter(id)}
                   items={[
                     {
                       id: 'UPCOMING',
                       name: 'Upcoming',
                       selected: filter === 'UPCOMING',
-                    },
-                    {
-                      id: 'CANCELED',
-                      name: 'Canceled',
-                      selected: filter === 'CANCELED',
                     },
                     {
                       id: 'ALL',
@@ -84,13 +79,14 @@ const PropertyPage: NextPage = () => {
                     },
                   ]}
                 />
-
-                <BookingList
-                  roleId={data.role_id}
-                  guestsOwnersId={data.guest_owners_id}
-                  propertyId={propertyId}
-                  filter={filter}
-                />
+                <div className="mt-4">
+                  <BookingList
+                    roleId={data.role_id}
+                    guestsOwnersId={data.guest_owners_id}
+                    propertyId={propertyId}
+                    filter={filter}
+                  />
+                </div>
               </div>
             )}
           </>
@@ -100,7 +96,7 @@ const PropertyPage: NextPage = () => {
   );
 };
 
-export default PropertyPage;
+export default CalendarPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx);

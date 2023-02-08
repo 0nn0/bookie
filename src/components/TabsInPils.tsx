@@ -12,7 +12,7 @@ const TabsInPils = ({
   onClick,
   items = [],
 }: {
-  onClick: (id: string) => void;
+  onClick: (id: any) => void;
   items: TabInPil[];
 }) => {
   return (
