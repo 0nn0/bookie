@@ -58,7 +58,6 @@ const BookingList = ({
               endDate={end_date}
               status={status}
               guestName={`${first_name} ${last_name}`}
-              propertyId={properties.id}
               propertyName={properties.name}
             />
           );

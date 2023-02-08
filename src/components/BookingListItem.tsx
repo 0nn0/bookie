@@ -3,7 +3,6 @@ import Badge from './ui/Badge';
 const BookingListItem = ({
   id,
   guestName,
-  propertyId,
   propertyName,
   startDate,
   endDate,
@@ -11,7 +10,6 @@ const BookingListItem = ({
 }: {
   id: string;
   guestName: string;
-  propertyId: string;
   propertyName: string;
   startDate: string;
   endDate: string;
@@ -28,10 +26,7 @@ const BookingListItem = ({
     year: 'numeric',
   });
   return (
-    <a
-      href={`/properties/${propertyId}/calendar/${id}`}
-      className="block px-4 py-4 hover:bg-gray-50"
-    >
+    <a href={`/bookings/${id}`} className="block px-4 py-4 hover:bg-gray-50">
       <div>
         <div>
           <div className="flex justify-between">

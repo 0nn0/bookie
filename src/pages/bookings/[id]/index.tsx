@@ -27,11 +27,11 @@ const CancelButton = ({
 
 const Booking = () => {
   const router = useRouter();
-  const { bookingId } = router.query;
+  const { id } = router.query;
 
   return (
     <Layout title="Booking">
-      <div>Booking {bookingId}</div>{' '}
+      <div>Booking {id}</div>{' '}
     </Layout>
   );
 };
