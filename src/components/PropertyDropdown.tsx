@@ -1,3 +1,4 @@
+import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { Home } from 'lucide-react';
 import { useRouter } from 'next/router';
@@ -29,11 +30,15 @@ const PropertyDropdown = () => {
   return (
     <DropdownMenu.Root>
       <DropdownMenu.Trigger asChild>
-        <button className="flex" aria-label="Customise options">
+        <button
+          className="flex w-full items-center justify-center rounded-md  bg-white/40 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-white/60 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+          aria-label="Select property"
+        >
           <div className="mr-2 inline-flex">
-            <Home />
+            <Home size={18} />
           </div>{' '}
           {selectedProperty?.properties?.name || 'Overview'}
+          <ChevronDownIcon className="-mr-1 ml-2 h-5 w-5" aria-hidden="true" />
         </button>
       </DropdownMenu.Trigger>
 
