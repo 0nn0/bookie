@@ -8,6 +8,7 @@ import GuestList from '@/components/GuestList';
 import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
 import PropertyHeader from '@/components/PropertyHeader';
+import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
@@ -32,13 +33,7 @@ const Guests: NextPage = () => {
   return (
     <Layout title={data.name}>
       <Container>
-        <BackLink href="/">Properties</BackLink>
-
-        <PropertyHeader
-          headline={data.name}
-          propertyId={propertyId}
-          roleId={data.role_id}
-        />
+        <PropertyNav propertyId={propertyId} />
 
         <SectionHeading
           title="Guests"

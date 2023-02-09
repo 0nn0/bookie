@@ -54,7 +54,7 @@ const CalendarPage: NextPage = () => {
             />
 
             {data.role_id === 'OWNER' && (
-              <div className="mt-4">
+              <div>
                 <TabsInPils
                   onClick={(id: CalendarFilter) => setFilter(id)}
                   items={[

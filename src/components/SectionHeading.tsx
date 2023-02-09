@@ -7,7 +7,7 @@ type Props = {
 
 const SectionHeading = ({ title, action }: Props) => {
   return (
-    <div className="flex items-center">
+    <div className="mb-4 flex items-center">
       <div className="flex-auto">
         <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
       </div>

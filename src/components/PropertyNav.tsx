@@ -1,4 +1,4 @@
-import { CalendarDays, Home, Settings, Users } from 'lucide-react';
+import { CalendarDays, Info, Settings, Users } from 'lucide-react';
 
 import Tabs from './Tabs';
 
@@ -11,10 +11,10 @@ const PropertyNav = ({
 }) => {
   const tabs = [
     {
-      name: 'General',
-      href: `/properties/${propertyId}/general`,
+      name: 'Info',
+      href: `/properties/${propertyId}/info`,
       current: true,
-      Icon: Home,
+      Icon: Info,
     },
     {
       name: 'Bookings',

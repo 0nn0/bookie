@@ -2,11 +2,11 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import BackLink from '@/components/BackButton';
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
 import Layout from '@/components/Layout';
-import PropertyHeader from '@/components/PropertyHeader';
+import PropertyNav from '@/components/PropertyNav';
+import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import useDeletePropertyMutation from '@/hooks/useDeletePropertyMutation';
@@ -31,13 +31,10 @@ const Settings: NextPage = () => {
   return (
     <Layout title="Settings">
       <Container>
-        <BackLink href="/">Properties</BackLink>
+        <PropertyNav propertyId={propertyId} />
 
-        <PropertyHeader
-          headline={data.name}
-          propertyId={propertyId}
-          roleId={data.role_id}
-        />
+        <SectionHeading title="Settings" />
+
         <Card>
           <CardContent>
             <DeleteButton propertyId={propertyId}>Delete property</DeleteButton>
