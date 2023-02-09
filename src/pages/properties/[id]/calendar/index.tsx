@@ -3,15 +3,11 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
-import BackLink from '@/components/BackButton';
 import BookingList from '@/components/BookingList';
-import EmptyState from '@/components/EmptyState';
 import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
-import PropertyHeader from '@/components/PropertyHeader';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
-import Spinner from '@/components/Spinner';
 import TabsInPils from '@/components/TabsInPils';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';

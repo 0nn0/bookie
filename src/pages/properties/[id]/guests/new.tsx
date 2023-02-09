@@ -1,8 +1,6 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 
-import BackLink from '@/components/BackButton';
-import BreadCrumbs from '@/components/Breadcrumbs';
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
 import InviteGuestForm from '@/components/InviteGuestForm';
@@ -17,9 +15,6 @@ const New: NextPage = () => {
   return (
     <Layout title="Invite guest">
       <Container>
-        <BreadCrumbs />
-        <BackLink href={`/properties/${propertyId}/guests`}>Back</BackLink>
-
         <div className="mb-4">
           <Headline level={4}>Invite a guest</Headline>
         </div>

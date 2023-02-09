@@ -2,12 +2,10 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 
-import BackLink from '@/components/BackButton';
 import ErrorState from '@/components/ErrorState';
 import GuestList from '@/components/GuestList';
 import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
-import PropertyHeader from '@/components/PropertyHeader';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
