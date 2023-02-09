@@ -8,21 +8,16 @@ const useGetPropertiesQuery = () => {
   const supabaseClient = useSupabaseClient();
 
   const fetchProperties = async () => {
-    const { data, error } = await supabaseClient
+    return await supabaseClient
       .from('guests_owners')
       .select('id, role_id, properties(id, name)')
-      .eq('profile_id', user?.id);
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return data;
+      .eq('profile_id', user?.id)
+      .throwOnError();
   };
 
   return useQuery<unknown, unknown, PropertiesByUser>({
     queryKey: ['properties'],
-    queryFn: () => fetchProperties(),
+    queryFn: async () => fetchProperties().then((result) => result.data),
   });
 };
 
