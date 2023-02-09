@@ -5,6 +5,7 @@ import { useRouter } from 'next/router';
 
 import Layout from '@/components/Layout';
 import PropertyList from '@/components/PropertyList';
+import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
 import Headline from '@/components/ui/Headline';
 
@@ -34,16 +35,16 @@ const Home: NextPage = ({ user }) => {
 
   const action = {
     href: '/properties/new',
-    label: 'Create property',
+    label: 'New',
   };
 
   return (
     <Layout title="Home">
       <Container>
-        <div className="mb-6 flex flex-wrap items-center justify-between sm:flex-nowrap">
-          <Headline level={1}>Properties</Headline>
-          <div className="ml-4 mt-2 flex-shrink-0">
-            {action && (
+        <div className="mb-6">
+          <SectionHeading
+            title="Properties"
+            action={
               <Link href={action.href}>
                 <button
                   type="button"
@@ -52,8 +53,8 @@ const Home: NextPage = ({ user }) => {
                   {action.label}
                 </button>
               </Link>
-            )}
-          </div>
+            }
+          />
         </div>
 
         <PropertyList />

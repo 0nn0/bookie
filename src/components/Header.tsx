@@ -6,6 +6,7 @@ import { useRouter } from 'next/router';
 
 import useGetProfileQuery from '@/hooks/useGetProfileQuery';
 
+import PropertyDropdown from './PropertyDropdown';
 import Container from './ui/Container';
 
 const Header = () => {
@@ -21,15 +22,7 @@ const Header = () => {
       <Container>
         <div className="flex h-16 items-center justify-between">
           <nav>
-            <ul className="">
-              {links.map(({ label, ...rest }) => (
-                <li key={label}>
-                  <Link {...rest}>
-                    <a className="text-white">{label}</a>
-                  </Link>
-                </li>
-              ))}
-            </ul>
+            <PropertyDropdown />
           </nav>
 
           <DropdownMenu.Root>

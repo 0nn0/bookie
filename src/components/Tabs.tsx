@@ -29,7 +29,7 @@ const Tabs = ({ items = [] }) => {
                 <div className="flex justify-center">
                   <Icon />
                 </div>
-                <div className="flex justify-center">
+                <div className="mt-1 flex justify-center">
                   <span>{tab.name}</span>
                 </div>
               </a>

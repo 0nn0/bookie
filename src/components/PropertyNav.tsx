@@ -17,7 +17,7 @@ const PropertyNav = ({
       Icon: Home,
     },
     {
-      name: 'Calendar',
+      name: 'Bookings',
       href: `/properties/${propertyId}/calendar`,
       current: true,
       Icon: CalendarDays,

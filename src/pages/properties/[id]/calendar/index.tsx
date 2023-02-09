@@ -9,6 +9,7 @@ import EmptyState from '@/components/EmptyState';
 import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
 import PropertyHeader from '@/components/PropertyHeader';
+import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Spinner from '@/components/Spinner';
 import TabsInPils from '@/components/TabsInPils';
@@ -33,17 +34,11 @@ const CalendarPage: NextPage = () => {
   return (
     <Layout title={title}>
       <Container>
-        <BackLink href="/">Properties</BackLink>
-
         {isLoading && <LoadingState />}
         {error instanceof Error && <p>{error.message}</p>}
         {data && (
           <>
-            <PropertyHeader
-              headline={data.name}
-              propertyId={propertyId}
-              roleId={data.role_id}
-            />
+            <PropertyNav propertyId={propertyId} />
 
             <SectionHeading
               title="Bookings"
