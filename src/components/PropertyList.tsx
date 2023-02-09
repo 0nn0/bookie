@@ -4,20 +4,23 @@ import Link from 'next/link';
 import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
 
 import Card from './Card';
+import EmptyState from './EmptyState';
+import ErrorState from './ErrorState';
+import LoadingState from './LoadingState';
 
 const PropertyList = () => {
   const { isLoading, data, error } = useGetPropertiesQuery();
 
   if (isLoading) {
-    return <div>Loading...</div>;
+    return <LoadingState />;
   }
 
   if (error instanceof Error) {
-    return <div>Error: {error?.message}</div>;
+    return <ErrorState>Error: {error?.message}</ErrorState>;
   }
 
   if (!data || data.length === 0) {
-    return <div>No properties listed</div>;
+    return <EmptyState>No properties listed</EmptyState>;
   }
 
   return (

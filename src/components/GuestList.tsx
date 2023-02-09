@@ -1,6 +1,10 @@
 import useDeleteGuestMutation from '@/hooks/useDeleteGuestMutation';
 import useGetGuestsQuery from '@/hooks/useGetGuestsQuery';
 
+import EmptyState from './EmptyState';
+import ErrorState from './ErrorState';
+import LoadingState from './LoadingState';
+
 const DeleteButton = ({
   children,
   propertyId,
@@ -29,15 +33,15 @@ const GuestList = ({ propertyId }: { propertyId: string }) => {
   const { isLoading, data, error } = useGetGuestsQuery({ propertyId });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingState />;
   }
 
   if (error instanceof Error) {
-    return <p>Error: {error.message}</p>;
+    return <ErrorState>Error: {error.message}</ErrorState>;
   }
 
   if (data.length === 0) {
-    return <p>No guests have been invited yet</p>;
+    return <EmptyState>No guests have been invited yet</EmptyState>;
   }
 
   return (

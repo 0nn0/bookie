@@ -3,6 +3,9 @@ import { CalendarFilter } from '@/pages/properties/[id]/calendar';
 
 import BookingListItem from './BookingListItem';
 import Card from './Card';
+import EmptyState from './EmptyState';
+import ErrorState from './ErrorState';
+import LoadingState from './LoadingState';
 
 const BookingList = ({
   propertyId,
@@ -15,12 +18,26 @@ const BookingList = ({
   guestsOwnersId: string;
   filter: CalendarFilter;
 }) => {
-  const { isLoading, data, error } = useGetBookingsQuery({
+  const { isLoading, data, error, isError } = useGetBookingsQuery({
     propertyId,
     roleId,
     guestsOwnersId,
     filter,
   });
+
+  if (isLoading) {
+    return <LoadingState />;
+  }
+
+  if (isError) {
+    console.error('Fetching bookings failed', { error });
+    return (
+      <ErrorState>
+        Fetching bookings failed. Please try again. If the issue persists,
+        please reach out to support.
+      </ErrorState>
+    );
+  }
 
   if (!data || data.length === 0) {
     const copy = {
@@ -28,11 +45,7 @@ const BookingList = ({
       ALL: 'You have no bookings',
     };
 
-    return (
-      <div className="flex h-24 items-center justify-center text-center text-sm text-gray-400">
-        {copy[filter]}
-      </div>
-    );
+    return <EmptyState>{copy[filter]}</EmptyState>;
   }
 
   return (

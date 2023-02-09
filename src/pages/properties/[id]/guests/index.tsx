@@ -3,9 +3,12 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 
 import BackLink from '@/components/BackButton';
+import ErrorState from '@/components/ErrorState';
 import GuestList from '@/components/GuestList';
 import Layout from '@/components/Layout';
+import LoadingState from '@/components/LoadingState';
 import PropertyHeader from '@/components/PropertyHeader';
+import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
@@ -19,11 +22,11 @@ const Guests: NextPage = () => {
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingState />;
   }
 
   if (error instanceof Error) {
-    return <p>{error.message}</p>;
+    return <ErrorState>{error.message}</ErrorState>;
   }
 
   return (
@@ -37,23 +40,17 @@ const Guests: NextPage = () => {
           roleId={data.role_id}
         />
 
-        <div className="sm:flex sm:items-center">
-          <div className="sm:flex-auto">
-            <h1 className="text-xl font-semibold text-gray-900">Guests</h1>
-            <p className="mt-2 text-sm text-gray-700">
-              A list of all the users in your account including their name,
-              title, email and role.
-            </p>
-          </div>
-          <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+        <SectionHeading
+          title="Guests"
+          action={
             <Button
               href={`/properties/${propertyId}/guests/new`}
               className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
             >
               Invite guest
             </Button>
-          </div>
-        </div>
+          }
+        />
 
         <GuestList propertyId={propertyId} />
       </Container>

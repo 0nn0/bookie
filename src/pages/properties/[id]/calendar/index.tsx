@@ -5,8 +5,12 @@ import { useState } from 'react';
 
 import BackLink from '@/components/BackButton';
 import BookingList from '@/components/BookingList';
+import EmptyState from '@/components/EmptyState';
 import Layout from '@/components/Layout';
+import LoadingState from '@/components/LoadingState';
 import PropertyHeader from '@/components/PropertyHeader';
+import SectionHeading from '@/components/SectionHeading';
+import Spinner from '@/components/Spinner';
 import TabsInPils from '@/components/TabsInPils';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
@@ -31,7 +35,7 @@ const CalendarPage: NextPage = () => {
       <Container>
         <BackLink href="/">Properties</BackLink>
 
-        {isLoading && <p>Loading...</p>}
+        {isLoading && <LoadingState />}
         {error instanceof Error && <p>{error.message}</p>}
         {data && (
           <>
@@ -41,29 +45,21 @@ const CalendarPage: NextPage = () => {
               roleId={data.role_id}
             />
 
-            <div className="sm:flex sm:items-center">
-              <div className="sm:flex-auto">
-                <h1 className="text-xl font-semibold text-gray-900">
-                  Bookings
-                </h1>
-                <p className="mt-2 text-sm text-gray-700">
-                  A list of all the users in your account including their name,
-                  title, email and role.
-                </p>
-              </div>
-              <div className="mt-4 sm:mt-0 sm:ml-16 sm:flex-none">
+            <SectionHeading
+              title="Bookings"
+              action={
                 <Button
                   href={`/properties/${propertyId}/calendar/new`}
                   type="button"
                   className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
                 >
-                  New booking
+                  New
                 </Button>
-              </div>
-            </div>
+              }
+            />
 
             {data.role_id === 'OWNER' && (
-              <div className="mt-10">
+              <div className="mt-4">
                 <TabsInPils
                   onClick={(id: CalendarFilter) => setFilter(id)}
                   items={[

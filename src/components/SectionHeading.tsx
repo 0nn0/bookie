@@ -2,12 +2,16 @@ import React from 'react';
 
 type Props = {
   title: string;
+  action: React.ReactNode;
 };
 
-const SectionHeading = ({ title }: Props) => {
+const SectionHeading = ({ title, action }: Props) => {
   return (
-    <div>
-      <h1>{title}</h1>
+    <div className="flex items-center">
+      <div className="flex-auto">
+        <h2 className="text-xl font-semibold text-gray-900">{title}</h2>
+      </div>
+      <div className="ml-4 flex-none sm:mt-0">{action}</div>
     </div>
   );
 };
