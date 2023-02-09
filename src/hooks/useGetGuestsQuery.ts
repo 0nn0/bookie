@@ -8,23 +8,18 @@ const useGetGuestsQuery = ({ propertyId }: { propertyId: string }) => {
   const supabaseClient = useSupabaseClient();
 
   const fetchGuests = async () => {
-    const { data, error } = await supabaseClient
+    return await supabaseClient
       .from('guests_owners')
       .select('id, role_id, profiles(id, email, last_sign_in_at)')
       .eq('property_id', propertyId)
       // exclude the current user
-      .neq('profile_id', user?.id);
-
-    if (error) {
-      throw new Error(error.message);
-    }
-
-    return data;
+      .neq('profile_id', user?.id)
+      .throwOnError();
   };
 
   return useQuery<unknown, unknown, PropertiesByUser>({
     queryKey: ['guests', propertyId],
-    queryFn: () => fetchGuests(),
+    queryFn: async () => fetchGuests().then((result) => result.data),
   });
 };
 
