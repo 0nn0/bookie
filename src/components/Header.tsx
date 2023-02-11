@@ -1,7 +1,6 @@
 import * as Avatar from '@radix-ui/react-avatar';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import Link from 'next/link';
 import { useRouter } from 'next/router';
 
 import useGetProfileQuery from '@/hooks/useGetProfileQuery';

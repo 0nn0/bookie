@@ -23,7 +23,7 @@ const useGetBookingsQuery = ({
         return await supabaseClient
           .from('bookings')
           .select(
-            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name)), properties(id, name)'
+            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
           )
           .eq('property_id', propertyId)
           .order('start_date', { ascending: true })
@@ -32,7 +32,7 @@ const useGetBookingsQuery = ({
         return await supabaseClient
           .from('bookings')
           .select(
-            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name)), properties(id, name)'
+            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
           )
           .eq('status', 'BOOKED')
           .eq('property_id', propertyId)
@@ -45,7 +45,7 @@ const useGetBookingsQuery = ({
       return await supabaseClient
         .from('bookings')
         .select(
-          'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name)), properties(id, name)'
+          'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
         )
         .eq('property_id', propertyId)
         // .eq('guests_owners_id', guestsOwnersId)

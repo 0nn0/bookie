@@ -61,7 +61,7 @@ const BookingList = ({
             guests_owners,
           } = item;
 
-          const { first_name, last_name } = guests_owners.profiles;
+          const { first_name, last_name, avatar_url } = guests_owners.profiles;
 
           return (
             <BookingListItem
@@ -71,6 +71,7 @@ const BookingList = ({
               endDate={end_date}
               status={status}
               guestName={`${first_name} ${last_name}`}
+              guestAvatarUrl={avatar_url}
               propertyName={properties.name}
             />
           );

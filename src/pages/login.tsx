@@ -12,7 +12,6 @@ const Login: NextPage = () => {
 
   return (
     <Layout title="Login">
-      <Link href="/signup">Sign up</Link>
       <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
         <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
           <div className="sm:mx-auto sm:w-full sm:max-w-md">
@@ -34,6 +33,12 @@ const Login: NextPage = () => {
                 />
               )}
             </div>
+            <br />
+            {!email && (
+              <div className="text-center">
+                Don't have an account? Go to <Link href="/signup">Sign up</Link>
+              </div>
+            )}
           </div>
         </div>
       </div>
