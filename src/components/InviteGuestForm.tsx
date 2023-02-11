@@ -54,7 +54,6 @@ const InviteGuestForm = ({ propertyId }: { propertyId: string }) => {
           type="submit"
           disabled={mutation.isLoading || isSubmitting}
           loading={mutation.isLoading || isSubmitting}
-          fullWidth
         >
           Send invite
         </Button>

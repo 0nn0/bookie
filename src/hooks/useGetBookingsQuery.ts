@@ -47,7 +47,9 @@ const useGetBookingsQuery = ({
         .select(
           'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name)), properties(id, name)'
         )
-        .eq('guests_owners_id', guestsOwnersId)
+        .eq('property_id', propertyId)
+        // .eq('guests_owners_id', guestsOwnersId)
+
         .order('start_date', { ascending: true })
         .throwOnError();
     }

@@ -4,7 +4,11 @@ import React from 'react';
 
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
+import ErrorState from '@/components/ErrorState';
 import Layout from '@/components/Layout';
+import LoadingState from '@/components/LoadingState';
+import PropertyContent from '@/components/PropertyContent';
+import PropertyDetailsForm from '@/components/PropertyDetailsForm';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
@@ -16,30 +20,32 @@ const Settings: NextPage = () => {
   const router = useRouter();
   const propertyId = router.query.id as string;
 
-  const { isLoading, data, error } = useGetPropertyQuery({
+  const { isLoading, data, error, isError } = useGetPropertyQuery({
     propertyId,
   });
 
   if (isLoading) {
-    return <p>Loading...</p>;
+    return <LoadingState />;
   }
 
-  if (error instanceof Error) {
-    return <p>{error.message}</p>;
+  if (isError) {
+    return <ErrorState>{JSON.stringify(error.message, null, 2)}</ErrorState>;
   }
 
   return (
     <Layout title="Settings">
       <Container>
         <PropertyNav propertyId={propertyId} />
+        <PropertyContent>
+          <SectionHeading title="Settings" />
 
-        <SectionHeading title="Settings" />
-
-        <Card>
-          <CardContent>
-            <DeleteButton propertyId={propertyId}>Delete property</DeleteButton>
-          </CardContent>
-        </Card>
+          <PropertyDetailsForm name={data.name} />
+          <br />
+          <br />
+          <br />
+          <br />
+          <DeleteButton propertyId={propertyId}>Delete property</DeleteButton>
+        </PropertyContent>
       </Container>
     </Layout>
   );

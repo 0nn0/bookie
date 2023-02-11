@@ -5,7 +5,7 @@ import { z } from 'zod';
 
 import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
-import useAddPropertyMutation from '@/hooks/useAddPropertyMutation';
+import useUpdatePropertyMutation from '@/hooks/useUpdatePropertyMutation';
 
 const schema = z.object({
   name: z.string().min(3, 'Please enter a valid name'),
@@ -13,9 +13,11 @@ const schema = z.object({
 
 export type FormSchema = z.infer<typeof schema>;
 
-const PropertyForm = () => {
-  const addPropertyMutation = useAddPropertyMutation();
-  const router = useRouter();
+const PropertyDetailsForm = ({ name }: { name: string }) => {
+  const { query } = useRouter();
+  const propertyId = query?.id as string;
+
+  const addPropertyMutation = useUpdatePropertyMutation({ propertyId });
 
   const {
     register,
@@ -24,14 +26,12 @@ const PropertyForm = () => {
   } = useForm<FormSchema>({
     resolver: zodResolver(schema),
     defaultValues: {
-      name: '',
+      name,
     },
   });
 
   const onSubmit = async (formData: FormSchema) => {
     addPropertyMutation.mutate({ name: formData.name });
-
-    router.push('/');
   };
 
   return (
@@ -46,11 +46,11 @@ const PropertyForm = () => {
           disabled={addPropertyMutation.isLoading || isSubmitting}
           loading={addPropertyMutation.isLoading || isSubmitting}
         >
-          Add property
+          Update
         </Button>
       </div>
     </form>
   );
 };
 
-export default PropertyForm;
+export default PropertyDetailsForm;

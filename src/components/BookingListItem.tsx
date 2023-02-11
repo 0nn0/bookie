@@ -1,3 +1,5 @@
+import Link from 'next/link';
+
 import Badge from './ui/Badge';
 
 const BookingListItem = ({
@@ -26,30 +28,32 @@ const BookingListItem = ({
     year: 'numeric',
   });
   return (
-    <a href={`/bookings/${id}`} className="block px-4 py-4 hover:bg-gray-50">
-      <div>
+    <Link href={`/bookings/${id}`}>
+      <a className="block px-4 py-4 hover:bg-gray-50">
         <div>
-          <div className="flex justify-between">
-            <div className="inline-flex font-semibold text-gray-700">
-              {guestName}
+          <div>
+            <div className="flex justify-between">
+              <div className="inline-flex font-semibold text-gray-700">
+                {guestName}
+              </div>
+              <div>
+                <Badge type={status === 'BOOKED' ? 'success' : 'danger'}>
+                  {status}
+                </Badge>
+              </div>
             </div>
-            <div>
-              <Badge type={status === 'BOOKED' ? 'success' : 'danger'}>
-                {status}
-              </Badge>
+            <div className="flex">
+              <div className="mr-2 text-sm text-gray-400">{propertyName}</div>
+            </div>
+            <div className="mt-3 text-sm text-gray-700">
+              {readableStartDate} - {readableEndDate}
             </div>
           </div>
-          <div className="flex">
-            <div className="mr-2 text-sm text-gray-400">{propertyName}</div>
-          </div>
-          <div className="mt-3 text-sm text-gray-700">
-            {readableStartDate} - {readableEndDate}
-          </div>
-        </div>
 
-        <div></div>
-      </div>
-    </a>
+          <div></div>
+        </div>
+      </a>
+    </Link>
   );
 };
 

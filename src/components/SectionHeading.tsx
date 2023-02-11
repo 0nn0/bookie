@@ -2,7 +2,7 @@ import React from 'react';
 
 type Props = {
   title: string;
-  action: React.ReactNode;
+  action?: React.ReactNode;
 };
 
 const SectionHeading = ({ title, action }: Props) => {

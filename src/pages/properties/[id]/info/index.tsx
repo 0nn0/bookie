@@ -2,6 +2,7 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import Layout from '@/components/Layout';
+import PropertyContent from '@/components/PropertyContent';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
@@ -14,7 +15,9 @@ const InfoPage = () => {
     <Layout>
       <Container>
         <PropertyNav propertyId={propertyId} />
-        <SectionHeading title="Info" />
+        <PropertyContent>
+          <SectionHeading title="Info" />
+        </PropertyContent>
       </Container>
     </Layout>
   );

@@ -2,6 +2,8 @@ import { useRouter } from 'next/router';
 import React from 'react';
 
 import Layout from '@/components/Layout';
+import SectionHeading from '@/components/SectionHeading';
+import Container from '@/components/ui/Container';
 import useCancelBookingMutation from '@/hooks/useCancelBookingMutation';
 
 const CancelButton = ({
@@ -31,7 +33,11 @@ const Booking = () => {
 
   return (
     <Layout title="Booking">
-      <div>Booking {id}</div>{' '}
+      <Container>
+        <SectionHeading title="Booking" />
+
+        <div>ID: {id}</div>
+      </Container>
     </Layout>
   );
 };

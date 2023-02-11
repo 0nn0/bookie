@@ -172,7 +172,7 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
             loading={mutation.isLoading || isSubmitting}
             fullWidth
           >
-            Make reservation
+            Book
           </Button>
         </div>
       </form>

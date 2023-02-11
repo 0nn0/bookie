@@ -80,7 +80,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   if (!data) {
     return {
       redirect: {
-        destination: `/properties/${ctx.params.id}`,
+        destination: `/properties/${ctx.params.id}/info`,
         permanent: false,
       },
     };

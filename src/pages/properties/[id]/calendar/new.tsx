@@ -1,13 +1,13 @@
 import { NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
 
+import BackLink from '@/components/BackButton';
 import BookingForm from '@/components/BookingForm';
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
 import Layout from '@/components/Layout';
+import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
-import Headline from '@/components/ui/Headline';
 
 const New: NextPage = () => {
   const { query } = useRouter();
@@ -17,8 +17,10 @@ const New: NextPage = () => {
     <Layout title="New booking">
       <Container>
         <div className="mb-4">
-          <Headline level={4}>Make a booking</Headline>
+          <BackLink href={`/properties/${propertyId}/calendar`}>Back</BackLink>
         </div>
+        <SectionHeading title="New booking" />
+
         <Card>
           <CardContent>
             <BookingForm propertyId={propertyId} />

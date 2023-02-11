@@ -112,7 +112,6 @@ const AccountDetails = ({ session }: Props) => {
               type="submit"
               disabled={isSubmitting || mutation.isLoading}
               loading={isSubmitting || mutation.isLoading}
-              fullWidth
             >
               {isSubmitting ? 'Updating ...' : 'Update'}
             </Button>
