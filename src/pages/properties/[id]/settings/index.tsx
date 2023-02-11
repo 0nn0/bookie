@@ -2,8 +2,6 @@ import { NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
-import Card from '@/components/Card';
-import CardContent from '@/components/CardContent';
 import ErrorState from '@/components/ErrorState';
 import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
@@ -24,27 +22,32 @@ const Settings: NextPage = () => {
     propertyId,
   });
 
-  if (isLoading) {
-    return <LoadingState />;
-  }
-
-  if (isError) {
-    return <ErrorState>{JSON.stringify(error.message, null, 2)}</ErrorState>;
-  }
-
   return (
     <Layout title="Settings">
       <Container>
         <PropertyNav propertyId={propertyId} />
+
         <PropertyContent>
           <SectionHeading title="Settings" />
 
-          <PropertyDetailsForm name={data.name} />
-          <br />
-          <br />
-          <br />
-          <br />
-          <DeleteButton propertyId={propertyId}>Delete property</DeleteButton>
+          {isLoading && <LoadingState />}
+
+          {isError && (
+            <ErrorState>{JSON.stringify(error.message, null, 2)}</ErrorState>
+          )}
+
+          {data && (
+            <>
+              <PropertyDetailsForm name={data.name} />
+              <br />
+              <br />
+              <br />
+              <br />
+              <DeleteButton propertyId={propertyId}>
+                Delete property
+              </DeleteButton>
+            </>
+          )}
         </PropertyContent>
       </Container>
     </Layout>
