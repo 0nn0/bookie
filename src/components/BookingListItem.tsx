@@ -35,10 +35,10 @@ const BookingListItem = ({
       <a className="block px-4 py-4 hover:bg-gray-50">
         <div>
           <div className="flex">
-            <div className="pt-1">
+            <div className="w-10 pt-1">
               <Avatar.Root>
                 <Avatar.Fallback
-                  className="flex h-full w-full items-center justify-center bg-slate-100 text-sm font-medium leading-none"
+                  className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-sm font-medium leading-none"
                   delayMs={600}
                 >
                   OS
