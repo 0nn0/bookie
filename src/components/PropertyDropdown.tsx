@@ -71,6 +71,7 @@ const PropertyDropdown = () => {
         <DropdownMenu.Content
           className="w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
           sideOffset={5}
+          align="start"
         >
           <DropdownMenu.Item
             className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
