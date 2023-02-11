@@ -42,7 +42,7 @@ const PropertyList = () => {
                             </p>
                           </div>
 
-                          <div className="hidden md:block">
+                          <div className="">
                             <div>
                               <p className="text-sm text-gray-900">
                                 {role_id === 'OWNER' ? 'Owner' : 'Guest'}

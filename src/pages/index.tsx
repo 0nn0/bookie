@@ -12,23 +12,45 @@ const Home: NextPage = ({ user }) => {
   if (!user)
     return (
       <Layout title="Home">
-        <Headline level={1}>
-          Easily share your holiday home with friends and family
-        </Headline>
-        <p>
-          No more manually planning who can stay when. Family and friends can
-          simply make reservations themselves based on your configuration.
-        </p>
-        <p>
-          Bookie helps families manage collectively owned vacation
-          property/homes
-        </p>
-        <Headline level={2}>Features</Headline>
-        <ul>
-          <li>Shared calendar through which family can manage their booking</li>
-          <li>Booking system configurable to your needs</li>
-          <li>Support multiple properties per user</li>
-        </ul>
+        <Container>
+          <header className="mb-6">
+            <nav>
+              <ul className="flex gap-4">
+                <li>
+                  <Link href="/login">
+                    <a>Login</a>
+                  </Link>
+                </li>
+                <li>
+                  <Link href="/signup">
+                    <a>Signup</a>
+                  </Link>
+                </li>
+              </ul>
+            </nav>
+          </header>
+          <Headline level={1}>
+            Easily share your holiday home with friends and family
+          </Headline>
+          <p>
+            Bookie helps families manage collectively owned vacation homes. No
+            more manually planning who can stay when. Family and friends can
+            simply make reservations themselves based on your configuration.
+          </p>
+          <p></p>
+          <div className="mt-10">
+            <Headline level={2}>Features</Headline>
+            <div className="">
+              <ul className="list-inside list-disc">
+                <li>
+                  Shared calendar through which you can manage all bookings
+                </li>
+                <li>Booking system configurable to your needs</li>
+                <li>Supports multiple properties</li>
+              </ul>
+            </div>
+          </div>
+        </Container>
       </Layout>
     );
 
