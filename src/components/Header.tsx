@@ -16,7 +16,6 @@ const Header = () => {
   const { data } = useGetProfileQuery();
   const avatarUrl = data?.avatar_url;
 
-  const links = [{ href: '/', label: 'Home' }];
   return (
     <header className="bg-slate-400">
       <Container>
