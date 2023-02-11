@@ -31,7 +31,7 @@ const Header = () => {
               >
                 <Avatar.Root>
                   <Avatar.Fallback
-                    className="flex h-full w-full items-center justify-center bg-slate-100 text-sm font-medium leading-none"
+                    className="flex h-full w-full items-center justify-center bg-slate-100 text-sm font-medium leading-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                     delayMs={600}
                   >
                     OS
@@ -39,7 +39,7 @@ const Header = () => {
                   {avatarUrl && (
                     <Avatar.Image
                       src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${process.env.NEXT_PUBLIC_SUPABASE_MEDIA_BUCKET_NAME}/${avatarUrl}`}
-                      className="h-8 w-8 rounded-full"
+                      className="h-8 w-8 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                       alt="Avatar"
                     />
                   )}
