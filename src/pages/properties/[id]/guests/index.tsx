@@ -11,8 +11,9 @@ import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
+import { Role, RoleId } from '@/pages/api/user';
 
-const Guests: NextPage = () => {
+const Guests = ({ roleId }: { roleId: RoleId }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
@@ -31,7 +32,7 @@ const Guests: NextPage = () => {
   return (
     <Layout title={data.name}>
       <Container>
-        <PropertyNav propertyId={propertyId} />
+        <PropertyNav propertyId={propertyId} roleId={roleId} />
 
         <SectionHeading
           title="Guests"
@@ -68,21 +69,38 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
 
+  if (!ctx.params?.id) {
+    return {
+      notFound: true,
+    };
+  }
+
   // check if user is owner of this property
   const { data } = await supabase
     .from('guests_owners')
     .select()
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)
-    .eq('role_id', 'OWNER')
+    .eq('role_id', Role.OWNER)
     .single();
 
   if (!data) {
     return {
-      redirect: {
-        destination: `/properties/${ctx.params.id}/error`,
-        permanent: false,
-      },
+      notFound: true,
+    };
+  }
+
+  // get role
+  const { data: roleData } = await supabase
+    .from('guests_owners')
+    .select('role_id')
+    .eq('profile_id', session.user.id)
+    .eq('property_id', ctx.params.id)
+    .single();
+
+  if (!roleData) {
+    return {
+      notFound: true,
     };
   }
 
@@ -90,6 +108,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       initialSession: session,
       user: session.user,
+      roleId: roleData.role_id,
     },
   };
 };

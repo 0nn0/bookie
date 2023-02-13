@@ -2,6 +2,8 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
+import { Role } from './user';
+
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY
@@ -32,7 +34,7 @@ export default async function handler(
       .select()
       .eq('property_id', propertyId)
       .eq('profile_id', session.user.id)
-      .eq('role_id', 'OWNER')
+      .eq('role_id', Role.OWNER)
       .single();
 
     console.log({ ownerData });
@@ -85,7 +87,7 @@ export default async function handler(
         created_at: new Date(),
         profile_id: profileId,
         property_id: propertyId,
-        role_id: 'GUEST',
+        role_id: Role.GUEST,
       });
     } else {
       return res.status(409).json({ error: 'User is already a guest' });

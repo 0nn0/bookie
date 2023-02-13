@@ -1,23 +1,22 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import BookingList from '@/components/BookingList';
-import ErrorState from '@/components/ErrorState';
 import Layout from '@/components/Layout';
-import LoadingState from '@/components/LoadingState';
 import PropertyContent from '@/components/PropertyContent';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import TabsInPils from '@/components/TabsInPils';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
-import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
+import { Role, RoleId } from '@/pages/api/user';
 
 export type CalendarFilter = 'UPCOMING' | 'ALL';
 
-const CalendarPage: NextPage = () => {
+const CalendarPage = ({ roleId }: { roleId: RoleId }) => {
+  console.log({ roleId });
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
@@ -26,7 +25,7 @@ const CalendarPage: NextPage = () => {
   return (
     <Layout title="Bookings">
       <Container>
-        <PropertyNav propertyId={propertyId} />
+        <PropertyNav propertyId={propertyId} roleId={roleId} />
         <PropertyContent>
           <SectionHeading
             title="Bookings"
@@ -59,7 +58,7 @@ const CalendarPage: NextPage = () => {
             />
             <div className="mt-4">
               <BookingList
-                roleId="OWNER"
+                roleId={Role.OWNER}
                 propertyId={propertyId}
                 filter={filter}
               />
@@ -88,10 +87,31 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
 
+  if (!ctx.params?.id) {
+    return {
+      notFound: true,
+    };
+  }
+
+  // get role
+  const { data } = await supabase
+    .from('guests_owners')
+    .select('role_id')
+    .eq('profile_id', session.user.id)
+    .eq('property_id', ctx.params.id)
+    .single();
+
+  if (!data) {
+    return {
+      notFound: true,
+    };
+  }
+
   return {
     props: {
       initialSession: session,
       user: session.user,
+      roleId: data.role_id,
     },
   };
 };

@@ -7,6 +7,13 @@ const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY
 );
 
+export const Role = {
+  OWNER: 'OWNER',
+  GUEST: 'GUEST',
+} as const;
+
+export type RoleId = keyof typeof Role;
+
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse

@@ -7,6 +7,7 @@ import { z } from 'zod';
 
 import useAddBookingMutation from '@/hooks/useAddBookingMutation';
 import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
+import { Role } from '@/pages/api/user';
 
 import RangeCalendar from './RangeCalendar';
 import Button from './ui/Button';
@@ -58,7 +59,7 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
   const { isLoading, data, error } = useGetBookingsQuery({
     propertyId,
     guestsOwnersId: '',
-    roleId: 'OWNER',
+    roleId: Role.OWNER,
     filter: 'UPCOMING',
   });
 

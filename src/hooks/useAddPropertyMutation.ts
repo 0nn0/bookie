@@ -3,6 +3,7 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 
 import { Database } from '@/lib/database.types';
+import { Role } from '@/pages/api/user';
 
 const useAddPropertyMutation = () => {
   const user = useUser();
@@ -40,7 +41,7 @@ const useAddPropertyMutation = () => {
           {
             profile_id: user.id,
             property_id: propertyId,
-            role_id: 'OWNER',
+            role_id: Role.OWNER,
           },
         ]);
 

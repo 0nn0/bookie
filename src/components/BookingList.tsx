@@ -1,4 +1,5 @@
 import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
+import { Role, RoleId } from '@/pages/api/user';
 import { CalendarFilter } from '@/pages/properties/[id]/calendar';
 
 import BookingListItem from './BookingListItem';
@@ -10,18 +11,15 @@ import LoadingState from './LoadingState';
 const BookingList = ({
   propertyId,
   roleId,
-  guestsOwnersId,
   filter,
 }: {
   propertyId: string;
-  roleId: 'OWNER';
-  guestsOwnersId: string;
+  roleId: RoleId;
   filter: CalendarFilter;
 }) => {
   const { isLoading, data, error, isError } = useGetBookingsQuery({
     propertyId,
     roleId,
-    guestsOwnersId,
     filter,
   });
 

@@ -1,23 +1,22 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 
+import { Role, RoleId } from '@/pages/api/user';
 import { CalendarFilter } from '@/pages/properties/[id]/calendar';
 
 const useGetBookingsQuery = ({
   propertyId,
-  guestsOwnersId,
   roleId,
   filter,
 }: {
   propertyId: string;
-  roleId: 'OWNER' | 'GUEST';
-  guestsOwnersId: string;
+  roleId: RoleId;
   filter: CalendarFilter;
 }) => {
   const supabaseClient = useSupabaseClient();
 
   const fetchBookings = async () => {
-    if (roleId === 'OWNER') {
+    if (roleId === Role.OWNER) {
       // Get bookings for this property
       if (filter === 'ALL') {
         return await supabaseClient

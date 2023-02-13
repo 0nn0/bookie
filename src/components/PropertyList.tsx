@@ -2,6 +2,7 @@ import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 
 import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
+import { Role } from '@/pages/api/user';
 
 import Card from './Card';
 import EmptyState from './EmptyState';
@@ -45,7 +46,7 @@ const PropertyList = () => {
                           <div className="">
                             <div>
                               <p className="text-sm text-gray-900">
-                                {role_id === 'OWNER' ? 'Owner' : 'Guest'}
+                                {role_id === Role.OWNER ? 'Owner' : 'Guest'}
                               </p>
                             </div>
                           </div>

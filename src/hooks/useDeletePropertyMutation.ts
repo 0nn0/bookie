@@ -2,6 +2,7 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Database } from '@/lib/database.types';
+import { Role } from '@/pages/api/user';
 
 const useDeletePropertyMutation = ({ propertyId }: { propertyId: string }) => {
   const user = useUser();
@@ -18,7 +19,7 @@ const useDeletePropertyMutation = ({ propertyId }: { propertyId: string }) => {
         .select()
         .eq('property_id', propertyId)
         .eq('profile_id', user.id)
-        .eq('role_id', 'OWNER');
+        .eq('role_id', Role.OWNER);
 
       if (data && data.length > 0) {
         // delete all guests_owners records for this property
