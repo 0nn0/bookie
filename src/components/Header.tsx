@@ -1,6 +1,7 @@
 import * as Avatar from '@radix-ui/react-avatar';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import Image from 'next/image';
 import { useRouter } from 'next/router';
 
 import useGetProfileQuery from '@/hooks/useGetProfileQuery';
@@ -29,21 +30,23 @@ const Header = () => {
                 className="inline-block h-8 w-8 overflow-hidden rounded-full bg-gray-100"
                 aria-label="Customise options"
               >
-                <Avatar.Root>
-                  <Avatar.Fallback
+                {/* <Avatar.Root> */}
+                {/* <Avatar.Fallback
                     className="flex h-full w-full items-center justify-center bg-slate-100 text-sm font-medium leading-none focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                     delayMs={600}
                   >
                     OS
-                  </Avatar.Fallback>
-                  {avatarUrl && (
-                    <Avatar.Image
-                      src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${process.env.NEXT_PUBLIC_SUPABASE_MEDIA_BUCKET_NAME}/${avatarUrl}`}
-                      className="h-8 w-8 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-                      alt="Avatar"
-                    />
-                  )}
-                </Avatar.Root>
+                  </Avatar.Fallback> */}
+                {avatarUrl && (
+                  <Image
+                    width={32}
+                    height={32}
+                    src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${process.env.NEXT_PUBLIC_SUPABASE_MEDIA_BUCKET_NAME}/${avatarUrl}`}
+                    className="h-8 w-8 rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+                    alt="Avatar"
+                  />
+                )}
+                {/* </Avatar.Root> */}
               </button>
             </DropdownMenu.Trigger>
 

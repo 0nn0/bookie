@@ -3,13 +3,13 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 
 import { Database } from '@/lib/database.types';
 
-const useCancelBookingMutation = () => {
+const useCancelBookingMutation = (bookingId: string, propertyId: string) => {
   const user = useUser();
   const supabase = useSupabaseClient<Database>();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (bookingId: string) => {
+    mutationFn: async () => {
       if (!user?.id) throw new Error('User not logged in');
 
       // check if user is authorised (owner/guest)
@@ -18,12 +18,12 @@ const useCancelBookingMutation = () => {
       //   .select()
       //   .eq('property_id', propertyId)
       //   .eq('profile_id', user.id)
-      //   .eq('role_id', 'OWNER');
+      //   .eq('role_id', Role.OWNER)
 
       // if (data && data.length > 0) {
       // cancel booking
 
-      console.log('useCancelBookingMutation', { bookingId });
+      // console.log('useCancelBookingMutation', { bookingId });
       const { data: propertyData, error: propertyError } = await supabase
         .from('bookings')
         .update({ status: 'CANCELED' })
@@ -35,7 +35,7 @@ const useCancelBookingMutation = () => {
       // throw new Error('User is not owner');
     },
     onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bookings'] });
+      queryClient.invalidateQueries({ queryKey: ['bookings', propertyId] });
     },
     onError: (error) => {
       console.log(error);

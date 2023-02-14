@@ -70,6 +70,7 @@ const BookingList = ({
               status={status}
               guestName={`${first_name} ${last_name}`}
               guestAvatarUrl={avatar_url}
+              propertyId={properties.id}
               propertyName={properties.name}
             />
           );

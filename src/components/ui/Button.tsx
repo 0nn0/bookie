@@ -13,6 +13,7 @@ const buttonStyles = cva(
         primary: ['bg-indigo-600'],
         secondary: ['bg-gray-600'],
         error: ['bg-red-100 text-red-700 hover:bg-red-200 focus:ring-red-500'],
+        primaryText: ['bg-indigo-600'],
       },
       fullWidth: {
         true: ['w-full'],
@@ -55,7 +56,11 @@ const Button = ({ intent, fullWidth, children, loading, ...rest }: Props) => {
     );
   }
   return (
-    <button {...rest} className={buttonStyles({ intent, fullWidth })}>
+    <button
+      type="button"
+      {...rest}
+      className={buttonStyles({ intent, fullWidth })}
+    >
       {!loading && children} {loading && <Spinner />}
     </button>
   );
