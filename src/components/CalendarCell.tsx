@@ -78,7 +78,7 @@ function CalendarCell({ state, date, currentMonth }) {
       >
         <div
           className={`flex h-full w-full items-center justify-center rounded-lg ${
-            isDisabled ? 'text-slate-300 line-through' : ''
+            isDisabled ? 'text-slate-300 line-through hover:bg-white' : ''
           } ${
             // Focus ring, visible while the cell has keyboard focus.
             isFocusVisible
@@ -96,7 +96,7 @@ function CalendarCell({ state, date, currentMonth }) {
               : ''
           } ${isToday ? 'font-bold' : ''} ${
             // Hover state for cells in the middle of the range.
-            isUnavailable ? 'text-gray-300 line-through' : ''
+            isUnavailable ? 'text-gray-300 line-through hover:bg-white' : ''
           } ${
             // Hover state for non-selected cells.
             !isSelected && !isDisabled ? 'hover:bg-slate-200' : ''
