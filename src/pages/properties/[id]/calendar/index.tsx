@@ -16,7 +16,6 @@ import { Role, RoleId } from '@/pages/api/user';
 export type CalendarFilter = 'UPCOMING' | 'ALL';
 
 const CalendarPage = ({ roleId }: { roleId: RoleId }) => {
-  console.log({ roleId });
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
