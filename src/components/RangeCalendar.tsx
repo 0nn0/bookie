@@ -20,7 +20,7 @@ function RangeCalendar(props) {
     useRangeCalendar(props, state, ref);
 
   return (
-    <div {...calendarProps} ref={ref} className="inline-block text-gray-800">
+    <div {...calendarProps} ref={ref} className=" text-gray-800">
       <CalendarHeader
         state={state}
         calendarProps={calendarProps}

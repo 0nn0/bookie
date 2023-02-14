@@ -13,10 +13,6 @@ import RangeCalendar from './RangeCalendar';
 import Button from './ui/Button';
 import FormErrorMessage from './ui/FormErrorMessage';
 
-interface Props {
-  propertyId: string;
-}
-
 const dateSchema = z.object({
   calendar: z.object({ identifier: z.string() }),
   day: z.number().int().min(1).max(31),
@@ -150,18 +146,14 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
             )}
           />
         </div>
-        {rangeCalendar?.start && rangeCalendar?.end && (
-          <div className="flex justify-between">
-            <div className="flex flex-col space-y-2">
-              {rangeCalendar.start.day}-{rangeCalendar.start.month}-
-              {rangeCalendar.start.year}
-            </div>
-            <div className="flex flex-col space-y-2">
-              {rangeCalendar.end.day}-{rangeCalendar.end.month}-
-              {rangeCalendar.end.year}
-            </div>
+        {/* {rangeCalendar?.start && rangeCalendar?.end && (
+          <div className="mt-4 text-center">
+            <ReadableDates
+              startDate={`${rangeCalendar.start.year}-${rangeCalendar.start.month}-${rangeCalendar.start.day}`}
+              endDate={`${rangeCalendar.end.year}-${rangeCalendar.end.month}-${rangeCalendar.end.day}`}
+            />
           </div>
-        )}
+        )} */}
         {errors?.rangeCalendar && (
           <FormErrorMessage>{errors?.rangeCalendar.message}</FormErrorMessage>
         )}

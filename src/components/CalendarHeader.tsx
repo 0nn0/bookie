@@ -13,10 +13,10 @@ function Button(props) {
     <button
       {...mergeProps(buttonProps, focusProps)}
       ref={ref}
-      className={`rounded-full p-2 ${props.isDisabled ? 'text-gray-400' : ''} ${
-        !props.isDisabled ? 'hover:bg-violet-100 active:bg-violet-200' : ''
+      className={`rounded-lg p-2 ${props.isDisabled ? 'text-gray-400' : ''} ${
+        !props.isDisabled ? 'hover:bg-slate-100 active:bg-slate-200' : ''
       } outline-none ${
-        isFocusVisible ? 'ring-2 ring-purple-600 ring-offset-2' : ''
+        isFocusVisible ? 'ring-2 ring-slate-600 ring-offset-2' : ''
       }`}
     >
       {props.children}
@@ -37,7 +37,7 @@ function CalendarHeader({
   });
 
   return (
-    <div className="flex items-center py-4">
+    <div className="mb-2 flex items-center py-4">
       {/* Add a screen reader only description of the entire visible range rather than
        * a separate heading above each month grid. This is placed first in the DOM order
        * so that it is the first thing a touch screen reader user encounters.
@@ -47,14 +47,14 @@ function CalendarHeader({
         <h2>{calendarProps['aria-label']}</h2>
       </VisuallyHidden>
       <Button intent="fullRound" {...prevButtonProps}>
-        <ChevronLeftIcon className="h-6 w-6" />
+        <ChevronLeftIcon className="h-5 w-5" />
       </Button>
       <h2
         // We have a visually hidden heading describing the entire visible range,
         // and the calendar itself describes the individual month
         // so we don't need to repeat that here for screen reader users.
         aria-hidden
-        className="align-center flex-1 text-center text-xl font-bold"
+        className="flex-auto text-center font-semibold"
       >
         {monthDateFormatter.format(
           state.visibleRange.start.toDate(state.timeZone)
@@ -69,7 +69,7 @@ function CalendarHeader({
         )}
       </h2> */}
       <Button intent="fullRound" {...nextButtonProps}>
-        <ChevronRightIcon className="h-6 w-6" />
+        <ChevronRightIcon className="h-5 w-5" />
       </Button>
     </div>
   );

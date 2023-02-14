@@ -1,4 +1,9 @@
-import { getDayOfWeek, isSameDay, isSameMonth } from '@internationalized/date';
+import {
+  CalendarDate,
+  getDayOfWeek,
+  isSameDay,
+  isSameMonth,
+} from '@internationalized/date';
 import { useRef } from 'react';
 import {
   mergeProps,
@@ -36,6 +41,16 @@ function CalendarCell({ state, date, currentMonth }) {
   // the last day of each week, and the end date of the selection.
   let { locale } = useLocale();
   let dayOfWeek = getDayOfWeek(date, locale);
+
+  let nowDate = new Date();
+  let today = new CalendarDate(
+    nowDate.getFullYear(),
+    nowDate.getMonth() + 1,
+    nowDate.getDate()
+  );
+
+  let isToday = isSameDay(date, today);
+
   let isRoundedLeft =
     isSelected && (isSelectionStart || dayOfWeek === 0 || date.day === 1);
   let isRoundedRight =
@@ -55,36 +70,36 @@ function CalendarCell({ state, date, currentMonth }) {
         {...mergeProps(buttonProps, focusProps)}
         ref={ref}
         hidden={isOutsideMonth}
-        className={`group h-10 w-10 outline-none ${
-          isRoundedLeft ? 'rounded-l-full' : ''
-        } ${isRoundedRight ? 'rounded-r-full' : ''} ${
-          isSelected ? 'bg-violet-300' : ''
+        className={`group h-10   outline-none ${
+          isRoundedLeft ? 'rounded-l-lg' : ''
+        } ${isRoundedRight ? 'rounded-r-lg' : ''} ${
+          isSelected ? 'bg-slate-300' : ''
         } ${isDisabled ? 'disabled' : ''}`}
       >
         <div
-          className={`flex h-full w-full items-center justify-center rounded-full ${
-            isDisabled ? 'text-gray-300 line-through' : ''
+          className={`flex h-full w-full items-center justify-center rounded-lg ${
+            isDisabled ? 'text-slate-300 line-through' : ''
           } ${
             // Focus ring, visible while the cell has keyboard focus.
             isFocusVisible
-              ? 'group-focus:z-2 ring-2 ring-violet-600 ring-offset-2'
+              ? 'group-focus:z-2 ring-2 ring-slate-600 ring-offset-2'
               : ''
           } ${
             // Darker selection background for the start and end.
             isSelectionStart || isSelectionEnd
-              ? 'bg-violet-600 text-white hover:bg-violet-700'
+              ? 'bg-slate-600 text-white hover:bg-slate-700'
               : ''
           } ${
             // Hover state for cells in the middle of the range.
             isSelected && !(isSelectionStart || isSelectionEnd)
-              ? 'hover:bg-violet-400'
+              ? 'hover:bg-slate-400'
               : ''
-          } ${
+          } ${isToday ? 'font-bold' : ''} ${
             // Hover state for cells in the middle of the range.
             isUnavailable ? 'text-gray-300 line-through' : ''
           } ${
             // Hover state for non-selected cells.
-            !isSelected && !isDisabled ? 'hover:bg-violet-100' : ''
+            !isSelected && !isDisabled ? 'hover:bg-slate-200' : ''
           } cursor-default`}
         >
           {formattedDate}

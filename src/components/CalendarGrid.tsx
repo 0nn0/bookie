@@ -20,7 +20,7 @@ function CalendarGrid({ state, offset = {} }) {
 
   return (
     <table {...gridProps} cellPadding="0" className="flex-1">
-      <thead {...headerProps} className="text-gray-600">
+      <thead {...headerProps} className="text-xs leading-6 text-gray-500">
         <tr>
           {weekDays.map((day, index) => (
             <th key={index}>{day}</th>
