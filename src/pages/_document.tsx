@@ -6,12 +6,8 @@ export default function Document() {
       <Head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#94a3b8" />
-        <meta
-          name="viewport"
-          content="width=device-width, initial-scale=1, minimum-scale=1"
-        />
       </Head>
-      <body className="h-full">
+      <body className="h-full ">
         <Main />
         <NextScript />
       </body>
