@@ -6,6 +6,13 @@ export default function Document() {
       <Head>
         <link rel="manifest" href="/manifest.json" />
         <meta name="theme-color" content="#94a3b8" />
+        <link
+          rel="preload"
+          href="/fonts/Inter-roman.var.woff2"
+          as="font"
+          type="font/woff2"
+          crossOrigin="anonymous"
+        />
       </Head>
       <body className="h-full ">
         <Main />
