@@ -15,12 +15,14 @@
 
 Must-have
 
-- Make work on mobile
-- Owner can delete a booking
-- Owner can change dates of a booking
-- Display bookings in calendar layout
-- Remove bookings when deleting account
+- [ ] Fix avatar image
+- [ ] Improve styling of guests list
+- [ ] Add ability to change booking dates
+- [ ] Improve loading of avatar
+- [ ] Remove bookings, avatar image when deleting account
+- [ ] Add description to a property
 
 Nice-to-have
 
+- Add upcoming bookings for all properties to overview
 - Suggest guests based on other properties
