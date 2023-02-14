@@ -6,8 +6,7 @@ import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import useAddBookingMutation from '@/hooks/useAddBookingMutation';
-import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
-import { Role } from '@/pages/api/user';
+import useGetUpcomingBookingsQuery from '@/hooks/useGetUpcomingBookingsQuery';
 
 import RangeCalendar from './RangeCalendar';
 import Button from './ui/Button';
@@ -52,11 +51,8 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
 
-  const { isLoading, data, error } = useGetBookingsQuery({
+  const { isLoading, data, error } = useGetUpcomingBookingsQuery({
     propertyId,
-    guestsOwnersId: '',
-    roleId: Role.OWNER,
-    filter: 'UPCOMING',
   });
 
   const {
@@ -71,7 +67,7 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
     resolver: zodResolver(schema),
   });
 
-  const rangeCalendar = watch('rangeCalendar');
+  // const rangeCalendar = watch('rangeCalendar');
 
   const mutation = useAddBookingMutation({ propertyId });
 
