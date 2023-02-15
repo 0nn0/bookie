@@ -10,7 +10,9 @@ const useGetGuestsQuery = ({ propertyId }: { propertyId: string }) => {
   const fetchGuests = async () => {
     return await supabaseClient
       .from('guests_owners')
-      .select('id, role_id, profiles(id, email, last_sign_in_at)')
+      .select(
+        'id, role_id, profiles(id, email, first_name, last_name, avatar_url, last_sign_in_at)'
+      )
       .eq('property_id', propertyId)
       // exclude the current user
       .neq('profile_id', user?.id)

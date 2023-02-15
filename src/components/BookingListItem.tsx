@@ -70,7 +70,7 @@ const BookingListItem = ({
   const isPast = new Date(endDate) < new Date();
 
   return (
-    <div className="block px-4 py-4 hover:bg-gray-50">
+    <div className="block px-4 py-4">
       <div>
         <div className="flex">
           <div className="w-10 pt-1">
