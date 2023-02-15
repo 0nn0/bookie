@@ -33,10 +33,17 @@ const schema = z
   .refine(
     ({ rangeCalendar }) => {
       const { start, end } = rangeCalendar;
-      const startDateValue = new Date(
-        `${start.year}-${start.month}-${start.day}`
-      );
-      const endDateValue = new Date(`${end.year}-${end.month}-${end.day}`);
+
+      const startDateValue = new Date();
+      startDateValue.setFullYear(start.year);
+      startDateValue.setMonth(start.month - 1);
+      startDateValue.setDate(start.day);
+
+      const endDateValue = new Date();
+      endDateValue.setFullYear(end.year);
+      endDateValue.setMonth(end.month - 1);
+      endDateValue.setDate(end.day);
+
       return endDateValue.getTime() > startDateValue.getTime();
     },
     {
@@ -51,7 +58,7 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
 
-  const { isLoading, data, error } = useGetUpcomingBookingsQuery({
+  const { isLoading, data, error, isError } = useGetUpcomingBookingsQuery({
     propertyId,
   });
 
@@ -61,7 +68,7 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
     // setValue,
     // getValues,
     // reset,
-    watch,
+    // watch,
     formState: { isSubmitting, errors },
   } = useForm<FormSchema>({
     resolver: zodResolver(schema),
@@ -123,26 +130,29 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
     return <p>Loading...</p>;
   }
 
+  if (isError) {
+    return <p>{error?.message}</p>;
+  }
+
   return (
-    <>
-      <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-        <div>
-          <Controller
-            name="rangeCalendar"
-            control={control}
-            rules={{ required: true }}
-            render={({ field }) => (
-              <RangeCalendar
-                aria-label="Trip dates"
-                minValue={today(getLocalTimeZone())}
-                isDateUnavailable={isDateUnavailable}
-                value={field.value}
-                onChange={field.onChange}
-              />
-            )}
-          />
-        </div>
-        {/* {rangeCalendar?.start && rangeCalendar?.end && (
+    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
+      <div>
+        <Controller
+          name="rangeCalendar"
+          control={control}
+          rules={{ required: true }}
+          render={({ field }) => (
+            <RangeCalendar
+              aria-label="Trip dates"
+              minValue={today(getLocalTimeZone())}
+              isDateUnavailable={isDateUnavailable}
+              value={field.value}
+              onChange={field.onChange}
+            />
+          )}
+        />
+      </div>
+      {/* {rangeCalendar?.start && rangeCalendar?.end && (
           <div className="mt-4 text-center">
             <ReadableDates
               startDate={`${rangeCalendar.start.year}-${rangeCalendar.start.month}-${rangeCalendar.start.day}`}
@@ -150,22 +160,21 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
             />
           </div>
         )} */}
-        {errors?.rangeCalendar && (
-          <FormErrorMessage>{errors?.rangeCalendar.message}</FormErrorMessage>
-        )}
-        <br />
-        <div>
-          <Button
-            type="submit"
-            disabled={mutation.isLoading || isSubmitting}
-            loading={mutation.isLoading || isSubmitting}
-            fullWidth
-          >
-            Book
-          </Button>
-        </div>
-      </form>
-    </>
+      {errors?.rangeCalendar && (
+        <FormErrorMessage>{errors?.rangeCalendar.message}</FormErrorMessage>
+      )}
+      <br />
+      <div>
+        <Button
+          type="submit"
+          disabled={mutation.isLoading || isSubmitting}
+          loading={mutation.isLoading || isSubmitting}
+          fullWidth
+        >
+          Book
+        </Button>
+      </div>
+    </form>
   );
 };
 
