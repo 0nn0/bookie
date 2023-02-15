@@ -1,6 +1,6 @@
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Home, Menu } from 'lucide-react';
+import { Home, LayoutList, Menu } from 'lucide-react';
 import { useRouter } from 'next/router';
 import React from 'react';
 
@@ -56,7 +56,11 @@ const PropertyDropdown = () => {
             aria-label="Select property"
           >
             <div className="mr-2 inline-flex">
-              <Home size={18} />
+              {selectedProperty?.properties?.name ? (
+                <Home size={18} />
+              ) : (
+                <LayoutList size={18} />
+              )}
             </div>{' '}
             {selectedProperty?.properties?.name || 'Overview'}
             <ChevronDownIcon
