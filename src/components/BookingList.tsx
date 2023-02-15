@@ -1,5 +1,4 @@
 import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
-import { Role, RoleId } from '@/pages/api/user';
 import { CalendarFilter } from '@/pages/properties/[id]/calendar';
 
 import BookingListItem from './BookingListItem';
@@ -68,8 +67,9 @@ const BookingList = ({
               startDate={start_date}
               endDate={end_date}
               status={status}
-              guestName={`${first_name} ${last_name}`}
-              guestAvatarUrl={avatar_url}
+              firstName={first_name}
+              lastName={last_name}
+              avatarUrl={avatar_url}
               propertyId={properties.id}
               propertyName={properties.name}
             />

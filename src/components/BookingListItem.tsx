@@ -1,8 +1,8 @@
-import * as Avatar from '@radix-ui/react-avatar';
 import Link from 'next/link';
 
 import useCancelBookingMutation from '@/hooks/useCancelBookingMutation';
 
+import Avatar from './Avatar';
 import ReadableDates from './ReadableDates';
 import Badge from './ui/Badge';
 
@@ -50,8 +50,9 @@ const CancelButton = ({
 
 const BookingListItem = ({
   id,
-  guestName,
-  guestAvatarUrl,
+  firstName,
+  lastName,
+  avatarUrl,
   propertyId,
   propertyName,
   startDate,
@@ -59,8 +60,9 @@ const BookingListItem = ({
   status,
 }: {
   id: string;
-  guestName: string;
-  guestAvatarUrl: string;
+  firstName: string;
+  lastName: string;
+  avatarUrl: string;
   propertyId: string;
   propertyName: string;
   startDate: string;
@@ -74,26 +76,17 @@ const BookingListItem = ({
       <div>
         <div className="flex">
           <div className="w-10 pt-1">
-            <Avatar.Root>
-              <Avatar.Fallback
-                className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-sm font-medium leading-none"
-                delayMs={600}
-              >
-                OS
-              </Avatar.Fallback>
-              {guestAvatarUrl && (
-                <Avatar.Image
-                  src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${process.env.NEXT_PUBLIC_SUPABASE_MEDIA_BUCKET_NAME}/${guestAvatarUrl}`}
-                  className="h-8 w-8 rounded-full"
-                  alt="Avatar"
-                />
-              )}
-            </Avatar.Root>
+            <Avatar
+              avatarUrl={avatarUrl}
+              size={32}
+              firstName={firstName}
+              lastName={lastName}
+            />
           </div>
           <div className="flex-1 pl-3">
             <div className="flex  justify-between">
               <div className="inline-flex font-semibold text-gray-700">
-                {guestName}
+                {firstName} {lastName}
               </div>
             </div>
             <div className="flex">

@@ -1,6 +1,6 @@
-import * as Avatar from '@radix-ui/react-avatar';
-
 import useDeleteGuestMutation from '@/hooks/useDeleteGuestMutation';
+
+import Avatar from './Avatar';
 
 const GuestListItem = ({
   id,
@@ -21,22 +21,12 @@ const GuestListItem = ({
     <div className="block p-4">
       <div className="flex">
         <div className="w-10 pt-1">
-          <Avatar.Root>
-            <Avatar.Fallback
-              className="flex h-8 w-8 items-center justify-center rounded-full bg-slate-100 text-sm font-medium leading-none"
-              delayMs={600}
-            >
-              {firstName[0]}
-              {lastName[0]}
-            </Avatar.Fallback>
-            {avatarUrl && (
-              <Avatar.Image
-                src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${process.env.NEXT_PUBLIC_SUPABASE_MEDIA_BUCKET_NAME}/${avatarUrl}`}
-                className="h-8 w-8 rounded-full"
-                alt="Avatar"
-              />
-            )}
-          </Avatar.Root>
+          <Avatar
+            avatarUrl={avatarUrl}
+            size={32}
+            firstName={firstName}
+            lastName={lastName}
+          />
         </div>
         <div className="">
           <div className="inline-flex font-semibold text-gray-700">
