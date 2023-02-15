@@ -26,6 +26,7 @@ const useGetUpcomingBookingsQuery = ({
     queryFn: async () => {
       return await fetch().then((result) => result.data);
     },
+    enabled: !!propertyId,
   });
 };
 
