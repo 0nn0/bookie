@@ -2,13 +2,16 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 
+import BookingList from '@/components/BookingList';
 import Layout from '@/components/Layout';
 import PropertyList from '@/components/PropertyList';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
 import Headline from '@/components/ui/Headline';
 
-const Home: NextPage = ({ user }) => {
+import { RoleId } from './api/user';
+
+const Home = ({ user, roleId }: { user: any; roleId: RoleId }) => {
   if (!user)
     return (
       <Layout title="Home">
@@ -63,6 +66,12 @@ const Home: NextPage = ({ user }) => {
     <Layout title="Home">
       <Container>
         <div className="mb-6">
+          <SectionHeading title="Upcoming bookings" />
+        </div>
+
+        <BookingList userId={user.id} filter="UPCOMING" />
+
+        <div className="mt-16 mb-6">
           <SectionHeading
             title="Properties"
             action={
@@ -93,12 +102,13 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session) return { props: {} };
-  //     redirect: {
-  //       destination: '/login',
-  //       permanent: false,
-  // },
-  //   };
+  if (!session)
+    return {
+      redirect: {
+        destination: '/login',
+        permanent: false,
+      },
+    };
 
   return {
     props: {
