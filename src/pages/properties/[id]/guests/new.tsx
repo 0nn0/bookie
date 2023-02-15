@@ -1,17 +1,16 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
-import Card from '@/components/Card';
-import CardContent from '@/components/CardContent';
+import BackLink from '@/components/BackButton';
 import InviteGuestForm from '@/components/InviteGuestForm';
 import Layout from '@/components/Layout';
 import PropertyNav from '@/components/PropertyNav';
+import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
-import Headline from '@/components/ui/Headline';
 import { Role, RoleId } from '@/pages/api/user';
 
-const New: NextPage = ({ roleId }: { roleId: RoleId }) => {
+const New = ({ roleId }: { roleId: RoleId }) => {
   const { query } = useRouter();
   const propertyId = query.id as string;
 
@@ -20,13 +19,10 @@ const New: NextPage = ({ roleId }: { roleId: RoleId }) => {
       <Container>
         <PropertyNav propertyId={propertyId} roleId={roleId} />
         <div className="mb-4">
-          <Headline level={4}>Invite a guest</Headline>
+          <BackLink href={`/properties/${propertyId}/guests`}>Back</BackLink>
         </div>
-        <Card>
-          <CardContent>
-            <InviteGuestForm propertyId={propertyId} />
-          </CardContent>
-        </Card>
+        <SectionHeading title="Invite guest" />
+        <InviteGuestForm propertyId={propertyId} />
       </Container>
     </Layout>
   );
