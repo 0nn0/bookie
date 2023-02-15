@@ -9,7 +9,7 @@ function classNames(...classes) {
 const Tabs = ({ items = [] }) => {
   const { asPath } = useRouter();
   return (
-    <nav className="flex flex-1" aria-label="Tabs">
+    <nav className="flex flex-1 gap-1 pb-2" aria-label="Tabs">
       {items.map((tab) => {
         const isCurrent = asPath.startsWith(tab.href);
         const { Icon } = tab;
@@ -21,16 +21,14 @@ const Tabs = ({ items = [] }) => {
                 isCurrent
                   ? ' text-indigo-600'
                   : 'text-gray-500  hover:text-gray-700',
-                'flex-column flex-1 items-center justify-center whitespace-nowrap py-4 text-sm font-medium'
+                'flex-1 items-center justify-center rounded-lg py-2 text-xs font-normal focus:bg-gray-200'
               )}
               aria-current={isCurrent ? 'page' : undefined}
             >
               <div className="flex justify-center">
                 <Icon />
               </div>
-              <div className="mt-1 flex justify-center">
-                <span>{tab.name}</span>
-              </div>
+              <div className="mt-2 text-center">{tab.name}</div>
             </a>
           </Link>
         );
