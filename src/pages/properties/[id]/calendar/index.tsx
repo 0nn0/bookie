@@ -15,7 +15,12 @@ import { Role, RoleId } from '@/pages/api/user';
 
 export type CalendarFilter = 'UPCOMING' | 'ALL';
 
-const CalendarPage = ({ roleId }: { roleId: RoleId }) => {
+export const CalendarFilters = {
+  UPCOMING: 'UPCOMING',
+  ALL: 'ALL',
+};
+
+const CalendarPage = ({ user, roleId }: { user: any; roleId: RoleId }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
@@ -57,7 +62,7 @@ const CalendarPage = ({ roleId }: { roleId: RoleId }) => {
             />
             <div className="mt-4">
               <BookingList
-                roleId={Role.OWNER}
+                userId={user.id}
                 propertyId={propertyId}
                 filter={filter}
               />
@@ -95,7 +100,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // get role
   const { data } = await supabase
     .from('guests_owners')
-    .select('role_id')
+    .select('id, role_id')
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)
     .single();
@@ -110,6 +115,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       initialSession: session,
       user: session.user,
+
       roleId: data.role_id,
     },
   };

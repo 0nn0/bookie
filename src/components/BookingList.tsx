@@ -9,17 +9,17 @@ import ErrorState from './ErrorState';
 import LoadingState from './LoadingState';
 
 const BookingList = ({
+  userId,
   propertyId,
-  roleId,
   filter,
 }: {
-  propertyId: string;
-  roleId: RoleId;
+  userId: string;
   filter: CalendarFilter;
+  propertyId?: string;
 }) => {
   const { isLoading, data, error, isError } = useGetBookingsQuery({
     propertyId,
-    roleId,
+    userId,
     filter,
   });
 

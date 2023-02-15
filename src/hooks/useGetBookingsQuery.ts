@@ -1,61 +1,53 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 
-import { Role, RoleId } from '@/pages/api/user';
 import { CalendarFilter } from '@/pages/properties/[id]/calendar';
 
 const useGetBookingsQuery = ({
-  propertyId,
-  roleId,
+  userId,
   filter,
+  propertyId,
+  limit,
 }: {
-  propertyId: string;
-  roleId: RoleId;
+  userId: string;
   filter: CalendarFilter;
+  propertyId?: string;
+  limit?: number;
 }) => {
   const supabaseClient = useSupabaseClient();
 
   const fetchBookings = async () => {
-    if (roleId === Role.OWNER) {
-      // Get bookings for this property
-      if (filter === 'ALL') {
-        return await supabaseClient
-          .from('bookings')
-          .select(
-            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
-          )
-          .eq('property_id', propertyId)
-          .order('start_date', { ascending: true })
-          .throwOnError();
-      } else if (filter === 'UPCOMING') {
-        return await supabaseClient
-          .from('bookings')
-          .select(
-            'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
-          )
-          .eq('status', 'BOOKED')
-          .eq('property_id', propertyId)
-          .gte('end_date', new Date().toISOString())
-          .order('start_date', { ascending: true })
-          .throwOnError();
-      }
-    } else {
-      // Get only your own bookings
-      return await supabaseClient
-        .from('bookings')
-        .select(
-          'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
-        )
-        .eq('property_id', propertyId)
-        // .eq('guests_owners_id', guestsOwnersId)
+    let query = supabaseClient
+      .from('bookings')
+      .select(
+        'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
+      );
 
-        .order('start_date', { ascending: true })
-        .throwOnError();
+    if (propertyId) {
+      query.eq('property_id', propertyId);
+    } else {
+      query.eq('guests_owners.profiles.id', userId);
     }
+
+    if (filter === 'UPCOMING') {
+      query = query
+        .eq('status', 'BOOKED')
+        .gte('end_date', new Date().toISOString());
+    }
+
+    if (limit) {
+      query = query.limit(limit);
+    }
+
+    query = query.order('start_date', { ascending: true }).throwOnError();
+
+    return await query;
   };
 
   return useQuery({
-    queryKey: ['bookings', propertyId, filter],
+    queryKey: propertyId
+      ? ['bookings', propertyId, filter]
+      : ['bookings', filter],
     queryFn: async () => {
       return await fetchBookings().then((result) => result.data);
     },

@@ -36,6 +36,7 @@ const useCancelBookingMutation = (bookingId: string, propertyId: string) => {
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings', propertyId] });
+      queryClient.invalidateQueries({ queryKey: ['bookings'] });
     },
     onError: (error) => {
       console.log(error);
