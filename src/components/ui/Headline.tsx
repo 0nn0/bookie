@@ -4,13 +4,13 @@ import React, { ElementType } from 'react';
 const headlineStyles = cva(['flex'], {
   variants: {
     h1: {
-      true: ['text-4xl font-bold'],
+      true: ['text-4xl font-semibold'],
     },
     h2: {
-      true: ['text-3xl'],
+      true: ['text-3xl font-semibold'],
     },
     h3: {
-      true: ['text-2xl'],
+      true: ['text-2xl font-semibold'],
     },
     h4: {
       true: ['text-xl'],
