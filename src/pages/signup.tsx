@@ -36,7 +36,12 @@ const Signup: NextPage = () => {
             <br />
             {!email && (
               <div className="text-center">
-                Already have an account? Go to <Link href="/login">Login</Link>
+                Already have an account? Go to{' '}
+                <Link href="/login">
+                  <a className="font-medium text-indigo-600 hover:text-indigo-500">
+                    Login
+                  </a>
+                </Link>
               </div>
             )}
           </div>
