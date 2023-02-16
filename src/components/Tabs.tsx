@@ -26,7 +26,7 @@ const Tabs = ({ items = [] }) => {
               aria-current={isCurrent ? 'page' : undefined}
             >
               <div className="flex justify-center">
-                <Icon />
+                <Icon className="h-6 w-6" />
               </div>
               <div className="mt-2 text-center">{tab.name}</div>
             </a>

@@ -1,4 +1,9 @@
-import { CalendarDays, Info, Settings, Users } from 'lucide-react';
+import {
+  CalendarDaysIcon,
+  Cog6ToothIcon,
+  InformationCircleIcon,
+  UserGroupIcon,
+} from '@heroicons/react/24/outline';
 
 import { Role, RoleId } from '@/pages/api/user';
 
@@ -16,13 +21,13 @@ const PropertyNav = ({
       name: 'Info',
       href: `/properties/${propertyId}/info`,
       current: true,
-      Icon: Info,
+      Icon: InformationCircleIcon,
     },
     {
       name: 'Bookings',
       href: `/properties/${propertyId}/calendar`,
       current: true,
-      Icon: CalendarDays,
+      Icon: CalendarDaysIcon,
     },
   ];
 
@@ -33,13 +38,13 @@ const PropertyNav = ({
         name: 'Guests',
         href: `/properties/${propertyId}/guests`,
         current: false,
-        Icon: Users,
+        Icon: UserGroupIcon,
       },
       {
         name: 'Settings',
         href: `/properties/${propertyId}/settings`,
         current: false,
-        Icon: Settings,
+        Icon: Cog6ToothIcon,
       },
     ];
   }
