@@ -50,7 +50,7 @@ const PropertyNav = ({
   }
 
   return (
-    <div className="bottom-nav fixed left-0 bottom-0 z-30 flex w-full border border-t border-gray-200 bg-gray-50 bg-opacity-40 px-1 pb-3 pt-2 shadow backdrop-blur-md ">
+    <div className="fixed left-0 bottom-0 z-30 flex w-full border-t border-gray-200 bg-gray-50 px-1 pb-3 pt-2">
       <Tabs items={tabs} />
     </div>
   );
