@@ -11,9 +11,7 @@ const useGetUpcomingBookingsQuery = ({
   const fetch = async () => {
     return await supabaseClient
       .from('bookings')
-      .select(
-        'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
-      )
+      .select('id, start_date, end_date, status')
       .eq('property_id', propertyId)
       .gte('end_date', new Date().toISOString())
       .neq('status', 'CANCELED')
