@@ -16,6 +16,8 @@
 Must-have
 
 - [ ] Fix avatar image
+- [ ] Change getBookingsQuery arguments to object
+- [ ] Create constant for filters
 - [ ] Improve styling of guests list
 - [ ] Add ability to change booking dates
 - [ ] Improve loading of avatar
