@@ -46,7 +46,7 @@ const PropertyForm = () => {
           disabled={addPropertyMutation.isLoading || isSubmitting}
           loading={addPropertyMutation.isLoading || isSubmitting}
         >
-          Add property
+          Add
         </Button>
       </div>
     </form>

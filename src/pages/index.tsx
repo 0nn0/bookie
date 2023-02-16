@@ -59,7 +59,7 @@ const Home = ({ user, roleId }: { user: any; roleId: RoleId }) => {
 
   const action = {
     href: '/properties/new',
-    label: 'New',
+    label: 'Add property',
   };
 
   return (
