@@ -5,7 +5,7 @@ import React from 'react';
 
 const buttonStyles = cva(
   [
-    'flex justify-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-400',
+    'truncate inline-flex items-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-400',
   ],
   {
     variants: {
@@ -13,7 +13,9 @@ const buttonStyles = cva(
         primary: ['bg-indigo-600'],
         secondary: ['bg-gray-600'],
         error: ['bg-red-100 text-red-700 hover:bg-red-200 focus:ring-red-500'],
-        primaryText: ['bg-indigo-600'],
+        dark: [
+          'bg-gray-900 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium',
+        ],
       },
       fullWidth: {
         true: ['w-full'],
@@ -47,24 +49,29 @@ type Props = React.ComponentPropsWithoutRef<'a'> &
   CommonProps &
   ConditionalProps;
 
-const Button = ({ intent, fullWidth, children, loading, ...rest }: Props) => {
-  if (rest.href) {
+const Button = React.forwardRef<HTMLButtonElement, Props>(
+  ({ intent, fullWidth, children, loading, ...props }, ref) => {
+    if (props.href) {
+      return (
+        <Link {...props}>
+          <a className={buttonStyles({ intent, fullWidth })}>{children}</a>
+        </Link>
+      );
+    }
     return (
-      <Link {...rest}>
-        <a className={buttonStyles({ intent, fullWidth })}>{children}</a>
-      </Link>
+      <button
+        ref={ref}
+        type="button"
+        {...props}
+        className={buttonStyles({ intent, fullWidth })}
+      >
+        {!loading && children} {loading && <Spinner />}
+      </button>
     );
   }
-  return (
-    <button
-      type="button"
-      {...rest}
-      className={buttonStyles({ intent, fullWidth })}
-    >
-      {!loading && children} {loading && <Spinner />}
-    </button>
-  );
-};
+);
+
+Button.displayName = 'Button';
 
 function Spinner() {
   return (

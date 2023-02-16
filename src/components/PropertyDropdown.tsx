@@ -1,10 +1,10 @@
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { Home, LayoutList, Menu } from 'lucide-react';
 import { useRouter } from 'next/router';
-import React from 'react';
 
 import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
+
+import Button from './ui/Button';
 
 const PropertyDropdown = () => {
   const router = useRouter();
@@ -21,7 +21,7 @@ const PropertyDropdown = () => {
 
   // get name of selected property
   const selectedProperty = data.find((item) => {
-    const { id, role_id, properties } = item;
+    const { properties } = item;
     if (properties) {
       return properties.id === router.query.id;
     }
@@ -34,40 +34,26 @@ const PropertyDropdown = () => {
     <DropdownMenu.Root>
       {isAccountPage && (
         <DropdownMenu.Trigger asChild>
-          <button
-            className="flex w-full items-center justify-center rounded-md  bg-white/40 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-white/60 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-            aria-label="Menu"
-          >
-            <div className="mr-2 inline-flex">
-              <Menu />
-            </div>{' '}
-            Menu
+          <Button intent="dark">
+            <span className="min-w-0 overflow-hidden truncate">Menu</span>
             <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
+              className="-mr-0.5 ml-2 h-4 w-4 flex-shrink-0 flex-grow-0 basis-4"
               aria-hidden="true"
             />
-          </button>
+          </Button>
         </DropdownMenu.Trigger>
       )}
       {!isAccountPage && (
         <DropdownMenu.Trigger asChild>
-          <button
-            className="flex w-full items-center justify-center rounded-md  bg-white/40 px-4 py-2 text-sm font-medium text-gray-700 shadow-sm hover:bg-white/60 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
-            aria-label="Select property"
-          >
-            <div className="mr-2 inline-flex">
-              {selectedProperty?.properties?.name ? (
-                <Home size={18} />
-              ) : (
-                <LayoutList size={18} />
-              )}
-            </div>{' '}
-            {selectedProperty?.properties?.name || 'Overview'}
+          <Button intent="dark">
+            <span className="min-w-0 overflow-hidden text-ellipsis">
+              {selectedProperty?.properties?.name || 'Overview'}
+            </span>
             <ChevronDownIcon
-              className="-mr-1 ml-2 h-5 w-5"
+              className="-mr-0.5 ml-2 h-4 w-4 flex-shrink-0 flex-grow-0 basis-4"
               aria-hidden="true"
             />
-          </button>
+          </Button>
         </DropdownMenu.Trigger>
       )}
 
