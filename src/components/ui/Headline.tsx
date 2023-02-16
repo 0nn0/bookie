@@ -13,10 +13,10 @@ const headlineStyles = cva(['flex'], {
       true: ['text-2xl font-semibold'],
     },
     h4: {
-      true: ['text-xl'],
+      true: ['text-xl font-semibold'],
     },
     h5: {
-      true: ['text-lg'],
+      true: ['text-lg font-semibold'],
     },
     h6: {
       true: ['text-md'],
