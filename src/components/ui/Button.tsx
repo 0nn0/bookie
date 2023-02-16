@@ -18,7 +18,7 @@ const buttonStyles = cva(
         ],
       },
       fullWidth: {
-        true: ['w-full text-center'],
+        true: ['w-full justify-center'],
       },
     },
     defaultVariants: {
