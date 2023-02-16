@@ -15,6 +15,7 @@
 
 Must-have
 
+- [ ] Merge PropertyForm (new) and PropertyDetailsForm (update)
 - [ ] Fix avatar image
 - [ ] Change getBookingsQuery arguments to object
 - [ ] Create constant for filters
