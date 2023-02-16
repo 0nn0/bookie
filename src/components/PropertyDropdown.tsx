@@ -72,7 +72,9 @@ const PropertyDropdown = () => {
             Overview
           </DropdownMenu.Item>
 
-          <DropdownMenu.Separator className="m-1 h-px bg-gray-200" />
+          {data.length > 0 && (
+            <DropdownMenu.Separator className="m-1 h-px bg-gray-200" />
+          )}
 
           {data.map((item) => {
             const { id, role_id, properties } = item;
