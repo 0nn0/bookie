@@ -7,17 +7,26 @@ import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
 import useUpdatePropertyMutation from '@/hooks/useUpdatePropertyMutation';
 
+import FormTextArea from './ui/FormTextArea';
+
 const schema = z.object({
   name: z.string().min(3, 'Please enter a valid name'),
+  description: z.string().optional(),
 });
 
 export type FormSchema = z.infer<typeof schema>;
 
-const PropertyDetailsForm = ({ name }: { name: string }) => {
+const PropertyDetailsForm = ({
+  name,
+  description,
+}: {
+  name: string;
+  description: string;
+}) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
-  const addPropertyMutation = useUpdatePropertyMutation({ propertyId });
+  const updatePropertyMutation = useUpdatePropertyMutation({ propertyId });
 
   const {
     register,
@@ -27,11 +36,15 @@ const PropertyDetailsForm = ({ name }: { name: string }) => {
     resolver: zodResolver(schema),
     defaultValues: {
       name,
+      description,
     },
   });
 
   const onSubmit = async (formData: FormSchema) => {
-    addPropertyMutation.mutate({ name: formData.name });
+    updatePropertyMutation.mutate({
+      name: formData.name,
+      description: formData.description,
+    });
   };
 
   return (
@@ -39,12 +52,20 @@ const PropertyDetailsForm = ({ name }: { name: string }) => {
       <div>
         <FormInput label="Name" id="name" register={register} errors={errors} />
       </div>
+      <div>
+        <FormTextArea
+          label="Description"
+          id="description"
+          register={register}
+          errors={errors}
+        />
+      </div>
 
       <div>
         <Button
           type="submit"
-          disabled={addPropertyMutation.isLoading || isSubmitting}
-          loading={addPropertyMutation.isLoading || isSubmitting}
+          disabled={updatePropertyMutation.isLoading || isSubmitting}
+          loading={updatePropertyMutation.isLoading || isSubmitting}
         >
           Update
         </Button>

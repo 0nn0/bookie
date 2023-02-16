@@ -40,7 +40,10 @@ const Settings: NextPage = () => {
 
           {data && (
             <>
-              <PropertyDetailsForm name={data.name} />
+              <PropertyDetailsForm
+                name={data.name}
+                description={data.description}
+              />
               <br />
               <br />
               <br />

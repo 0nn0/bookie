@@ -12,7 +12,13 @@ const useAddPropertyMutation = () => {
   const router = useRouter();
 
   return useMutation({
-    mutationFn: async ({ name }: { name: string }) => {
+    mutationFn: async ({
+      name,
+      description,
+    }: {
+      name: string;
+      description?: string;
+    }) => {
       if (!user?.id) throw new Error('User not logged in');
 
       const { data, error } = await supabase
@@ -20,6 +26,7 @@ const useAddPropertyMutation = () => {
         .insert([
           {
             name,
+            description,
           },
         ])
         .select('*');
@@ -55,7 +62,7 @@ const useAddPropertyMutation = () => {
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
 
-      router.push('/');
+      router.push('/'); // TODO: move outside of mutation
     },
   });
 };

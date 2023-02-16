@@ -7,8 +7,11 @@ import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
 import useAddPropertyMutation from '@/hooks/useAddPropertyMutation';
 
+import FormTextArea from './ui/FormTextArea';
+
 const schema = z.object({
   name: z.string().min(3, 'Please enter a valid name'),
+  description: z.string().optional(),
 });
 
 export type FormSchema = z.infer<typeof schema>;
@@ -25,11 +28,15 @@ const PropertyForm = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: '',
+      description: '',
     },
   });
 
   const onSubmit = async (formData: FormSchema) => {
-    addPropertyMutation.mutate({ name: formData.name });
+    addPropertyMutation.mutate({
+      name: formData.name,
+      description: formData.description,
+    });
 
     router.push('/');
   };
@@ -38,6 +45,14 @@ const PropertyForm = () => {
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
       <div>
         <FormInput label="Name" id="name" register={register} errors={errors} />
+      </div>
+      <div>
+        <FormTextArea
+          label="Description"
+          id="description"
+          register={register}
+          errors={errors}
+        />
       </div>
 
       <div>

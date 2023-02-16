@@ -3,16 +3,23 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import React from 'react';
 
+import ErrorState from '@/components/ErrorState';
 import Layout from '@/components/Layout';
+import LoadingState from '@/components/LoadingState';
 import PropertyContent from '@/components/PropertyContent';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
+import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 import { RoleId } from '@/pages/api/user';
 
 const InfoPage = ({ roleId }: { roleId: RoleId }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
+
+  const { isLoading, data, isError, error } = useGetPropertyQuery({
+    propertyId,
+  });
 
   return (
     <Layout title="Info">
@@ -20,6 +27,9 @@ const InfoPage = ({ roleId }: { roleId: RoleId }) => {
         <PropertyNav propertyId={propertyId} roleId={roleId} />
         <PropertyContent>
           <SectionHeading title="Info" />
+          {isLoading && <LoadingState />}
+          {isError && <ErrorState>{error?.message}</ErrorState>}
+          {data && <p>{data.description}</p>}
         </PropertyContent>
       </Container>
     </Layout>
