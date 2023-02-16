@@ -1,5 +1,7 @@
-import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
-import { CalendarFilter } from '@/pages/properties/[id]/calendar';
+import useGetBookingsQuery, {
+  BookingsByProperty,
+  BookingsByUser,
+} from '@/hooks/useGetBookingsQuery';
 
 import BookingListItem from './BookingListItem';
 import Card from './Card';
@@ -7,20 +9,10 @@ import EmptyState from './EmptyState';
 import ErrorState from './ErrorState';
 import LoadingState from './LoadingState';
 
-const BookingList = ({
-  userId,
-  propertyId,
-  filter,
-}: {
-  userId: string;
-  filter: CalendarFilter;
-  propertyId?: string;
-}) => {
-  const { isLoading, data, error, isError } = useGetBookingsQuery({
-    propertyId,
-    userId,
-    filter,
-  });
+type ConditionalProps = BookingsByProperty | BookingsByUser;
+
+const BookingList = (props: ConditionalProps) => {
+  const { isLoading, data, error, isError } = useGetBookingsQuery(props);
 
   if (isLoading) {
     return <LoadingState />;
@@ -42,7 +34,7 @@ const BookingList = ({
       ALL: 'You have no bookings',
     };
 
-    return <EmptyState>{copy[filter]}</EmptyState>;
+    return <EmptyState>{copy[props.filter]}</EmptyState>;
   }
 
   return (
@@ -58,7 +50,9 @@ const BookingList = ({
             guests_owners,
           } = item;
 
-          const { first_name, last_name, avatar_url } = guests_owners.profiles;
+          const avatar_url = guests_owners.profiles?.avatar_url;
+          const first_name = guests_owners.profiles?.first_name;
+          const last_name = guests_owners.profiles?.last_name;
 
           return (
             <BookingListItem

@@ -3,40 +3,48 @@ import { useQuery } from '@tanstack/react-query';
 
 import { CalendarFilter } from '@/pages/properties/[id]/calendar';
 
-const useGetBookingsQuery = ({
-  userId,
-  filter,
-  propertyId,
-  limit,
-}: {
+export interface BookingsByProperty {
+  propertyId: string;
+  filter: CalendarFilter;
+  limit?: number;
+  userId?: never;
+}
+
+export interface BookingsByUser {
   userId: string;
   filter: CalendarFilter;
-  propertyId?: string;
   limit?: number;
-}) => {
+  propertyId?: never;
+}
+
+type Props = BookingsByProperty | BookingsByUser;
+
+const useGetBookingsQuery = (props: Props) => {
   const supabaseClient = useSupabaseClient();
 
   const fetchBookings = async () => {
     let query = supabaseClient
       .from('bookings')
       .select(
-        'id, start_date, end_date, status, guests_owners(id, role_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
+        'id, start_date, end_date, status, guests_owners!inner(id, role_id, profile_id, profiles(id, first_name, last_name, avatar_url)), properties(id, name)'
       );
 
-    if (propertyId) {
-      query.eq('property_id', propertyId);
-    } else {
-      query.eq('guests_owners.profiles.id', userId);
+    if ('propertyId' in props) {
+      query.eq('property_id', props.propertyId);
     }
 
-    if (filter === 'UPCOMING') {
+    if ('userId' in props) {
+      query.eq('guests_owners.profile_id', props.userId);
+    }
+
+    if (props.filter === 'UPCOMING') {
       query = query
         .eq('status', 'BOOKED')
         .gte('end_date', new Date().toISOString());
     }
 
-    if (limit) {
-      query = query.limit(limit);
+    if (props.limit) {
+      query = query.limit(props.limit);
     }
 
     query = query.order('start_date', { ascending: true }).throwOnError();
@@ -45,9 +53,9 @@ const useGetBookingsQuery = ({
   };
 
   return useQuery({
-    queryKey: propertyId
-      ? ['bookings', propertyId, filter]
-      : ['bookings', filter],
+    queryKey: props.propertyId
+      ? ['bookings', props.propertyId, props.filter]
+      : ['bookings', props.filter],
     queryFn: async () => {
       return await fetchBookings().then((result) => result.data);
     },
