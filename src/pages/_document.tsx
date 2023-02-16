@@ -10,7 +10,7 @@ export default function Document() {
         <meta name="apple-mobile-web-app-capable" content="yes" />
         <meta name="application-name" content="Bookie" />
         <meta name="mobile-web-app-capable" content="yes" />
-        <meta name="theme-color" content="#94a3b8" />
+        <meta name="theme-color" content="#1f2937" />
         <link
           rel="preload"
           href="/fonts/Inter-roman.var.woff2"
