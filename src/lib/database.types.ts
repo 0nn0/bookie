@@ -96,16 +96,19 @@ export interface Database {
       properties: {
         Row: {
           created_at: string
+          description: string | null
           id: string
           name: string | null
         }
         Insert: {
           created_at?: string
+          description?: string | null
           id?: string
           name?: string | null
         }
         Update: {
           created_at?: string
+          description?: string | null
           id?: string
           name?: string | null
         }
@@ -129,6 +132,14 @@ export interface Database {
       booking_exists: {
         Args: { sdate: string; edate: string; propid: string }
         Returns: { property_id: string; start_date: string; end_date: string }[]
+      }
+      delete_avatar: {
+        Args: { avatar_url: string }
+        Returns: Record<string, unknown>[]
+      }
+      delete_storage_object: {
+        Args: { bucket: string; object: string }
+        Returns: Record<string, unknown>[]
       }
     }
     Enums: {
