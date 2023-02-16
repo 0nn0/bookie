@@ -25,9 +25,10 @@ const Header = () => {
         <div className="flex h-16 items-center justify-between gap-3">
           <PropertyDropdown />
 
-          <div className="flex items-center gap-3">
+          <div className="flex items-center gap-3 md:gap-6">
             <Button intent="dark" href="https://wa.me/31619429873">
-              Feedback
+              <span className="md:hidden">Feedback</span>
+              <span className="hidden md:block">Give feedback</span>
             </Button>
 
             <DropdownMenu.Root>
