@@ -57,46 +57,10 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
       },
     };
 
-  if (!ctx.params?.id) {
-    return {
-      notFound: true,
-    };
-  }
-
-  // check if user is owner of this property
-  const { data } = await supabase
-    .from('guests_owners')
-    .select()
-    .eq('profile_id', session.user.id)
-    .eq('property_id', ctx.params.id)
-    .eq('role_id', Role.OWNER)
-    .single();
-
-  if (!data) {
-    return {
-      notFound: true,
-    };
-  }
-
-  // get role
-  const { data: roleData } = await supabase
-    .from('guests_owners')
-    .select('role_id')
-    .eq('profile_id', session.user.id)
-    .eq('property_id', ctx.params.id)
-    .single();
-
-  if (!roleData) {
-    return {
-      notFound: true,
-    };
-  }
-
   return {
     props: {
       initialSession: session,
       user: session.user,
-      roleId: roleData.role_id,
     },
   };
 };
