@@ -11,8 +11,8 @@ import Headline from '@/components/ui/Headline';
 
 import { RoleId } from './api/user';
 
-const Home = ({ user, roleId }: { user: any; roleId: RoleId }) => {
-  if (!user)
+const Home = ({ session }: { session: any }) => {
+  if (!session?.user)
     return (
       <Layout title="Home">
         <Container>
@@ -102,18 +102,9 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     data: { session },
   } = await supabase.auth.getSession();
 
-  if (!session)
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-
   return {
     props: {
       initialSession: session,
-      user: session.user,
     },
   };
 };
