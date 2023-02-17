@@ -4,6 +4,7 @@ import Link from 'next/link';
 
 import BookingList from '@/components/BookingList';
 import Layout from '@/components/Layout';
+import PropertyContent from '@/components/PropertyContent';
 import PropertyList from '@/components/PropertyList';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
@@ -84,29 +85,31 @@ const Home = ({ initialSession }: { initialSession: any }) => {
   return (
     <Layout title="Home">
       <Container>
-        <div className="mb-6">
-          <SectionHeading title="Upcoming bookings" />
-        </div>
+        <PropertyContent>
+          <div className="mb-6">
+            <SectionHeading title="Upcoming bookings" />
+          </div>
 
-        <BookingList userId={initialSession.user.id} filter="UPCOMING" />
+          <BookingList userId={initialSession.user.id} filter="UPCOMING" />
 
-        <div className="mt-16 mb-6">
-          <SectionHeading
-            title="Properties"
-            action={
-              <Link href={action.href}>
-                <button
-                  type="button"
-                  className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-                >
-                  {action.label}
-                </button>
-              </Link>
-            }
-          />
-        </div>
+          <div className="mt-16 mb-6">
+            <SectionHeading
+              title="Properties"
+              action={
+                <Link href={action.href}>
+                  <button
+                    type="button"
+                    className="relative inline-flex items-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+                  >
+                    {action.label}
+                  </button>
+                </Link>
+              }
+            />
+          </div>
 
-        <PropertyList />
+          <PropertyList />
+        </PropertyContent>
       </Container>
     </Layout>
   );
