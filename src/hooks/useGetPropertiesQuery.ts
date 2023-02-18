@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 
 const useGetPropertiesQuery = () => {
   const user = useUser();
-  console.log({ user });
   const supabaseClient = useSupabaseClient();
 
   const fetchProperties = async () => {
