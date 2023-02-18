@@ -5,14 +5,18 @@ import React from 'react';
 
 const buttonStyles = cva(
   [
-    'truncate inline-flex items-center rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-400',
+    'truncate inline-flex items-center rounded-md border border-transparent py-2 px-4 text-sm font-medium text-white shadow-sm focus:outline-none focus:ring-2 focus:ring-offset-2 disabled:cursor-not-allowed',
   ],
   {
     variants: {
       intent: {
-        primary: ['bg-indigo-600'],
-        secondary: ['bg-gray-600'],
-        error: ['bg-red-100 text-red-700 hover:bg-red-200 focus:ring-red-500'],
+        primary: [
+          'bg-indigo-600 hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 disabled:cursor-not-allowed disabled:bg-indigo-400',
+        ],
+        secondary: [
+          'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-indigo-500',
+        ],
+        error: ['bg-red-600 hover:bg-red-700 focus:ring-red-500 '],
         dark: [
           'bg-gray-900 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium',
         ],
@@ -50,11 +54,13 @@ type Props = React.ComponentPropsWithoutRef<'a'> &
   ConditionalProps;
 
 const Button = React.forwardRef<HTMLButtonElement, Props>(
-  ({ intent, fullWidth, children, loading, ...props }, ref) => {
+  ({ intent, fullWidth, children, loading, className = '', ...props }, ref) => {
     if (props.href) {
       return (
         <Link {...props}>
-          <a className={buttonStyles({ intent, fullWidth })}>{children}</a>
+          <a className={buttonStyles({ intent, fullWidth }) + className}>
+            {children}
+          </a>
         </Link>
       );
     }
@@ -62,8 +68,8 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
       <button
         ref={ref}
         type="button"
+        className={buttonStyles({ intent, fullWidth }) + className}
         {...props}
-        className={buttonStyles({ intent, fullWidth })}
       >
         {!loading && children} {loading && <Spinner />}
       </button>
