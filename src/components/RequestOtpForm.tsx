@@ -1,6 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import React, { useState } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -45,8 +44,9 @@ const RequestOtpForm = ({ onSubmitSuccess, isSignUp }: Props) => {
 
       onSubmitSuccess(formData.email);
     } catch (error: any) {
-      console.log({ error });
       if (error.status === 400) {
+        // show success message despite error
+        // to avoid leaking user emails
         onSubmitSuccess(formData.email);
       } else {
         console.log({ error });
