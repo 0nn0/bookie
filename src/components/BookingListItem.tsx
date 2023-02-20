@@ -114,8 +114,8 @@ const CancelButton = ({
           e.preventDefault();
           dialogContext?.setDialog(
             <Dialog
-              title="Confirm cancellation"
-              body="Are you sure you want to cancel your booking?"
+              title="Are you sure?"
+              body="This action cannot be undone."
               confirmButton={{
                 label: 'Yes, cancel booking',
                 disabled: mutation.isLoading,

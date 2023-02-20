@@ -13,6 +13,7 @@ import AvatarInput from './AvatarInput';
 import DeleteAccountButton from './DeleteAccountButton';
 import Button from './ui/Button';
 import FormInput from './ui/FormInput';
+import FormLabel from './ui/FormLabel';
 
 const STORAGE_BUCKET = 'media';
 interface Props {
@@ -149,16 +150,15 @@ const AccountDetails = ({ session }: Props) => {
               autoComplete="family-name"
             />
           </div>
-          <br />
-
-          <AvatarInput
-            url={`${data?.avatar_url}?${data?.updated_at}`}
-            onUpload={(file) => {
-              setValue('avatarFile', file);
-            }}
-          />
-          <br />
           <div>
+            <AvatarInput
+              url={`${data?.avatar_url}?${data?.updated_at}`}
+              onUpload={(file) => {
+                setValue('avatarFile', file);
+              }}
+            />
+          </div>
+          <div className="mt-6">
             <Button
               type="submit"
               disabled={isSubmitting || mutation.isLoading}
@@ -167,11 +167,12 @@ const AccountDetails = ({ session }: Props) => {
               {isSubmitting ? 'Updating ...' : 'Update'}
             </Button>
           </div>
-          <br />
-          <br />
-          <br />
         </div>
       </form>
+
+      <div className="mt-12 mb-12">
+        <hr />
+      </div>
 
       <DeleteAccountButton />
     </>
@@ -179,52 +180,3 @@ const AccountDetails = ({ session }: Props) => {
 };
 
 export default AccountDetails;
-
-// async function downloadImage(path: string) {
-//   try {
-//     const { data, error } = await supabase.storage
-//       .from(STORAGE_BUCKET)
-//       .download(path);
-//     if (error) {
-//       throw error;
-//     }
-//     const url = URL.createObjectURL(data);
-//     setAvatarUrl(url);
-//   } catch (error) {
-//     console.log('Error downloading image: ', error);
-//   }
-// }
-
-// const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (
-//   event
-// ) => {
-//   try {
-//     setUploading(true);
-
-//     if (!event.target.files || event.target.files.length === 0) {
-//       throw new Error('You must select an image to upload.');
-//     }
-
-//     const file = event.target.files[0];
-//     const fileExt = file.name.split('.').pop();
-//     const fileName = `avatar.${fileExt}`;
-//     const filePath = `${uid}/${fileName}`;
-
-//     console.log({ filePath, file, fileExt, fileName });
-
-//     let { error: uploadError } = await supabase.storage
-//       .from(STORAGE_BUCKET)
-//       .upload(filePath, file, { upsert: true });
-
-//     if (uploadError) {
-//       throw uploadError;
-//     }
-
-//     onUpload(filePath);
-//   } catch (error) {
-//     alert('Error uploading avatar!');
-//     console.log(error);
-//   } finally {
-//     setUploading(false);
-//   }
-// };

@@ -1,7 +1,7 @@
 import { cva } from 'class-variance-authority';
 import React, { ElementType } from 'react';
 
-const headlineStyles = cva(['flex'], {
+const headlineStyles = cva([''], {
   variants: {
     h1: {
       true: ['text-4xl font-semibold'],
@@ -31,14 +31,21 @@ interface Props {
   level: 1 | 2 | 3 | 4 | 5 | 6;
   children: React.ReactNode;
   bold?: boolean;
+  className?: string;
 }
 
-const Headline = ({ level, children, bold, ...otherProps }: Props) => {
+const Headline = ({
+  level,
+  children,
+  bold,
+  className = '',
+  ...props
+}: Props) => {
   const HeadingTag = `h${level}` as ElementType;
   return (
     <HeadingTag
-      className={headlineStyles({ [`h${level}`]: true })}
-      {...otherProps}
+      className={headlineStyles({ [`h${level}`]: true }) + ' ' + className}
+      {...props}
     >
       {children}
     </HeadingTag>

@@ -6,13 +6,10 @@ import {
 import { GetServerSideProps, NextPage } from 'next';
 
 import AccountDetails from '@/components/AccountDetails';
-import Card from '@/components/Card';
-import CardContent from '@/components/CardContent';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
 
 import Layout from '../components/Layout';
-import Headline from '../components/ui/Headline';
 
 interface Props {
   user: User;

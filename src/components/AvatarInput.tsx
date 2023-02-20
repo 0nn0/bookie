@@ -3,6 +3,7 @@ import React, { useState } from 'react';
 import { Database } from '@/lib/database.types';
 
 import Avatar from './Avatar';
+import FormLabel from './ui/FormLabel';
 
 type Base64 = string | ArrayBuffer | null;
 
@@ -34,32 +35,35 @@ function AvatarInput({
   };
 
   return (
-    <div className="flex items-center">
-      {base64Preview ? (
-        <img className="h-8 w-8 rounded-full" src={base64Preview} />
-      ) : (
-        <Avatar avatarUrl={url} size={32} />
-      )}
-      <div className="">
-        <label
-          className="ml-5 cursor-pointer rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
-          htmlFor="single"
-        >
-          {uploading ? 'Uploading ...' : 'Upload'}
-        </label>
-        <input
-          style={{
-            visibility: 'hidden',
-            position: 'absolute',
-          }}
-          type="file"
-          id="single"
-          accept="image/*"
-          onChange={uploadAvatar}
-          disabled={uploading}
-        />
+    <>
+      <FormLabel>Avatar</FormLabel>
+      <div className="mt-2 flex items-center">
+        {base64Preview ? (
+          <img className="h-8 w-8 rounded-full" src={base64Preview} />
+        ) : (
+          <Avatar avatarUrl={url} size={32} />
+        )}
+        <div>
+          <label
+            className="ml-5 cursor-pointer rounded-md border border-gray-300 bg-white py-2 px-3 text-sm font-medium leading-4 text-gray-700 shadow-sm hover:bg-gray-50 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2"
+            htmlFor="single"
+          >
+            {uploading ? 'Uploading ...' : 'Change'}
+          </label>
+          <input
+            style={{
+              visibility: 'hidden',
+              position: 'absolute',
+            }}
+            type="file"
+            id="single"
+            accept="image/*"
+            onChange={uploadAvatar}
+            disabled={uploading}
+          />
+        </div>
       </div>
-    </div>
+    </>
   );
 }
 

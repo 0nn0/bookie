@@ -26,8 +26,10 @@ const Dialog = ({ title, body, confirmButton, cancelButton }: DialogProps) => {
             aria-hidden="true"
           />
         </div>
-        <div className="mt-3 text-center sm:mt-0 sm:ml-4 sm:text-left">
-          <Headline level={4}>{title}</Headline>
+        <div className="mt-3 text-center sm:mt-0 sm:ml-4 md:text-left">
+          <Headline className="text-center md:text-left" level={4}>
+            {title}
+          </Headline>
           <div className="mt-2">
             <p className="text-sm text-gray-500">{body}</p>
           </div>

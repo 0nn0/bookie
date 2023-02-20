@@ -41,8 +41,8 @@ const DeleteAccountButton = () => {
   const handleClick = () => {
     dialogContext?.setDialog(
       <Dialog
-        title="Confirm account deletion"
-        body="Are you sure you want to delete your account?"
+        title="Are you sure?"
+        body="This action cannot be undone. This will permanently delete your account."
         confirmButton={{
           label: 'Yes, delete account',
           disabled: mutation.isLoading,
@@ -51,7 +51,7 @@ const DeleteAccountButton = () => {
           },
         }}
         cancelButton={{
-          label: 'No, keep',
+          label: 'No, keep account',
           onClick: () => {
             dialogContext?.setOpen(false);
           },

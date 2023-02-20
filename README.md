@@ -13,12 +13,10 @@ App that allows you to
 High priority
 
 - [ ] Add ability to change booking dates
-- [ ] Add confirmation dialog to cancel booking
 
 Medium priority
 
 - [ ] Reveal all bookings from Upcoming bookings in overview
 - [ ] Merge PropertyForm (new) and PropertyDetailsForm (update)
-- [ ] Change getBookingsQuery arguments to object
 - [ ] Create constant for filters
 - [ ] Remove bookings, avatar image when deleting account
