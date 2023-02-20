@@ -20,8 +20,6 @@ interface Props {
 }
 
 const Account: NextPage<Props> = ({ user, initialSession }) => {
-  console.log({ user });
-
   return (
     <Layout title="Account">
       <Container>

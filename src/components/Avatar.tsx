@@ -6,12 +6,11 @@ const Avatar = ({
   lastName,
   size = 32,
 }: {
-  avatarUrl: string;
-  firstName: string;
-  lastName: string;
+  avatarUrl?: string;
+  firstName?: string;
+  lastName?: string;
   size?: number;
 }) => {
-  console.log({ avatarUrl, firstName, lastName, size });
   return (
     <div
       title={`${firstName} ${lastName}`}

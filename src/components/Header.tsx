@@ -18,6 +18,7 @@ const Header = () => {
   const avatarUrl = data?.avatar_url;
   const firstName = data?.first_name;
   const lastName = data?.last_name;
+  const updatedAt = data?.updated_at;
 
   return (
     <header className="bg-gray-800">
@@ -38,7 +39,7 @@ const Header = () => {
                   aria-label="User menu"
                 >
                   <Avatar
-                    avatarUrl={avatarUrl}
+                    avatarUrl={`${avatarUrl}?${updatedAt}`}
                     size={32}
                     firstName={firstName}
                     lastName={lastName}

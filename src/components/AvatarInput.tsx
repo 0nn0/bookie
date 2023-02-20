@@ -1,101 +1,44 @@
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import Image from 'next/image';
-import React, { useEffect, useState } from 'react';
+import React, { useState } from 'react';
 
 import { Database } from '@/lib/database.types';
 
-type Profiles = Database['public']['Tables']['profiles']['Row'];
+import Avatar from './Avatar';
 
-const STORAGE_BUCKET = 'media';
+type Base64 = string | ArrayBuffer | null;
 
-export default function Avatar({
-  uid,
+function AvatarInput({
   url,
-  size,
   onUpload,
 }: {
-  uid: string;
-  url: Profiles['avatar_url'];
-  size: number;
-  onUpload: (url: string) => void;
+  url: string;
+  onUpload: (file: File) => void;
 }) {
-  const supabase = useSupabaseClient<Database>();
-  const [avatarUrl, setAvatarUrl] = useState<Profiles['avatar_url']>(null);
+  const [base64Preview, setBase64Preview] = useState<Base64 | null>(null);
   const [uploading, setUploading] = useState(false);
-
-  useEffect(() => {
-    if (url) downloadImage(url);
-  }, [url]);
-
-  async function downloadImage(path: string) {
-    try {
-      const { data, error } = await supabase.storage
-        .from(STORAGE_BUCKET)
-        .download(path);
-      if (error) {
-        throw error;
-      }
-      const url = URL.createObjectURL(data);
-      setAvatarUrl(url);
-    } catch (error) {
-      console.log('Error downloading image: ', error);
-    }
-  }
 
   const uploadAvatar: React.ChangeEventHandler<HTMLInputElement> = async (
     event
   ) => {
-    try {
-      setUploading(true);
-
-      if (!event.target.files || event.target.files.length === 0) {
-        throw new Error('You must select an image to upload.');
-      }
-
-      const file = event.target.files[0];
-      const fileExt = file.name.split('.').pop();
-      const fileName = `avatar.${fileExt}`;
-      const filePath = `${uid}/${fileName}`;
-
-      console.log({ filePath, file, fileExt, fileName });
-
-      let { error: uploadError } = await supabase.storage
-        .from(STORAGE_BUCKET)
-        .upload(filePath, file, { upsert: true });
-
-      if (uploadError) {
-        throw uploadError;
-      }
-
-      onUpload(filePath);
-    } catch (error) {
-      alert('Error uploading avatar!');
-      console.log(error);
-    } finally {
-      setUploading(false);
+    if (!event.target.files || event.target.files.length === 0) {
+      throw new Error('You must select an image to upload.');
     }
+
+    setUploading(true);
+
+    const file = event.target.files[0];
+    const base64Preview = await toBase64(file);
+    setBase64Preview(base64Preview);
+
+    setUploading(false);
+    onUpload(file);
   };
 
   return (
     <div className="flex items-center">
-      {avatarUrl ? (
-        <Image
-          width={size}
-          height={size}
-          src={avatarUrl}
-          alt="Avatar"
-          className="avatar image h-12 w-12 rounded-full"
-        />
+      {base64Preview ? (
+        <img className="h-8 w-8 rounded-full" src={base64Preview} />
       ) : (
-        <span className="inline-block h-12 w-12 overflow-hidden rounded-full bg-gray-100">
-          <svg
-            className="h-full w-full text-gray-300"
-            fill="currentColor"
-            viewBox="0 0 24 24"
-          >
-            <path d="M24 20.993V24H0v-2.996A14.977 14.977 0 0112.004 15c4.904 0 9.26 2.354 11.996 5.993zM16.002 8.999a4 4 0 11-8 0 4 4 0 018 0z" />
-          </svg>
-        </span>
+        <Avatar avatarUrl={url} size={32} />
       )}
       <div className="">
         <label
@@ -118,4 +61,15 @@ export default function Avatar({
       </div>
     </div>
   );
+}
+
+export default AvatarInput;
+
+function toBase64(file: File): Promise<Base64> {
+  return new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => resolve(reader.result);
+    reader.onerror = (error) => reject(error);
+  });
 }

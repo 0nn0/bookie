@@ -8,7 +8,7 @@ const useGetProfileQuery = () => {
   const fetchProfile = async () => {
     const { data, error, status } = await supabaseClient
       .from('profiles')
-      .select(`id, first_name, last_name, avatar_url`)
+      .select(`id, first_name, last_name, avatar_url, updated_at`)
       .eq('id', user?.id)
       .single();
 
