@@ -1,52 +1,14 @@
+import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
+import { useContext } from 'react';
 
 import useCancelBookingMutation from '@/hooks/useCancelBookingMutation';
 
 import Avatar from './Avatar';
+import Dialog from './Dialog';
+import { DialogContext } from './DialogContext';
 import ReadableDates from './ReadableDates';
 import Badge from './ui/Badge';
-
-const ChangeButton = ({ children }: { children: React.ReactNode }) => {
-  return (
-    <Link href="#">
-      <a
-        onClick={(e) => {
-          e.preventDefault();
-          alert('Not implemented yet');
-        }}
-        className="text-indigo-600 hover:text-indigo-900"
-      >
-        {children}
-      </a>
-    </Link>
-  );
-};
-
-const CancelButton = ({
-  children,
-  bookingId,
-  propertyId,
-}: {
-  children: React.ReactNode;
-  bookingId: string;
-  propertyId: string;
-}) => {
-  const mutation = useCancelBookingMutation(bookingId, propertyId);
-
-  return (
-    <Link href="#">
-      <a
-        onClick={(e) => {
-          e.preventDefault();
-          mutation.mutate();
-        }}
-        className="text-red-600 hover:text-red-900"
-      >
-        {mutation.isLoading || mutation.isSuccess ? 'Loading' : children}
-      </a>
-    </Link>
-  );
-};
 
 const BookingListItem = ({
   id,
@@ -110,11 +72,75 @@ const BookingListItem = ({
             )}
           </div>
         </div>
-
-        <div></div>
       </div>
     </div>
   );
 };
 
 export default BookingListItem;
+
+const ChangeButton = ({ children }: { children: React.ReactNode }) => {
+  return (
+    <Link href="#">
+      <a
+        onClick={(e) => {
+          e.preventDefault();
+          alert('Not implemented yet');
+        }}
+        className="text-indigo-600 hover:text-indigo-900"
+      >
+        {children}
+      </a>
+    </Link>
+  );
+};
+
+const CancelButton = ({
+  children,
+  bookingId,
+  propertyId,
+}: {
+  children: React.ReactNode;
+  bookingId: string;
+  propertyId: string;
+}) => {
+  const dialogContext = useContext(DialogContext);
+  const mutation = useCancelBookingMutation(bookingId, propertyId);
+
+  return (
+    <Link href="#">
+      <a
+        onClick={(e) => {
+          e.preventDefault();
+          dialogContext?.setDialog(
+            <Dialog
+              title="Confirm cancellation"
+              body="Are you sure you want to cancel your booking?"
+              confirmButton={{
+                label: 'Yes, cancel booking',
+                disabled: mutation.isLoading,
+                onClick: () => {
+                  mutation.mutate(undefined, {
+                    onSuccess: () => {
+                      dialogContext?.setOpen(false);
+                    },
+                  });
+                },
+              }}
+              cancelButton={{
+                label: 'No, keep booking',
+                onClick: () => {
+                  dialogContext?.setOpen(false);
+                },
+              }}
+            />
+          );
+          dialogContext?.setOpen(true);
+        }}
+        className="text-red-600 hover:text-red-900"
+      >
+        {mutation.isLoading || mutation.isSuccess ? 'Loading' : children}
+      </a>
+    </Link>
+  );
+};

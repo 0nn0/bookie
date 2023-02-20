@@ -6,6 +6,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
 
+import { DialogContext, DialogProvider } from '@/components/DialogContext';
 import { Database } from '@/lib/database.types';
 
 import '../styles/globals.css';
@@ -28,7 +29,9 @@ function MyApp({ Component, pageProps }: AppProps) {
         initialSession={pageProps.initialSession}
       >
         <QueryClientProvider client={queryClient}>
-          <Component {...pageProps} />
+          <DialogProvider>
+            <Component {...pageProps} />
+          </DialogProvider>
           <ReactQueryDevtools initialIsOpen={true} />
         </QueryClientProvider>
       </SessionContextProvider>
