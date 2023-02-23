@@ -31,7 +31,7 @@ const InviteGuestForm = ({ propertyId }: { propertyId: string }) => {
   const onSubmit = async (formData: FormSchema) => {
     mutation.mutate(formData, {
       onSuccess: () => {
-        router.push('/');
+        router.push(`/properties/${propertyId}/guests`);
       },
     });
   };
