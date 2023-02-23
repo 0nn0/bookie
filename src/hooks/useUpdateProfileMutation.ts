@@ -11,7 +11,6 @@ const useUpdateProfileMutation = () => {
       last_name: string;
       avatar_url?: string;
     }) => {
-      console.log('UPDATE');
       const { data, error } = await supabaseClient
         .from('profiles')
         .update({

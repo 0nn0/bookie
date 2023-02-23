@@ -11,9 +11,8 @@ import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
-import { RoleId } from '@/pages/api/user';
 
-const InfoPage = ({ roleId }: { roleId: RoleId }) => {
+const InfoPage = ({ roleId }: { roleId: string }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
@@ -61,7 +60,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get role
   const { data } = await supabase
-    .from('guests_owners')
+    .from('fact_table')
     .select('role_id')
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)

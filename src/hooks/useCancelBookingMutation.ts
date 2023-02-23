@@ -1,6 +1,7 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { StatusIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
 
 const useCancelBookingMutation = (bookingId: string, propertyId: string) => {
@@ -23,16 +24,16 @@ const useCancelBookingMutation = (bookingId: string, propertyId: string) => {
       // if (data && data.length > 0) {
       // cancel booking
 
-      // console.log('useCancelBookingMutation', { bookingId });
       const { data: propertyData, error: propertyError } = await supabase
         .from('bookings')
-        .update({ status: 'CANCELED' })
+        .update({ status_id: StatusIdByName.Canceled })
         .eq('id', bookingId);
 
-      return propertyData;
-      // }
+      if (propertyError instanceof Error) {
+        throw new Error(propertyError.message);
+      }
 
-      // throw new Error('User is not owner');
+      return propertyData;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['bookings', propertyId] });

@@ -1,15 +1,13 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
 
+import { RoleIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
-import { Role } from '@/pages/api/user';
 
 const useAddPropertyMutation = () => {
   const user = useUser();
   const supabase = useSupabaseClient<Database>();
   const queryClient = useQueryClient();
-  const router = useRouter();
 
   return useMutation({
     mutationFn: async ({
@@ -31,8 +29,6 @@ const useAddPropertyMutation = () => {
         ])
         .select('*');
 
-      console.log({ data });
-
       if (error) {
         throw new Error(error.message);
       }
@@ -44,11 +40,11 @@ const useAddPropertyMutation = () => {
       const propertyId = data[0].id;
 
       const { data: dataNewGuestsOwners, error: errorNewGuestsOwners } =
-        await supabase.from('guests_owners').insert([
+        await supabase.from('fact_table').insert([
           {
             profile_id: user.id,
             property_id: propertyId,
-            role_id: Role.OWNER,
+            role_id: RoleIdByName.Owner,
           },
         ]);
 
@@ -61,8 +57,6 @@ const useAddPropertyMutation = () => {
 
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
-
-      router.push('/'); // TODO: move outside of mutation
     },
   });
 };

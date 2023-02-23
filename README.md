@@ -12,7 +12,11 @@ App that allows you to
 
 High priority
 
+- [ ] Fix invalidate keys propertyId vs propertyIds vs with filter etc.
+- [ ] Fix property-nav being on top of dialog
+- [ ] Fix side-padding dialog
 - [ ] Add ability to change booking dates
+- [ ] Return to guests page after successfully submitting invite form
 
 Medium priority
 

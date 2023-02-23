@@ -1,8 +1,8 @@
 import { ChevronRightIcon } from '@heroicons/react/20/solid';
 import Link from 'next/link';
 
+import { RoleIdByName } from '@/constants/constants';
 import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
-import { Role } from '@/pages/api/user';
 
 import Card from './Card';
 import EmptyState from './EmptyState';
@@ -28,7 +28,7 @@ const PropertyList = () => {
     <Card>
       <ul role="list" className="divide-y divide-gray-200">
         {data.map((item) => {
-          const { id, role_id, properties } = item;
+          const { id, roles, properties } = item;
           if (properties) {
             return (
               <li key={id}>
@@ -46,7 +46,9 @@ const PropertyList = () => {
                           <div className="">
                             <div>
                               <p className="text-sm text-gray-900">
-                                {role_id === Role.OWNER ? 'Owner' : 'Guest'}
+                                {roles?.id === RoleIdByName.Owner
+                                  ? 'Owner'
+                                  : 'Guest'}
                               </p>
                             </div>
                           </div>

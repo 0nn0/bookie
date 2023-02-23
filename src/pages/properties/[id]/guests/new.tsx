@@ -8,9 +8,9 @@ import Layout from '@/components/Layout';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
-import { Role, RoleId } from '@/pages/api/user';
+import { RoleIdByName } from '@/constants/constants';
 
-const New = ({ roleId }: { roleId: RoleId }) => {
+const New = ({ roleId }: { roleId: string }) => {
   const { query } = useRouter();
   const propertyId = query.id as string;
 
@@ -53,11 +53,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // check if user is owner of this property
   const { data } = await supabase
-    .from('guests_owners')
+    .from('fact_table')
     .select()
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)
-    .eq('role_id', Role.OWNER)
+    .eq('role_id', RoleIdByName.Owner)
     .single();
 
   if (!data) {
@@ -68,7 +68,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get role
   const { data: roleData } = await supabase
-    .from('guests_owners')
+    .from('fact_table')
     .select('role_id')
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)

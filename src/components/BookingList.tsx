@@ -41,31 +41,28 @@ const BookingList = (props: ConditionalProps) => {
     <Card>
       <div className="divide-y divide-gray-200">
         {data.map((item) => {
-          const {
-            id,
-            start_date,
-            end_date,
-            status,
-            properties,
-            guests_owners,
-          } = item;
+          const { id, start_date, end_date, status_id, fact_table } = item;
 
-          const avatar_url = guests_owners.profiles?.avatar_url;
-          const first_name = guests_owners.profiles?.first_name;
-          const last_name = guests_owners.profiles?.last_name;
+          const avatarUrl = fact_table.profiles?.avatar_url;
+          const firstName = fact_table.profiles?.first_name;
+          const lastName = fact_table.profiles?.last_name;
+          const profileId = fact_table.profiles?.id;
+          const propertyId = fact_table.properties.id;
+          const propertyName = fact_table.properties.name;
 
           return (
             <BookingListItem
               key={id}
               id={id}
+              profileId={profileId}
               startDate={start_date}
               endDate={end_date}
-              status={status}
-              firstName={first_name}
-              lastName={last_name}
-              avatarUrl={avatar_url}
-              propertyId={properties.id}
-              propertyName={properties.name}
+              statusId={status_id}
+              firstName={firstName}
+              lastName={lastName}
+              avatarUrl={avatarUrl}
+              propertyId={propertyId}
+              propertyName={propertyName}
             />
           );
         })}

@@ -12,9 +12,9 @@ import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
+import { RoleIdByName } from '@/constants/constants';
 import useDeletePropertyMutation from '@/hooks/useDeletePropertyMutation';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
-import { Role } from '@/pages/api/user';
 
 const Settings: NextPage = () => {
   const router = useRouter();
@@ -27,7 +27,7 @@ const Settings: NextPage = () => {
   return (
     <Layout title="Settings">
       <Container>
-        <PropertyNav propertyId={propertyId} roleId="OWNER" />
+        <PropertyNav propertyId={propertyId} roleId={RoleIdByName.Owner} />
 
         <PropertyContent>
           <SectionHeading title="Settings" />
@@ -83,7 +83,11 @@ function DeleteButton({
       >
         {mutation.isLoading || mutation.isSuccess ? 'Loading' : children}
       </Button>
-      {mutation.isError && <div>You are not the owner</div>}
+      {mutation.isError && (
+        <div className="mt-2 text-sm text-red-600">
+          {mutation.error?.message}
+        </div>
+      )}
     </>
   );
 }
@@ -113,11 +117,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // check if user is owner of this property
   const { data } = await supabase
-    .from('guests_owners')
+    .from('fact_table')
     .select()
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)
-    .eq('role_id', Role.OWNER)
+    .eq('role_id', RoleIdByName.Owner)
     .single();
 
   if (!data) {

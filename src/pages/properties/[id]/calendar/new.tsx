@@ -11,9 +11,8 @@ import PropertyContent from '@/components/PropertyContent';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
-import { Role, RoleId } from '@/pages/api/user';
 
-const New = ({ roleId }: { roleId: RoleId }) => {
+const New = ({ roleId }: { roleId: string }) => {
   const { query } = useRouter();
   const propertyId = query.id as string;
 

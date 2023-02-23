@@ -21,12 +21,12 @@ const useDeleteGuestMutation = ({
       const { data: bookings, error: bookingsError } = await supabase
         .from('bookings')
         .delete()
-        .eq('guests_owners_id', guestId)
+        .eq('fact_table_id', guestId)
         .eq('property_id', propertyId);
 
       // delete guest
       const { data, error } = await supabase
-        .from('guests_owners')
+        .from('fact_table')
         .delete()
         .eq('id', guestId)
         .eq('property_id', propertyId);

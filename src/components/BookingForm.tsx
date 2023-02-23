@@ -1,16 +1,20 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
+import { useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { StatusIdByName } from '@/constants/constants';
 import useAddBookingMutation from '@/hooks/useAddBookingMutation';
 import useGetUpcomingBookingsQuery from '@/hooks/useGetUpcomingBookingsQuery';
 
 import RangeCalendar from './RangeCalendar';
 import Button from './ui/Button';
 import FormErrorMessage from './ui/FormErrorMessage';
+
+const IS_DEV = process.env.NODE_ENV === 'development';
 
 const dateSchema = z.object({
   calendar: z.object({ identifier: z.string() }),
@@ -56,6 +60,7 @@ export type FormSchema = z.infer<typeof schema>;
 
 const BookingForm = ({ propertyId }: { propertyId: string }) => {
   const supabaseClient = useSupabaseClient();
+  const queryClient = useQueryClient();
   const router = useRouter();
 
   const { isLoading, data, error, isError } = useGetUpcomingBookingsQuery({
@@ -87,15 +92,24 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
       sdate: startDate,
       edate: endDate,
       propid: propertyId,
+      statusid: StatusIdByName.Booked,
     });
 
     if (error) console.log(error);
 
     if (data?.length === 0) {
-      mutation.mutate({
-        startDate: startDate,
-        endDate: endDate,
-      });
+      mutation.mutate(
+        {
+          startDate: startDate,
+          endDate: endDate,
+        },
+        {
+          onSuccess: () => {
+            queryClient.invalidateQueries(['bookings', propertyId]);
+            router.push(`/properties/${propertyId}/calendar`);
+          },
+        }
+      );
 
       // reset form
       // setValue('rangeCalendar', undefined);
@@ -144,7 +158,7 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
           render={({ field }) => (
             <RangeCalendar
               aria-label="Trip dates"
-              minValue={today(getLocalTimeZone())}
+              minValue={IS_DEV ? undefined : today(getLocalTimeZone())}
               isDateUnavailable={isDateUnavailable}
               value={field.value}
               onChange={field.onChange}

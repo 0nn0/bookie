@@ -2,7 +2,7 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
 
-import { Role } from './user';
+import { RoleIdByName } from '@/constants/constants';
 
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
@@ -28,16 +28,13 @@ export default async function handler(
     const { email, propertyId } = req.body;
 
     // check if use is an owner (authorised to invite guests)
-    console.log('session.user.id', session.user.id);
     const { data: ownerData, error: ownerError } = await supabase
-      .from('guests_owners')
+      .from('fact_table')
       .select()
       .eq('property_id', propertyId)
       .eq('profile_id', session.user.id)
-      .eq('role_id', Role.OWNER)
+      .eq('role_id', RoleIdByName.Owner)
       .single();
-
-    console.log({ ownerData });
 
     if (ownerError) {
       console.log({ ownerError });
@@ -74,7 +71,7 @@ export default async function handler(
 
     // check if user is already a guest for this property
     const guest = await supabaseAdmin
-      .from('guests_owners')
+      .from('fact_table')
       .select()
       .eq('profile_id', profileId)
       .eq('property_id', propertyId);
@@ -83,11 +80,11 @@ export default async function handler(
 
     if (guest.data.length === 0) {
       console.log('Inserting guest');
-      await supabaseAdmin.from('guests_owners').insert({
+      await supabaseAdmin.from('fact_table').insert({
         created_at: new Date(),
         profile_id: profileId,
         property_id: propertyId,
-        role_id: Role.GUEST,
+        role_id: RoleIdByName.Guest,
       });
     } else {
       return res.status(409).json({ error: 'User is already a guest' });

@@ -5,7 +5,7 @@ import {
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
 
-import { Role, RoleId } from '@/pages/api/user';
+import { RoleIdByName } from '@/constants/constants';
 
 import Tabs from './Tabs';
 
@@ -14,7 +14,7 @@ const PropertyNav = ({
   roleId,
 }: {
   propertyId: string;
-  roleId: RoleId;
+  roleId: string;
 }) => {
   let tabs = [
     {
@@ -31,7 +31,7 @@ const PropertyNav = ({
     },
   ];
 
-  if (roleId === Role.OWNER) {
+  if (roleId === RoleIdByName.Owner) {
     tabs = [
       ...tabs,
       {

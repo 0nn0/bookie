@@ -1,8 +1,8 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { RoleIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
-import { Role } from '@/pages/api/user';
 
 const useDeletePropertyMutation = ({ propertyId }: { propertyId: string }) => {
   const user = useUser();
@@ -15,16 +15,42 @@ const useDeletePropertyMutation = ({ propertyId }: { propertyId: string }) => {
 
       // check if user is owner
       const { data, error } = await supabase
-        .from('guests_owners')
+        .from('fact_table')
         .select()
         .eq('property_id', propertyId)
         .eq('profile_id', user.id)
-        .eq('role_id', Role.OWNER);
+        .eq('role_id', RoleIdByName.Owner);
+
+      if (error) {
+        throw new Error(error.message);
+      }
 
       if (data && data.length > 0) {
-        // delete all guests_owners records for this property
-        const { data, error } = await supabase
-          .from('guests_owners')
+        // get all bookings for property
+        const { data: bookingsData, error: getBookingsError } = await supabase
+          .from('bookings')
+          .select('id, fact_table!inner(id, property_id)')
+          .eq('fact_table.property_id', propertyId);
+
+        if (getBookingsError) {
+          throw new Error(getBookingsError.message);
+        }
+
+        const bookingIds = bookingsData?.map((item) => item.id);
+
+        // delete all bookings for this property
+        const { error: deleteBookingsError } = await supabase
+          .from('bookings')
+          .delete()
+          .in('id', bookingIds);
+
+        if (deleteBookingsError) {
+          throw new Error(deleteBookingsError.message);
+        }
+
+        // delete all fact_table records for this property
+        const { error } = await supabase
+          .from('fact_table')
           .delete()
           .eq('property_id', propertyId);
 
@@ -37,6 +63,10 @@ const useDeletePropertyMutation = ({ propertyId }: { propertyId: string }) => {
           .from('properties')
           .delete()
           .eq('id', propertyId);
+
+        if (propertyError) {
+          throw new Error(propertyError.message);
+        }
 
         return propertyData;
       }

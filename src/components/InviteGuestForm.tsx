@@ -1,4 +1,5 @@
 import { zodResolver } from '@hookform/resolvers/zod';
+import { useRouter } from 'next/router';
 import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -15,6 +16,7 @@ const schema = z.object({
 export type FormSchema = z.infer<typeof schema>;
 
 const InviteGuestForm = ({ propertyId }: { propertyId: string }) => {
+  const router = useRouter();
   const {
     register,
     handleSubmit,
@@ -27,7 +29,11 @@ const InviteGuestForm = ({ propertyId }: { propertyId: string }) => {
   const mutation = useAddGuestMutation({ propertyId });
 
   const onSubmit = async (formData: FormSchema) => {
-    mutation.mutate(formData);
+    mutation.mutate(formData, {
+      onSuccess: () => {
+        router.push('/');
+      },
+    });
   };
 
   return (

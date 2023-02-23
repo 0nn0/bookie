@@ -13,52 +13,52 @@ export interface Database {
         Row: {
           created_at: string | null
           end_date: string
-          guests_owners_id: string
+          fact_table_id: string
           id: string
-          property_id: string
           start_date: string
-          status: string
+          status_id: string
+          updated_at: string
         }
         Insert: {
           created_at?: string | null
           end_date: string
-          guests_owners_id: string
+          fact_table_id: string
           id?: string
-          property_id: string
           start_date: string
-          status: string
+          status_id: string
+          updated_at?: string
         }
         Update: {
           created_at?: string | null
           end_date?: string
-          guests_owners_id?: string
+          fact_table_id?: string
           id?: string
-          property_id?: string
           start_date?: string
-          status?: string
+          status_id?: string
+          updated_at?: string
         }
       }
-      guests_owners: {
+      fact_table: {
         Row: {
           created_at: string | null
           id: string
           profile_id: string
           property_id: string
-          role_id: string
+          role_id: string | null
         }
         Insert: {
           created_at?: string | null
           id?: string
           profile_id: string
           property_id: string
-          role_id: string
+          role_id?: string | null
         }
         Update: {
           created_at?: string | null
           id?: string
           profile_id?: string
           property_id?: string
-          role_id?: string
+          role_id?: string | null
         }
       }
       profiles: {
@@ -115,13 +115,36 @@ export interface Database {
       }
       roles: {
         Row: {
+          created_at: string
           id: string
+          name: string
         }
         Insert: {
-          id: string
+          created_at: string
+          id?: string
+          name: string
         }
         Update: {
+          created_at?: string
           id?: string
+          name?: string
+        }
+      }
+      status: {
+        Row: {
+          created_at: string | null
+          id: string
+          name: string
+        }
+        Insert: {
+          created_at?: string | null
+          id?: string
+          name: string
+        }
+        Update: {
+          created_at?: string | null
+          id?: string
+          name?: string
         }
       }
     }

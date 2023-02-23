@@ -11,7 +11,7 @@ import SectionHeading from '@/components/SectionHeading';
 import TabsInPils from '@/components/TabsInPils';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
-import { Role, RoleId } from '@/pages/api/user';
+import { RoleIdByName } from '@/constants/constants';
 
 export type CalendarFilter = 'UPCOMING' | 'ALL';
 
@@ -20,7 +20,7 @@ export const CalendarFilters = {
   ALL: 'ALL',
 };
 
-const CalendarPage = ({ user, roleId }: { user: any; roleId: RoleId }) => {
+const CalendarPage = ({ user, roleId }: { user: any; roleId: string }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
@@ -62,8 +62,8 @@ const CalendarPage = ({ user, roleId }: { user: any; roleId: RoleId }) => {
             />
             <div className="mt-4">
               <BookingList
-                userId={user.id}
-                propertyId={propertyId}
+                userId={roleId === RoleIdByName.Guest ? user.id : undefined}
+                propertyIds={[propertyId]}
                 filter={filter}
               />
             </div>
@@ -99,7 +99,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get role
   const { data } = await supabase
-    .from('guests_owners')
+    .from('fact_table')
     .select('id, role_id')
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)
@@ -115,7 +115,6 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       initialSession: session,
       user: session.user,
-
       roleId: data.role_id,
     },
   };

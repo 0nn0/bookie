@@ -7,13 +7,6 @@ const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY
 );
 
-export const Role = {
-  OWNER: 'OWNER',
-  GUEST: 'GUEST',
-} as const;
-
-export type RoleId = keyof typeof Role;
-
 export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
@@ -32,7 +25,7 @@ export default async function handler(
   if (req.method === 'DELETE') {
     // 1. check if user is owner or guest of any properties
     const { data: userData, error: userError } = await supabase
-      .from('guests_owners')
+      .from('fact_table')
       .select()
       .eq('profile_id', session.user.id);
 
@@ -47,7 +40,7 @@ export default async function handler(
     if (ownedPropertyIds) {
       for (const propertyId of ownedPropertyIds) {
         const { error } = await supabase
-          .from('guests_owners')
+          .from('fact_table')
           .delete()
           .eq('property_id', propertyId);
       }
@@ -55,7 +48,7 @@ export default async function handler(
 
     // 4. delete themselves from properties for which they are a guest
     const { error } = await supabase
-      .from('guests_owners')
+      .from('fact_table')
       .delete()
       .eq('profile_id', session.user.id);
 

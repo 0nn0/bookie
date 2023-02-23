@@ -40,7 +40,6 @@ const RequestOtpForm = ({ onSubmitSuccess, isSignUp }: Props) => {
       if (error) {
         throw error;
       }
-      console.log({ data });
 
       onSubmitSuccess(formData.email);
     } catch (error: any) {

@@ -1,5 +1,5 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
 import ErrorState from '@/components/ErrorState';
@@ -10,10 +10,10 @@ import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
+import { RoleIdByName } from '@/constants/constants';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
-import { Role, RoleId } from '@/pages/api/user';
 
-const Guests = ({ roleId }: { roleId: RoleId }) => {
+const Guests = ({ roleId }: { roleId: string }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
@@ -77,11 +77,11 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // check if user is owner of this property
   const { data } = await supabase
-    .from('guests_owners')
+    .from('fact_table')
     .select()
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)
-    .eq('role_id', Role.OWNER)
+    .eq('role_id', RoleIdByName.Owner)
     .single();
 
   if (!data) {
@@ -92,7 +92,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   // get role
   const { data: roleData } = await supabase
-    .from('guests_owners')
+    .from('fact_table')
     .select('role_id')
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)

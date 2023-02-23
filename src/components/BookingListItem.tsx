@@ -1,7 +1,7 @@
-import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 import Link from 'next/link';
 import { useContext } from 'react';
 
+import { StatusIdByName } from '@/constants/constants';
 import useCancelBookingMutation from '@/hooks/useCancelBookingMutation';
 
 import Avatar from './Avatar';
@@ -19,7 +19,7 @@ const BookingListItem = ({
   propertyName,
   startDate,
   endDate,
-  status,
+  statusId,
 }: {
   id: string;
   firstName: string;
@@ -29,7 +29,7 @@ const BookingListItem = ({
   propertyName: string;
   startDate: string;
   endDate: string;
-  status: string;
+  statusId: string;
 }) => {
   const isPast = new Date(endDate) < new Date();
 
@@ -57,7 +57,7 @@ const BookingListItem = ({
             <div className="mt-3 text-sm text-gray-700">
               <ReadableDates startDate={startDate} endDate={endDate} />
             </div>
-            {!isPast && status === 'BOOKED' && (
+            {!isPast && statusId === StatusIdByName.Booked && (
               <div className="mt-3 flex gap-4">
                 <ChangeButton>Change</ChangeButton>
                 <CancelButton propertyId={propertyId} bookingId={id}>
@@ -65,7 +65,7 @@ const BookingListItem = ({
                 </CancelButton>
               </div>
             )}
-            {status === 'CANCELED' && (
+            {statusId === StatusIdByName.Canceled && (
               <div className="mt-3 inline-flex">
                 <Badge type="danger">CANCELED</Badge>
               </div>

@@ -1,7 +1,7 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { kStringMaxLength } from 'buffer';
 
+import { StatusIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
 
 const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
@@ -19,25 +19,23 @@ const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
     }) => {
       if (!user?.id) throw new Error('User not logged in');
 
-      // get the guests_owners id
-      const { data: guestsOwnersData, error: guestsOwnersError } =
-        await supabase
-          .from('guests_owners')
-          .select('id')
-          .eq('property_id', propertyId)
-          .eq('profile_id', user.id)
-          .single();
+      // get the fact_table id
+      const { data: factTableData, error: factTableError } = await supabase
+        .from('fact_table')
+        .select('id')
+        .eq('property_id', propertyId)
+        .eq('profile_id', user.id)
+        .single();
 
-      if (guestsOwnersData?.id) {
+      if (factTableData?.id) {
         const { data, error } = await supabase
           .from('bookings')
           .insert([
             {
-              property_id: propertyId,
-              guests_owners_id: guestsOwnersData.id,
+              fact_table_id: factTableData.id,
               start_date: startDate,
               end_date: endDate,
-              status: 'BOOKED',
+              status_id: StatusIdByName.Booked,
             },
           ])
           .select('*');
@@ -48,8 +46,8 @@ const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
 
         return data;
       } else {
-        if (guestsOwnersError instanceof Error) {
-          throw new Error(guestsOwnersError.message);
+        if (factTableError instanceof Error) {
+          throw new Error(factTableError.message);
         }
       }
     },

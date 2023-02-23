@@ -9,7 +9,7 @@ const useGetGuestsQuery = ({ propertyId }: { propertyId: string }) => {
 
   const fetchGuests = async () => {
     return await supabaseClient
-      .from('guests_owners')
+      .from('fact_table')
       .select(
         'id, role_id, profiles(id, email, first_name, last_name, avatar_url, last_sign_in_at)'
       )

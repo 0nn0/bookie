@@ -33,12 +33,17 @@ const PropertyForm = () => {
   });
 
   const onSubmit = async (formData: FormSchema) => {
-    addPropertyMutation.mutate({
-      name: formData.name,
-      description: formData.description,
-    });
-
-    router.push('/');
+    addPropertyMutation.mutate(
+      {
+        name: formData.name,
+        description: formData.description,
+      },
+      {
+        onSuccess: () => {
+          router.push('/');
+        },
+      }
+    );
   };
 
   return (

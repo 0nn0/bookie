@@ -10,7 +10,7 @@ const useGetPropertyQuery = ({ propertyId }: { propertyId: string }) => {
 
     // check if user is owner or guest of property
     const { data } = await supabaseClient
-      .from('guests_owners')
+      .from('fact_table')
       .select('id, role_id')
       .eq('property_id', propertyId)
       .eq('profile_id', user.id)
