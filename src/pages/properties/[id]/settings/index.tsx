@@ -1,8 +1,10 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
-import React from 'react';
+import React, { useContext } from 'react';
 
+import Dialog from '@/components/Dialog';
+import { DialogContext } from '@/components/DialogContext';
 import ErrorState from '@/components/ErrorState';
 import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
@@ -66,21 +68,41 @@ function DeleteButton({
   children: React.ReactNode;
   propertyId: string;
 }) {
+  const dialogContext = useContext(DialogContext);
   const router = useRouter();
   const mutation = useDeletePropertyMutation({ propertyId });
 
+  const handleClick = () => {
+    dialogContext?.setDialog(
+      <Dialog
+        title="Are you sure?"
+        body="This will permanently delete this property including its bookings. This action cannot be undone. "
+        confirmButton={{
+          label: 'Yes, delete property',
+          disabled: mutation.isLoading,
+          onClick: () => {
+            mutation.mutate(propertyId, {
+              onSuccess: () => {
+                router.push('/');
+              },
+            });
+          },
+        }}
+        cancelButton={{
+          label: 'No, keep property',
+          onClick: () => {
+            dialogContext?.setOpen(false);
+          },
+        }}
+      />
+    );
+
+    dialogContext?.setOpen(true);
+  };
+
   return (
     <>
-      <Button
-        intent="error"
-        onClick={() => {
-          mutation.mutate(propertyId, {
-            onSuccess: () => {
-              router.push('/');
-            },
-          });
-        }}
-      >
+      <Button intent="error" onClick={handleClick}>
         {mutation.isLoading || mutation.isSuccess ? 'Loading' : children}
       </Button>
       {mutation.isError && (

@@ -60,8 +60,6 @@ const DeleteAccountButton = () => {
     );
 
     dialogContext?.setOpen(true);
-
-    // mutation.mutate();
   };
 
   return (
