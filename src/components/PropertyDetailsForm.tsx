@@ -56,6 +56,7 @@ const PropertyDetailsForm = ({
         <FormTextArea
           label="Description"
           id="description"
+          rows={8}
           register={register}
           errors={errors}
         />
