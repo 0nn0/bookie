@@ -51,7 +51,9 @@ const PropertyNav = ({
 
   return (
     <div className="z-5 fixed left-0 bottom-0 flex w-full border-t border-gray-200 bg-gray-50 px-1 pb-3 pt-2">
-      <Tabs items={tabs} />
+      <div className="mx-auto max-w-5xl flex-1">
+        <Tabs items={tabs} />
+      </div>
     </div>
   );
 };
