@@ -14,8 +14,6 @@ import RangeCalendar from './RangeCalendar';
 import Button from './ui/Button';
 import FormErrorMessage from './ui/FormErrorMessage';
 
-const IS_DEV = process.env.NODE_ENV === 'development';
-
 const dateSchema = z.object({
   calendar: z.object({ identifier: z.string() }),
   day: z.number().int().min(1).max(31),
@@ -158,7 +156,7 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
           render={({ field }) => (
             <RangeCalendar
               aria-label="Trip dates"
-              minValue={IS_DEV ? undefined : today(getLocalTimeZone())}
+              minValue={today(getLocalTimeZone())}
               isDateUnavailable={isDateUnavailable}
               value={field.value}
               onChange={field.onChange}
