@@ -5,6 +5,7 @@ import { useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { STORAGE_BUCKET } from '@/constants/constants';
 import useGetProfileQuery from '@/hooks/useGetProfileQuery';
 import useUpdateProfileMutation from '@/hooks/useUpdateProfileMutation';
 import { Database } from '@/lib/database.types';
@@ -13,9 +14,7 @@ import AvatarInput from './AvatarInput';
 import DeleteAccountButton from './DeleteAccountButton';
 import Button from './ui/Button';
 import FormInput from './ui/FormInput';
-import FormLabel from './ui/FormLabel';
 
-const STORAGE_BUCKET = 'media';
 interface Props {
   session: Session;
 }
