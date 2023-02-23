@@ -13,14 +13,11 @@ App that allows you to
 High priority
 
 - [ ] Fix invalidate keys propertyId vs propertyIds vs with filter etc.
-- [ ] Fix property-nav being on top of dialog
-- [ ] Fix side-padding dialog
 - [ ] Add ability to change booking dates
-- [ ] Return to guests page after successfully submitting invite form
 
 Medium priority
 
-- [ ] Reveal all bookings from Upcoming bookings in overview
 - [ ] Merge PropertyForm (new) and PropertyDetailsForm (update)
+- [ ] Design list items in Guests (currently placeholder for avatar and empty line for name)
 - [ ] Create constant for filters
 - [ ] Remove bookings, avatar image when deleting account
