@@ -15,7 +15,10 @@ import Headline from '@/components/ui/Headline';
 const Home = ({ initialSession }: { initialSession: any }) => {
   if (!initialSession?.user)
     return (
-      <Layout title="Home">
+      <Layout
+        title="Home"
+        description="Platform for managing your vacation home"
+      >
         <Container>
           <header className="mb-6">
             <nav>

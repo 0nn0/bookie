@@ -5,16 +5,18 @@ import Header from './Header';
 
 type LayoutProps = {
   title: string;
+  description: string;
   children: React.ReactNode;
 };
 
-const Layout = ({ title, children }: LayoutProps) => {
+const Layout = ({ title = '', description = '', children }: LayoutProps) => {
   const user = useUser();
 
   return (
     <>
       <Head>
         <title>{`${title} | Bookie`}</title>
+        <meta name="description" content={description} />
       </Head>
       {user && <Header />}
       <main className="py-8">{children}</main>
