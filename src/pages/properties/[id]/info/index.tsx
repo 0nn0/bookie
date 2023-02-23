@@ -28,7 +28,7 @@ const InfoPage = ({ roleId }: { roleId: string }) => {
           <SectionHeading title="Info" />
           {isLoading && <LoadingState />}
           {isError && <ErrorState>{error?.message}</ErrorState>}
-          {data && <p>{data.description}</p>}
+          {data && <p className="whitespace-pre-line">{data.description}</p>}
         </PropertyContent>
       </Container>
     </Layout>
