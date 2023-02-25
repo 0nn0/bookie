@@ -1,6 +1,7 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { createClient } from '@supabase/supabase-js';
 import type { NextApiRequest, NextApiResponse } from 'next';
+import { z } from 'zod';
 
 import { RoleIdByName } from '@/constants/constants';
 
@@ -13,9 +14,20 @@ export default async function handler(
   req: NextApiRequest,
   res: NextApiResponse
 ) {
+  // validate request body
+  const schema = z.object({
+    email: z.string().email(),
+    propertyId: z.string(),
+  });
+
+  if (!schema.safeParse(req.body).success) {
+    res.status(400).json({ message: 'Invalid request body' });
+    return;
+  }
+
   const supabase = createServerSupabaseClient({ req, res });
 
-  // check if user is logged in
+  // check if user is authenticated
   const {
     data: { session },
   } = await supabase.auth.getSession();
@@ -41,6 +53,7 @@ export default async function handler(
       return res.status(500).json({ error: ownerError.message });
     }
 
+    // invite user
     const { data: inviteData, error: inviteError } =
       await supabaseAdmin.auth.admin.inviteUserByEmail(email);
 
@@ -63,8 +76,6 @@ export default async function handler(
       profileId = inviteData?.user.id;
     }
 
-    // console.log({ profileId });
-
     if (!profileId) {
       return res.status(500).json({ error: 'Could not find user' });
     }
@@ -76,10 +87,10 @@ export default async function handler(
       .eq('profile_id', profileId)
       .eq('property_id', propertyId);
 
-    console.log({ guest });
+    const notAGuest = guest.data?.length === 0;
 
-    if (guest.data.length === 0) {
-      console.log('Inserting guest');
+    if (notAGuest) {
+      // add user as guest
       await supabaseAdmin.from('fact_table').insert({
         created_at: new Date(),
         profile_id: profileId,
