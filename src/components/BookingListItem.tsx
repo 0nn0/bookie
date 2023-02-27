@@ -52,7 +52,11 @@ const BookingListItem = ({
               </div>
             </div>
             <div className="flex">
-              <div className="mr-2 text-sm text-gray-400">{propertyName}</div>
+              <div className="mr-2 text-sm text-gray-400 hover:text-gray-600">
+                <Link href={`/properties/${propertyId}/info`}>
+                  {propertyName}
+                </Link>
+              </div>
             </div>
             <div className="mt-3 text-sm text-gray-700">
               <ReadableDates startDate={startDate} endDate={endDate} />
