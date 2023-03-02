@@ -57,10 +57,11 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
   ({ intent, fullWidth, children, loading, className = '', ...props }, ref) => {
     if (props.href) {
       return (
-        <Link {...props}>
-          <a className={buttonStyles({ intent, fullWidth }) + className}>
-            {children}
-          </a>
+        <Link
+          {...props}
+          className={buttonStyles({ intent, fullWidth }) + className}
+        >
+          {children}
         </Link>
       );
     }

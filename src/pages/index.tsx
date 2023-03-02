@@ -24,14 +24,10 @@ const Home = ({ initialSession }: { initialSession: any }) => {
             <nav>
               <ul className="flex gap-4">
                 <li>
-                  <Link href="/login">
-                    <a>Login</a>
-                  </Link>
+                  <Link href="/login">Login</Link>
                 </li>
                 <li>
-                  <Link href="/signup">
-                    <a>Signup</a>
-                  </Link>
+                  <Link href="/signup">Signup</Link>
                 </li>
               </ul>
             </nav>

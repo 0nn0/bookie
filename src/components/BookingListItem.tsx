@@ -85,16 +85,15 @@ export default BookingListItem;
 
 const ChangeButton = ({ children }: { children: React.ReactNode }) => {
   return (
-    <Link href="#">
-      <a
-        onClick={(e) => {
-          e.preventDefault();
-          alert('Not implemented yet');
-        }}
-        className="text-indigo-600 hover:text-indigo-900"
-      >
-        {children}
-      </a>
+    <Link
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        alert('Not implemented yet');
+      }}
+      className="text-indigo-600 hover:text-indigo-900"
+    >
+      {children}
     </Link>
   );
 };
@@ -112,39 +111,38 @@ const CancelButton = ({
   const mutation = useCancelBookingMutation(bookingId, propertyId);
 
   return (
-    <Link href="#">
-      <a
-        onClick={(e) => {
-          e.preventDefault();
-          dialogContext?.setDialog(
-            <Dialog
-              title="Are you sure?"
-              body="This action cannot be undone."
-              confirmButton={{
-                label: 'Yes, cancel booking',
-                disabled: mutation.isLoading,
-                onClick: () => {
-                  mutation.mutate(undefined, {
-                    onSuccess: () => {
-                      dialogContext?.setOpen(false);
-                    },
-                  });
-                },
-              }}
-              cancelButton={{
-                label: 'No, keep booking',
-                onClick: () => {
-                  dialogContext?.setOpen(false);
-                },
-              }}
-            />
-          );
-          dialogContext?.setOpen(true);
-        }}
-        className="text-red-600 hover:text-red-900"
-      >
-        {mutation.isLoading || mutation.isSuccess ? 'Loading' : children}
-      </a>
+    <Link
+      href="#"
+      onClick={(e) => {
+        e.preventDefault();
+        dialogContext?.setDialog(
+          <Dialog
+            title="Are you sure?"
+            body="This action cannot be undone."
+            confirmButton={{
+              label: 'Yes, cancel booking',
+              disabled: mutation.isLoading,
+              onClick: () => {
+                mutation.mutate(undefined, {
+                  onSuccess: () => {
+                    dialogContext?.setOpen(false);
+                  },
+                });
+              },
+            }}
+            cancelButton={{
+              label: 'No, keep booking',
+              onClick: () => {
+                dialogContext?.setOpen(false);
+              },
+            }}
+          />
+        );
+        dialogContext?.setOpen(true);
+      }}
+      className="text-red-600 hover:text-red-900"
+    >
+      {mutation.isLoading || mutation.isSuccess ? 'Loading' : children}
     </Link>
   );
 };
