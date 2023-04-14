@@ -14,6 +14,8 @@ type ConditionalProps = BookingsByProperty | BookingsByUser;
 const BookingList = (props: ConditionalProps) => {
   const { isLoading, data, error, isError } = useGetBookingsQuery(props);
 
+  console.log({ data });
+
   if (isLoading) {
     return <LoadingState />;
   }
@@ -44,6 +46,7 @@ const BookingList = (props: ConditionalProps) => {
           const { id, start_date, end_date, status_id, fact_table } = item;
 
           const avatarUrl = fact_table.profiles?.avatar_url;
+          const updatedAt = fact_table.profiles?.updated_at;
           const firstName = fact_table.profiles?.first_name;
           const lastName = fact_table.profiles?.last_name;
           const profileId = fact_table.profiles?.id;
@@ -60,7 +63,7 @@ const BookingList = (props: ConditionalProps) => {
               statusId={status_id}
               firstName={firstName}
               lastName={lastName}
-              avatarUrl={avatarUrl}
+              avatarUrl={`${avatarUrl}?${updatedAt}`}
               propertyId={propertyId}
               propertyName={propertyName}
             />

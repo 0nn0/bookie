@@ -2,9 +2,7 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 
-import BookingList from '@/components/BookingList';
 import Layout from '@/components/Layout';
-import OwnedPropertyBookings from '@/components/OwnedPropertyBookings';
 import PropertyContent from '@/components/PropertyContent';
 import PropertyList from '@/components/PropertyList';
 import SectionHeading from '@/components/SectionHeading';
@@ -87,14 +85,6 @@ const Home = ({ initialSession }: { initialSession: any }) => {
     <Layout title="Home">
       <Container>
         <PropertyContent>
-          <div className="mb-6">
-            <SectionHeading title="My personal bookings" />
-          </div>
-
-          <BookingList userId={initialSession.user.id} filter="UPCOMING" />
-
-          <OwnedPropertyBookings />
-
           <div className="mt-16 mb-6">
             <SectionHeading
               title="Properties"

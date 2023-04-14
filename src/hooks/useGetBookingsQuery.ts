@@ -9,6 +9,9 @@ export interface BookingsByProperty {
   filter: CalendarFilter;
   limit?: number;
   userId?: never;
+  propertyId: string;
+  startDate: string;
+  endDate: string;
 }
 
 export interface BookingsByUser {
@@ -18,48 +21,40 @@ export interface BookingsByUser {
   propertyIds?: never;
 }
 
-type Props = BookingsByProperty | BookingsByUser;
-
-const useGetBookingsQuery = (props: Props) => {
+const useGetBookingsQuery = ({
+  month,
+  year,
+  propertyId,
+}: {
+  month: number;
+  year: number;
+  propertyId: string;
+}) => {
   const supabaseClient = useSupabaseClient();
 
   const fetchBookings = async () => {
+    const startDate = `${year}-${month}-01`;
+
+    const daysInMonth = new Date(year, month, 0).getDate();
+    const endDate = `${year}-${month}-${daysInMonth}`;
+
     let query = supabaseClient
       .from('bookings')
       .select(
-        'id, start_date, end_date, status_id, status!inner(id, name), fact_table!inner(id, role_id, profile_id, property_id, profiles(id, first_name, last_name, avatar_url), properties(id, name))'
-      );
-
-    // From selected properties
-    if ('propertyIds' in props && props.propertyIds) {
-      query.in('fact_table.property_id', props.propertyIds);
-    }
-
-    // Your own bookings
-    if ('userId' in props && props.userId) {
-      query.eq('fact_table.profile_id', props.userId);
-    }
-
-    if (props.filter === 'UPCOMING') {
-      query
-        .eq('status_id', StatusIdByName.Booked)
-        .gte('end_date', new Date().toISOString());
-    }
-
-    if (props.limit) {
-      query.limit(props.limit);
-    }
-
-    query.order('start_date', { ascending: true });
-    query.throwOnError();
+        'id, start_date, end_date, fact_table!inner(id, profile_id, profiles(id, first_name, last_name, avatar_url), properties(id, name))'
+      )
+      .eq('fact_table.property_id', propertyId)
+      .eq('status_id', StatusIdByName.Booked)
+      .gte('start_date', startDate)
+      .lte('end_date', endDate)
+      .order('start_date', { ascending: true })
+      .throwOnError();
 
     return await query;
   };
 
   return useQuery({
-    queryKey: props.propertyIds
-      ? ['bookings', props.propertyIds, props.filter]
-      : ['bookings', props.filter],
+    queryKey: [`bookings-${month}-${year}-${propertyId}`],
     queryFn: async () => {
       return await fetchBookings().then((result) => result.data);
     },

@@ -6,6 +6,7 @@ import ErrorState from '@/components/ErrorState';
 import GuestList from '@/components/GuestList';
 import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
+import PropertyContent from '@/components/PropertyContent';
 import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
@@ -33,20 +34,21 @@ const Guests = ({ roleId }: { roleId: string }) => {
     <Layout title={data.name}>
       <Container>
         <PropertyNav propertyId={propertyId} roleId={roleId} />
+        <PropertyContent>
+          <SectionHeading
+            title="Guests"
+            action={
+              <Button
+                href={`/properties/${propertyId}/guests/new`}
+                className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+              >
+                Invite guest
+              </Button>
+            }
+          />
 
-        <SectionHeading
-          title="Guests"
-          action={
-            <Button
-              href={`/properties/${propertyId}/guests/new`}
-              className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
-            >
-              Invite guest
-            </Button>
-          }
-        />
-
-        <GuestList propertyId={propertyId} />
+          <GuestList propertyId={propertyId} />
+        </PropertyContent>
       </Container>
     </Layout>
   );

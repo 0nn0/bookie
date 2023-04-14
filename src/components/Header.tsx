@@ -18,10 +18,10 @@ const Header = () => {
   const avatarUrl = data?.avatar_url;
   const firstName = data?.first_name;
   const lastName = data?.last_name;
-  const updatedAt = data?.updated_at;
+  const updatedAt = data?.updated_at || '';
 
   return (
-    <header className="bg-gray-800">
+    <header className="fixed z-30 w-full bg-gray-800">
       <Container>
         <div className="flex h-16 items-center justify-between gap-3">
           <PropertyDropdown />
@@ -39,7 +39,7 @@ const Header = () => {
                   aria-label="User menu"
                 >
                   <Avatar
-                    avatarUrl={`${avatarUrl}?${updatedAt}`}
+                    avatarUrl={`${avatarUrl}?${encodeURIComponent(updatedAt)}`}
                     size={32}
                     firstName={firstName}
                     lastName={lastName}
@@ -49,7 +49,7 @@ const Header = () => {
 
               <DropdownMenu.Portal>
                 <DropdownMenu.Content
-                  className="w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+                  className="z-50 w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
                   sideOffset={5}
                   align="end"
                 >

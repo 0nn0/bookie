@@ -3,6 +3,7 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useState } from 'react';
 
+import BookingCalendar from '@/components/BookingCalendar';
 import BookingList from '@/components/BookingList';
 import Layout from '@/components/Layout';
 import PropertyContent from '@/components/PropertyContent';
@@ -30,7 +31,7 @@ const CalendarPage = ({ user, roleId }: { user: any; roleId: string }) => {
     <Layout title="Bookings">
       <Container>
         <PropertyNav propertyId={propertyId} roleId={roleId} />
-        <PropertyContent>
+        {/* <PropertyContent>
           <SectionHeading
             title="Bookings"
             action={
@@ -68,6 +69,12 @@ const CalendarPage = ({ user, roleId }: { user: any; roleId: string }) => {
               />
             </div>
           </div>
+         */}
+        <PropertyContent>
+          <BookingCalendar
+            userId={roleId === RoleIdByName.Guest ? user.id : undefined}
+            propertyId={propertyId}
+          />
         </PropertyContent>
       </Container>
     </Layout>

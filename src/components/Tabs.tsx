@@ -22,14 +22,14 @@ const Tabs = ({ items = [] }) => {
               isCurrent
                 ? ' text-indigo-600'
                 : 'text-gray-500  hover:text-gray-700',
-              'flex-1 items-center justify-center rounded-lg py-2 text-xs font-normal focus:bg-gray-200'
+              'flex-1 items-center justify-center rounded-lg pb-3 pt-1 text-xs font-normal focus:bg-gray-200'
             )}
             aria-current={isCurrent ? 'page' : undefined}
           >
             <div className="flex justify-center">
               <Icon className="h-6 w-6" />
             </div>
-            <div className="mt-2 text-center">{tab.name}</div>
+            <div className="mt-1 text-center">{tab.name}</div>
           </Link>
         );
       })}

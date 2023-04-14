@@ -47,7 +47,7 @@ const PropertyDropdown = () => {
         <DropdownMenu.Trigger asChild>
           <Button intent="dark">
             <span className="min-w-0 overflow-hidden text-ellipsis">
-              {selectedProperty?.properties?.name || 'Overview'}
+              {selectedProperty?.properties?.name || 'Properties'}
             </span>
             <ChevronDownIcon
               className="-mr-0.5 ml-2 h-4 w-4 flex-shrink-0 flex-grow-0 basis-4"
@@ -59,7 +59,7 @@ const PropertyDropdown = () => {
 
       <DropdownMenu.Portal>
         <DropdownMenu.Content
-          className="w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
+          className="z-50 w-48 rounded-md bg-white py-1 shadow-lg ring-1 ring-black ring-opacity-5 focus:outline-none"
           sideOffset={5}
           align="start"
         >
@@ -69,7 +69,7 @@ const PropertyDropdown = () => {
               router.push(`/`);
             }}
           >
-            Overview
+            Properties
           </DropdownMenu.Item>
 
           {data.length > 0 && (

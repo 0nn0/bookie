@@ -1,16 +1,34 @@
 import Image from 'next/image';
+import { useState } from 'react';
+
+const ImageStatus = {
+  LOADING: 'loading',
+  LOADED: 'loaded',
+  ERROR: 'error',
+} as const;
+
+type ImageStatusKeys = keyof typeof ImageStatus;
+type ImageStatusValues = typeof ImageStatus[ImageStatusKeys];
 
 const Avatar = ({
   avatarUrl,
+  updatedAt,
   firstName,
   lastName,
   size = 32,
 }: {
   avatarUrl?: string;
+  updatedAt?: string;
   firstName?: string;
   lastName?: string;
   size?: number;
 }) => {
+  const [imageStatus, setImageStatus] = useState<ImageStatusValues>(
+    ImageStatus.LOADING
+  );
+
+  const imageSrc = `${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${process.env.NEXT_PUBLIC_SUPABASE_MEDIA_BUCKET_NAME}/${avatarUrl}`;
+
   return (
     <div
       title={`${firstName} ${lastName}`}
@@ -18,13 +36,21 @@ const Avatar = ({
         size / 4
       } items-center justify-center overflow-hidden rounded-full  text-xs text-gray-500`}
     >
-      {avatarUrl ? (
+      {avatarUrl && imageStatus !== ImageStatus.ERROR ? (
         <Image
           width={size}
           height={size}
-          src={`${process.env.NEXT_PUBLIC_SUPABASE_URL}/storage/v1/object/public/${process.env.NEXT_PUBLIC_SUPABASE_MEDIA_BUCKET_NAME}/${avatarUrl}`}
-          className="focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
+          src={imageSrc}
+          className={` focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100 ${
+            imageStatus === ImageStatus.LOADED ? 'opacity-100' : 'opacity-0'
+          }`}
           alt={`Avatar of ${firstName} ${lastName}`}
+          onLoad={() => {
+            setImageStatus(ImageStatus.LOADED);
+          }}
+          onError={() => {
+            setImageStatus(ImageStatus.ERROR);
+          }}
         />
       ) : firstName ? (
         <svg viewBox="0 0 32 32" className="absolute h-full w-full">
