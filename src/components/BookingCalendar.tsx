@@ -37,6 +37,7 @@ const BookingCalendar = ({
       )}
       <div className="-ml-6 -mr-6">
         <Calendar
+          propertyId={propertyId}
           setCurrentMonth={setCurrentMonth}
           currentMonth={currentMonth}
           events={data}

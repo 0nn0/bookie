@@ -1,6 +1,6 @@
 import { NextPage } from 'next';
 
-import BackLink from '@/components/BackButton';
+import BackLink from '@/components/BackLink';
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
 import Layout from '@/components/Layout';

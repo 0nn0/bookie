@@ -1,7 +1,5 @@
 import React, { useState } from 'react';
 
-import { Database } from '@/lib/database.types';
-
 import Avatar from './Avatar';
 import FormLabel from './ui/FormLabel';
 

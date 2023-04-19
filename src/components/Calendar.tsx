@@ -1,8 +1,4 @@
-import {
-  ChevronLeftIcon,
-  ChevronRightIcon,
-  PlusIcon,
-} from '@heroicons/react/20/solid';
+import { ChevronLeftIcon, ChevronRightIcon } from '@heroicons/react/20/solid';
 import classNames from 'classnames';
 import {
   add,
@@ -17,8 +13,10 @@ import {
   startOfMonth,
   startOfWeek,
 } from 'date-fns';
-import { Dispatch, SetStateAction } from 'react';
+import { Dispatch, SetStateAction, useContext } from 'react';
 
+import BookingForm from './BookingForm';
+import { DialogContext } from './DialogContext';
 import FloatingActionButton from './FloatingActionButton';
 import Spinner from './Spinner';
 
@@ -55,16 +53,19 @@ type CalendarEvent = {
 };
 
 function Calendar({
+  propertyId,
   currentMonth,
   setCurrentMonth,
   events = [],
   isLoading,
 }: {
+  propertyId: string;
   setCurrentMonth: Dispatch<SetStateAction<string>>;
   currentMonth: string;
   events: CalendarEvent[];
   isLoading: boolean;
 }) {
+  let dialogContext = useContext(DialogContext);
   let firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
 
   let days = eachDayOfInterval({
@@ -91,11 +92,16 @@ function Calendar({
     setCurrentMonth(format(new Date(), 'MM-yyyy'));
   };
 
+  const handleNewBookingClick = () => {
+    dialogContext?.setDialog(<BookingForm propertyId={propertyId} />);
+    dialogContext?.setOpen(true);
+  };
+
   return (
     <div>
-      <header className="flex items-center justify-between border-b border-gray-200 py-4 px-6 lg:flex-none">
+      <header className="flex items-center justify-between border-b border-gray-200 px-6 pb-4 lg:flex-none">
         <div className="flex items-center">
-          <h1 className="whitespace-nowrap text-base font-semibold leading-6 text-gray-900">
+          <h1 className="whitespace-nowrap text-base font-semibold leading-6 text-gray-900 lg:text-xl">
             {format(firstDayCurrentMonth, 'MMMM yyyy')}
           </h1>
           <div className="ml-4">{isLoading && <Spinner />}</div>
@@ -131,11 +137,12 @@ function Calendar({
           <button
             type="button"
             className="ml-6 hidden rounded-md border border-transparent bg-indigo-600 py-2 px-4 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:block"
+            onClick={handleNewBookingClick}
           >
             New booking
           </button>
           <div className="sm:hidden">
-            <FloatingActionButton onClick={() => {}} />
+            <FloatingActionButton onClick={handleNewBookingClick} />
           </div>
         </div>
       </header>
@@ -206,10 +213,11 @@ function Calendar({
                       <div className="grid grid-cols-7">
                         <button
                           className={classNames(
-                            'mx-0.5 mb-px rounded-md bg-pink-50 py-1 text-white hover:bg-pink-100',
+                            'mx-0.5 mb-px rounded-md bg-pink-50 py-1 text-white ',
                             isPast(eventEndDate) &&
                               'text-pink-300 hover:text-pink-400',
-                            !isPast(eventEndDate) && 'text-pink-600',
+                            !isPast(eventEndDate) &&
+                              'text-pink-600 hover:bg-pink-100',
                             {
                               'col-start-1': startColumn === 1,
                               'col-start-2': startColumn === 2,

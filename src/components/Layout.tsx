@@ -19,7 +19,7 @@ const Layout = ({ title = '', description = '', children }: LayoutProps) => {
         <meta name="description" content={description} />
       </Head>
       {user && <Header />}
-      <main className="py-8">{children}</main>
+      <main className="pt-24">{children}</main>
     </>
   );
 };

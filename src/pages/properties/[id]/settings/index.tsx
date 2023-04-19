@@ -3,6 +3,8 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
+import Card from '@/components/Card';
+import CardContent from '@/components/CardContent';
 import Dialog from '@/components/Dialog';
 import { DialogContext } from '@/components/DialogContext';
 import ErrorState from '@/components/ErrorState';
@@ -32,29 +34,38 @@ const Settings: NextPage = () => {
         <PropertyNav propertyId={propertyId} roleId={RoleIdByName.Owner} />
 
         <PropertyContent>
-          <SectionHeading title="Settings" />
+          <div className="mb-6">
+            <SectionHeading title="Settings" />
+          </div>
+          <Card>
+            <CardContent>
+              {isLoading && <LoadingState />}
 
-          {isLoading && <LoadingState />}
+              {isError && (
+                <ErrorState>
+                  {JSON.stringify(error.message, null, 2)}
+                </ErrorState>
+              )}
 
-          {isError && (
-            <ErrorState>{JSON.stringify(error.message, null, 2)}</ErrorState>
-          )}
-
-          {data && (
-            <>
-              <PropertyDetailsForm
-                name={data.name}
-                description={data.description}
-              />
-              <br />
-              <br />
-              <br />
-              <br />
-              <DeleteButton propertyId={propertyId}>
-                Delete property
-              </DeleteButton>
-            </>
-          )}
+              {data && (
+                <>
+                  <PropertyDetailsForm
+                    name={data.name}
+                    description={data.description}
+                  />
+                  <br />
+                  <br />
+                  <br />
+                  <div className="mt-12 mb-12">
+                    <hr />
+                  </div>
+                  <DeleteButton propertyId={propertyId}>
+                    Delete property
+                  </DeleteButton>
+                </>
+              )}
+            </CardContent>
+          </Card>
         </PropertyContent>
       </Container>
     </Layout>

@@ -4,13 +4,9 @@ import { useRouter } from 'next/router';
 import { useState } from 'react';
 
 import BookingCalendar from '@/components/BookingCalendar';
-import BookingList from '@/components/BookingList';
 import Layout from '@/components/Layout';
 import PropertyContent from '@/components/PropertyContent';
 import PropertyNav from '@/components/PropertyNav';
-import SectionHeading from '@/components/SectionHeading';
-import TabsInPils from '@/components/TabsInPils';
-import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import { RoleIdByName } from '@/constants/constants';
 
@@ -31,45 +27,6 @@ const CalendarPage = ({ user, roleId }: { user: any; roleId: string }) => {
     <Layout title="Bookings">
       <Container>
         <PropertyNav propertyId={propertyId} roleId={roleId} />
-        {/* <PropertyContent>
-          <SectionHeading
-            title="Bookings"
-            action={
-              <Button
-                href={`/properties/${propertyId}/calendar/new`}
-                type="button"
-                intent="primary"
-              >
-                New booking
-              </Button>
-            }
-          />
-
-          <div>
-            <TabsInPils
-              onClick={(id: CalendarFilter) => setFilter(id)}
-              items={[
-                {
-                  id: 'UPCOMING',
-                  name: 'Upcoming',
-                  selected: filter === 'UPCOMING',
-                },
-                {
-                  id: 'ALL',
-                  name: 'All',
-                  selected: filter === 'ALL',
-                },
-              ]}
-            />
-            <div className="mt-4">
-              <BookingList
-                userId={roleId === RoleIdByName.Guest ? user.id : undefined}
-                propertyIds={[propertyId]}
-                filter={filter}
-              />
-            </div>
-          </div>
-         */}
         <PropertyContent>
           <BookingCalendar
             userId={roleId === RoleIdByName.Guest ? user.id : undefined}

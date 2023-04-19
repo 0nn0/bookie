@@ -1,7 +1,7 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { getLocalTimeZone, parseDate, today } from '@internationalized/date';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
 import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -10,43 +10,23 @@ import { StatusIdByName } from '@/constants/constants';
 import useAddBookingMutation from '@/hooks/useAddBookingMutation';
 import useGetUpcomingBookingsQuery from '@/hooks/useGetUpcomingBookingsQuery';
 
-import RangeCalendar from './RangeCalendar';
+import DateRangePicker from './DateRangePicker';
 import Button from './ui/Button';
 import FormErrorMessage from './ui/FormErrorMessage';
-
-const dateSchema = z.object({
-  calendar: z.object({ identifier: z.string() }),
-  day: z.number().int().min(1).max(31),
-  month: z.number().min(1).max(12),
-  year: z.number().min(new Date().getFullYear()),
-  era: z.string().optional(),
-});
 
 const schema = z
   .object({
     rangeCalendar: z.object(
       {
-        start: dateSchema,
-        end: dateSchema,
+        start: z.date(),
+        end: z.date(),
       },
       { required_error: 'Please select a date range' }
     ),
   })
   .refine(
     ({ rangeCalendar }) => {
-      const { start, end } = rangeCalendar;
-
-      const startDateValue = new Date();
-      startDateValue.setFullYear(start.year);
-      startDateValue.setMonth(start.month - 1);
-      startDateValue.setDate(start.day);
-
-      const endDateValue = new Date();
-      endDateValue.setFullYear(end.year);
-      endDateValue.setMonth(end.month - 1);
-      endDateValue.setDate(end.day);
-
-      return endDateValue.getTime() > startDateValue.getTime();
+      return rangeCalendar.end.getTime() > rangeCalendar.start.getTime();
     },
     {
       message: 'End date must be after start date',
@@ -56,7 +36,15 @@ const schema = z
 
 export type FormSchema = z.infer<typeof schema>;
 
-const BookingForm = ({ propertyId }: { propertyId: string }) => {
+const BookingForm = ({
+  propertyId,
+  startDate,
+  endDate,
+}: {
+  propertyId: string;
+  startDate?: Date;
+  endDate?: Date;
+}) => {
   const supabaseClient = useSupabaseClient();
   const queryClient = useQueryClient();
   const router = useRouter();
@@ -68,23 +56,23 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
   const {
     control,
     handleSubmit,
-    // setValue,
-    // getValues,
-    // reset,
-    // watch,
     formState: { isSubmitting, errors },
   } = useForm<FormSchema>({
     resolver: zodResolver(schema),
+    defaultValues: {
+      rangeCalendar: {
+        start: startDate,
+        end: endDate,
+      },
+    },
   });
-
-  // const rangeCalendar = watch('rangeCalendar');
 
   const mutation = useAddBookingMutation({ propertyId });
 
   const onSubmit = async (formData: FormSchema) => {
     const { start, end } = formData.rangeCalendar;
-    const startDate = `${start.year}-${start.month}-${start.day}`;
-    const endDate = `${end.year}-${end.month}-${end.day}`;
+    const startDate = format(start, 'yyyy-MM-dd');
+    const endDate = format(end, 'yyyy-MM-dd');
 
     let { data, error } = await supabaseClient.rpc('booking_exists', {
       sdate: startDate,
@@ -96,6 +84,9 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
     if (error) console.log(error);
 
     if (data?.length === 0) {
+      console.log('SUCCESS');
+
+      return;
       mutation.mutate(
         {
           startDate: startDate,
@@ -119,25 +110,6 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
     }
   };
 
-  // let now = today(getLocalTimeZone());
-  // let disabledRanges = [
-  //   [now, now.add({ days: 5 })],
-  //   [now.add({ days: 14 }), now.add({ days: 16 })],
-  //   [now.add({ days: 23 }), now.add({ days: 24 })],
-  // ];
-
-  const disabledRanges = data?.map((item) => {
-    return [parseDate(item.start_date), parseDate(item.end_date)];
-  });
-
-  // let { locale } = useLocale();
-  const isDateUnavailable = (date: any) => {
-    return disabledRanges?.some(
-      (interval) =>
-        date.compare(interval[0]) >= 0 && date.compare(interval[1]) <= 0
-    );
-  };
-
   if (isLoading) {
     return <p>Loading...</p>;
   }
@@ -148,34 +120,27 @@ const BookingForm = ({ propertyId }: { propertyId: string }) => {
 
   return (
     <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <div>
+      {/* Fixed height to avoid jumping UI when switching between months of 4 to 5 weeks */}
+      <div className="h-[370px]">
         <Controller
           name="rangeCalendar"
           control={control}
           rules={{ required: true }}
           render={({ field }) => (
-            <RangeCalendar
-              aria-label="Trip dates"
-              minValue={today(getLocalTimeZone())}
-              isDateUnavailable={isDateUnavailable}
-              value={field.value}
+            <DateRangePicker
+              propertyId={propertyId}
               onChange={field.onChange}
             />
           )}
         />
       </div>
-      {/* {rangeCalendar?.start && rangeCalendar?.end && (
-          <div className="mt-4 text-center">
-            <ReadableDates
-              startDate={`${rangeCalendar.start.year}-${rangeCalendar.start.month}-${rangeCalendar.start.day}`}
-              endDate={`${rangeCalendar.end.year}-${rangeCalendar.end.month}-${rangeCalendar.end.day}`}
-            />
-          </div>
-        )} */}
-      {errors?.rangeCalendar && (
-        <FormErrorMessage>{errors?.rangeCalendar.message}</FormErrorMessage>
-      )}
-      <br />
+
+      <div>
+        {errors?.rangeCalendar && (
+          <FormErrorMessage>{errors?.rangeCalendar.message}</FormErrorMessage>
+        )}
+      </div>
+
       <div>
         <Button
           type="submit"

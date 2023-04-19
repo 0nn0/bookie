@@ -21,7 +21,7 @@ const Header = () => {
   const updatedAt = data?.updated_at || '';
 
   return (
-    <header className="fixed z-30 w-full bg-gray-800">
+    <header className="fixed top-0 z-30 w-full bg-gray-800">
       <Container>
         <div className="flex h-16 items-center justify-between gap-3">
           <PropertyDropdown />

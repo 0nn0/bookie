@@ -2,7 +2,7 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
-import BackLink from '@/components/BackButton';
+import BackLink from '@/components/BackLink';
 import InviteGuestForm from '@/components/InviteGuestForm';
 import Layout from '@/components/Layout';
 import PropertyNav from '@/components/PropertyNav';

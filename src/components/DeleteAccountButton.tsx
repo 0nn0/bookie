@@ -1,8 +1,7 @@
-import { TrashIcon } from '@heroicons/react/24/outline';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
-import React, { useContext } from 'react';
+import { useContext } from 'react';
 
 import Dialog from './Dialog';
 import { DialogContext } from './DialogContext';

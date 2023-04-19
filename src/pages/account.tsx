@@ -6,6 +6,8 @@ import {
 import { GetServerSideProps, NextPage } from 'next';
 
 import AccountDetails from '@/components/AccountDetails';
+import Card from '@/components/Card';
+import CardContent from '@/components/CardContent';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
 
@@ -22,7 +24,11 @@ const Account: NextPage<Props> = ({ user, initialSession }) => {
       <Container>
         <SectionHeading title="Account" />
 
-        <AccountDetails session={initialSession} />
+        <Card>
+          <CardContent>
+            <AccountDetails session={initialSession} />
+          </CardContent>
+        </Card>
       </Container>
     </Layout>
   );

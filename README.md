@@ -38,6 +38,11 @@ It is built with the following technologies:
 
 The app is hosted on [Vercel](https://vercel.com/). Every commit pushed to the `main` branch will trigger a Production Deployment.
 
+## Dates
+
+Dates in the Postgres database are stored in the the ISO 8601 format (YYYY-MM-DD). There is no time information stored.
+When working with dates in the front-end, a date is parsed to a Date object using date-fns.
+
 ## Todo
 
 ### High priority
