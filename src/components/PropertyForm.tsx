@@ -11,7 +11,6 @@ import FormTextArea from './ui/FormTextArea';
 
 const schema = z.object({
   name: z.string().min(3, 'Please enter a valid name'),
-  description: z.string().optional(),
 });
 
 export type FormSchema = z.infer<typeof schema>;
@@ -28,7 +27,6 @@ const PropertyForm = () => {
     resolver: zodResolver(schema),
     defaultValues: {
       name: '',
-      description: '',
     },
   });
 
@@ -36,7 +34,6 @@ const PropertyForm = () => {
     addPropertyMutation.mutate(
       {
         name: formData.name,
-        description: formData.description,
       },
       {
         onSuccess: () => {

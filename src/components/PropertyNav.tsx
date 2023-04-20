@@ -20,12 +20,6 @@ const PropertyNav = ({
   const { asPath } = useRouter();
   let tabs = [
     {
-      name: 'Info',
-      href: `/properties/${propertyId}/info`,
-      current: true,
-      Icon: InformationCircleIcon,
-    },
-    {
       name: 'Calendar',
       href: `/properties/${propertyId}/calendar`,
       current: true,

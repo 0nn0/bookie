@@ -9,20 +9,13 @@ const useUpdatePropertyMutation = ({ propertyId }: { propertyId: string }) => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      name,
-      description,
-    }: {
-      name: string;
-      description?: string;
-    }) => {
+    mutationFn: async ({ name }: { name: string }) => {
       if (!user?.id) throw new Error('User not logged in');
 
       return await supabase
         .from('properties')
         .update({
           name,
-          description,
         })
         .eq('id', propertyId)
         .throwOnError();

@@ -84,7 +84,7 @@ const PropertyDropdown = () => {
                   key={id}
                   className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                   onSelect={() => {
-                    router.push(`/properties/${properties.id}/info`);
+                    router.push(`/properties/${properties.id}/calendar`);
                   }}
                 >
                   {properties.name}

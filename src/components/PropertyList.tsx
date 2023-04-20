@@ -33,7 +33,7 @@ const PropertyList = () => {
             return (
               <li key={id}>
                 <Link
-                  href={`/properties/${properties.id}/info`}
+                  href={`/properties/${properties.id}/calendar`}
                   className="block hover:bg-gray-50"
                 >
                   <div className="flex items-center px-4 py-4 sm:px-6">

@@ -101,7 +101,7 @@ function Calendar({
     <div>
       <header className="flex items-center justify-between border-b border-gray-200 px-6 pb-4 lg:flex-none">
         <div className="flex items-center">
-          <h1 className="whitespace-nowrap text-base font-semibold leading-6 text-gray-900 lg:text-xl">
+          <h1 className="whitespace-nowrap text-lg font-semibold leading-6 text-gray-900 lg:text-xl">
             {format(firstDayCurrentMonth, 'MMMM yyyy')}
           </h1>
           <div className="ml-4">{isLoading && <Spinner />}</div>

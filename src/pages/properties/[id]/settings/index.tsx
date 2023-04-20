@@ -49,10 +49,7 @@ const Settings: NextPage = () => {
 
               {data && (
                 <>
-                  <PropertyDetailsForm
-                    name={data.name}
-                    description={data.description}
-                  />
+                  <PropertyDetailsForm name={data.name} />
                   <br />
                   <br />
                   <br />
