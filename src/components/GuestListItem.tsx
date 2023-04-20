@@ -1,6 +1,6 @@
 import useDeleteGuestMutation from '@/hooks/useDeleteGuestMutation';
 
-import Avatar from './Avatar';
+import Button from './ui/Button';
 
 const GuestListItem = ({
   id,
@@ -8,36 +8,27 @@ const GuestListItem = ({
   firstName,
   lastName,
   email,
-  avatarUrl,
 }: {
   id: string;
   propertyId: string;
   firstName: string;
   lastName: string;
   email: string;
-  avatarUrl: string;
 }) => {
+  const name = firstName || lastName ? `${firstName} ${lastName}` : 'No name';
   return (
-    <div className="block p-4">
-      <div className="flex">
-        <div className="w-10 pt-1">
-          <Avatar
-            avatarUrl={avatarUrl}
-            size={32}
-            firstName={firstName}
-            lastName={lastName}
-          />
+    <div className="p-4">
+      <div className="flex items-center justify-between">
+        <div className="min-w-0 pr-4">
+          <div className="truncate whitespace-nowrap font-medium text-gray-700">
+            {name}
+          </div>
+          <div className="truncate text-sm text-gray-400">{email}</div>
         </div>
-        <div className="">
-          <div className="inline-flex font-semibold text-gray-700">
-            {firstName} {lastName}
-          </div>
-          <div className="mr-2 text-sm text-gray-400">{email}</div>
-          <div className="mt-3">
-            <DeleteButton propertyId={propertyId} guestId={id}>
-              Delete
-            </DeleteButton>
-          </div>
+        <div>
+          <DeleteButton propertyId={propertyId} guestId={id}>
+            Remove
+          </DeleteButton>
         </div>
       </div>
     </div>
@@ -58,14 +49,14 @@ function DeleteButton({
   const mutation = useDeleteGuestMutation({ propertyId, guestId });
 
   return (
-    <button
+    <Button
+      intent="error"
       disabled={mutation.isLoading}
-      className="text-red-600 hover:text-red-900"
       onClick={() => {
         mutation.mutate(propertyId);
       }}
     >
       {mutation.isLoading ? 'Loading' : children}
-    </button>
+    </Button>
   );
 }

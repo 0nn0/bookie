@@ -15,21 +15,21 @@ const useDeleteGuestMutation = ({
 
   return useMutation({
     mutationFn: async (propertyId: string) => {
-      console.log('DELETE', { propertyId, guestId });
-
       // delete all bookings
-      const { data: bookings, error: bookingsError } = await supabase
+      const { error: bookingsError } = await supabase
         .from('bookings')
         .delete()
-        .eq('fact_table_id', guestId)
-        .eq('property_id', propertyId);
+        .eq('fact_table_id', guestId);
+
+      if (bookingsError) {
+        throw new Error(bookingsError.message);
+      }
 
       // delete guest
       const { data, error } = await supabase
         .from('fact_table')
         .delete()
-        .eq('id', guestId)
-        .eq('property_id', propertyId);
+        .eq('id', guestId);
 
       if (error) {
         throw new Error(error.message);

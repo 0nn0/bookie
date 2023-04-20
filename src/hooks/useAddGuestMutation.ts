@@ -12,6 +12,8 @@ const useAddGuestMutation = ({ propertyId }: { propertyId: string }) => {
             'Content-Type': 'application/json',
           },
           body: JSON.stringify({
+            firstName: formData.firstName,
+            lastName: formData.lastName,
             email: formData.email,
             propertyId: propertyId,
           }),

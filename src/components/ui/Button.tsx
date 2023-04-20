@@ -2,6 +2,7 @@ import { cva } from 'class-variance-authority';
 import type { VariantProps } from 'class-variance-authority';
 import Link from 'next/link';
 import React from 'react';
+import { twMerge } from 'tailwind-merge';
 
 const buttonStyles = cva(
   [
@@ -16,7 +17,9 @@ const buttonStyles = cva(
         secondary: [
           'border-gray-300 bg-white text-gray-700 hover:bg-gray-50 focus:ring-indigo-500',
         ],
-        error: ['bg-red-600 hover:bg-red-700 focus:ring-red-500 '],
+        error: [
+          'bg-white text-red-600 shadow-sm ring-1 ring-red-300 hover:bg-red-50 hover:text-red-900',
+        ],
         dark: [
           'bg-gray-900 text-gray-300 hover:bg-gray-700 hover:text-white px-3 py-2 rounded-md text-sm font-medium',
         ],
@@ -59,7 +62,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
       return (
         <Link
           {...props}
-          className={buttonStyles({ intent, fullWidth }) + className}
+          className={twMerge(buttonStyles({ intent, fullWidth }), className)}
         >
           {children}
         </Link>
@@ -69,7 +72,7 @@ const Button = React.forwardRef<HTMLButtonElement, Props>(
       <button
         ref={ref}
         type="button"
-        className={buttonStyles({ intent, fullWidth }) + className}
+        className={twMerge(buttonStyles({ intent, fullWidth }), className)}
         {...props}
       >
         <span

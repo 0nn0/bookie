@@ -85,13 +85,10 @@ const Home = ({ initialSession }: { initialSession: any }) => {
     <Layout title="Home">
       <Container>
         <PropertyContent>
-          <div className="mt-16 mb-6">
-            <SectionHeading
-              title="Properties"
-              action={<Button href={action.href}>{action.label}</Button>}
-            />
-          </div>
-
+          <SectionHeading
+            title="Properties"
+            action={<Button href={action.href}>{action.label}</Button>}
+          />
           <PropertyList />
         </PropertyContent>
       </Container>

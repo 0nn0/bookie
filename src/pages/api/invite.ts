@@ -16,6 +16,8 @@ export default async function handler(
 ) {
   // validate request body
   const schema = z.object({
+    firstName: z.string(),
+    lastName: z.string(),
     email: z.string().email(),
     propertyId: z.string(),
   });
@@ -37,7 +39,7 @@ export default async function handler(
   }
 
   if (req.method === 'POST') {
-    const { email, propertyId } = req.body;
+    const { firstName, lastName, email, propertyId } = req.body;
 
     // check if use is an owner (authorised to invite guests)
     const { data: ownerData, error: ownerError } = await supabase
@@ -55,14 +57,18 @@ export default async function handler(
 
     // invite user
     const { data: inviteData, error: inviteError } =
-      await supabaseAdmin.auth.admin.inviteUserByEmail(email);
+      await supabaseAdmin.auth.admin.inviteUserByEmail(email, {
+        data: {
+          firstName,
+          lastName,
+        },
+      });
 
     let profileId;
 
     if (inviteError) {
       // e.g. user already exists
       console.log('inviteError', inviteError.message);
-      // return res.status(500).json({ error: inviteError.message });
 
       // get user id from email
       const { data: user, error: userError } = await supabaseAdmin
@@ -79,6 +85,15 @@ export default async function handler(
     if (!profileId) {
       return res.status(500).json({ error: 'Could not find user' });
     }
+
+    // update first and last name in profile table
+    const { error: updateError } = await supabaseAdmin
+      .from('profiles')
+      .update({
+        first_name: firstName,
+        last_name: lastName,
+      })
+      .eq('id', profileId);
 
     // check if user is already a guest for this property
     const guest = await supabaseAdmin

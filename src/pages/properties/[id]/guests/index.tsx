@@ -1,9 +1,13 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { useContext } from 'react';
 
+import { DialogContext } from '@/components/DialogContext';
 import ErrorState from '@/components/ErrorState';
+import FloatingActionButton from '@/components/FloatingActionButton';
 import GuestList from '@/components/GuestList';
+import InviteGuestForm from '@/components/InviteGuestForm';
 import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
 import PropertyContent from '@/components/PropertyContent';
@@ -11,12 +15,15 @@ import PropertyNav from '@/components/PropertyNav';
 import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
+import Headline from '@/components/ui/Headline';
 import { RoleIdByName } from '@/constants/constants';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 
 const Guests = ({ roleId }: { roleId: string }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
+
+  const dialogContext = useContext(DialogContext);
 
   const { isLoading, data, error } = useGetPropertyQuery({
     propertyId,
@@ -30,6 +37,19 @@ const Guests = ({ roleId }: { roleId: string }) => {
     return <ErrorState>{error.message}</ErrorState>;
   }
 
+  function handleInviteGuest() {
+    dialogContext?.setDialog(
+      <InviteGuestForm
+        propertyId={propertyId}
+        onSuccess={() => {
+          dialogContext.setOpen(false);
+        }}
+      />
+    );
+
+    dialogContext?.setOpen(true);
+  }
+
   return (
     <Layout title={data.name}>
       <Container>
@@ -39,8 +59,8 @@ const Guests = ({ roleId }: { roleId: string }) => {
             title="Guests"
             action={
               <Button
-                href={`/properties/${propertyId}/guests/new`}
-                className="inline-flex items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:w-auto"
+                onClick={handleInviteGuest}
+                className="hidden items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:inline-flex sm:w-auto"
               >
                 Invite guest
               </Button>
@@ -48,6 +68,9 @@ const Guests = ({ roleId }: { roleId: string }) => {
           />
 
           <GuestList propertyId={propertyId} />
+          <div className="sm:hidden">
+            <FloatingActionButton onClick={handleInviteGuest} />
+          </div>
         </PropertyContent>
       </Container>
     </Layout>

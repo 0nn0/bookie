@@ -28,6 +28,7 @@
     "react-dom": "18.2.0",
     "react-hook-form": "^7.34.0",
     "react-stately": "^3.20.0",
+    "tailwind-merge": "^1.12.0",
     "zod": "^3.19.1"
   },
   "devDependencies": {

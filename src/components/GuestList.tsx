@@ -25,9 +25,9 @@ const GuestList = ({ propertyId }: { propertyId: string }) => {
     <Card>
       <div className="divide-y divide-gray-200">
         {data.map((item) => {
-          const { id, role_id, profiles } = item;
+          const { id, profiles } = item;
 
-          const { avatar_url, email, first_name, last_name } = profiles;
+          const { email, first_name, last_name } = profiles;
 
           return (
             <GuestListItem
@@ -36,7 +36,6 @@ const GuestList = ({ propertyId }: { propertyId: string }) => {
               propertyId={propertyId}
               firstName={first_name}
               lastName={last_name}
-              avatarUrl={avatar_url}
               email={email}
             />
           );
