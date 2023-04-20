@@ -2,7 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
-import { useRouter } from 'next/router';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -38,18 +37,19 @@ export type FormSchema = z.infer<typeof schema>;
 
 const BookingForm = ({
   propertyId,
+  onSuccess,
   startDate,
   endDate,
 }: {
   propertyId: string;
+  onSuccess: () => void;
   startDate?: Date;
   endDate?: Date;
 }) => {
   const supabaseClient = useSupabaseClient();
   const queryClient = useQueryClient();
-  const router = useRouter();
 
-  const { isLoading, data, error, isError } = useGetUpcomingBookingsQuery({
+  const { isLoading, error, isError } = useGetUpcomingBookingsQuery({
     propertyId,
   });
 
@@ -84,9 +84,6 @@ const BookingForm = ({
     if (error) console.log(error);
 
     if (data?.length === 0) {
-      console.log('SUCCESS');
-
-      return;
       mutation.mutate(
         {
           startDate: startDate,
@@ -95,16 +92,10 @@ const BookingForm = ({
         {
           onSuccess: () => {
             queryClient.invalidateQueries(['bookings', propertyId]);
-            router.push(`/properties/${propertyId}/calendar`);
+            onSuccess();
           },
         }
       );
-
-      // reset form
-      // setValue('rangeCalendar', undefined);
-      // reset();
-
-      router.push(`/properties/${propertyId}/calendar`);
     } else {
       window.alert('Booking already exists');
     }

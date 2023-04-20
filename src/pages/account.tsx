@@ -5,7 +5,7 @@ import {
 } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps, NextPage } from 'next';
 
-import AccountDetails from '@/components/AccountDetails';
+import AccountForm from '@/components/AccountForm';
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
 import SectionHeading from '@/components/SectionHeading';
@@ -26,7 +26,7 @@ const Account: NextPage<Props> = ({ user, initialSession }) => {
 
         <Card>
           <CardContent>
-            <AccountDetails session={initialSession} />
+            <AccountForm session={initialSession} />
           </CardContent>
         </Card>
       </Container>

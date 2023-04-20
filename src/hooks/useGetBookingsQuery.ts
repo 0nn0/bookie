@@ -54,7 +54,7 @@ const useGetBookingsQuery = ({
   };
 
   return useQuery({
-    queryKey: [`bookings-${month}-${year}-${propertyId}`],
+    queryKey: ['bookings', propertyId, `${month}-${year}`],
     queryFn: async () => {
       return await fetchBookings().then((result) => result.data);
     },

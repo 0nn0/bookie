@@ -20,31 +20,6 @@ import { DialogContext } from './DialogContext';
 import FloatingActionButton from './FloatingActionButton';
 import Spinner from './Spinner';
 
-function checkDateOverlap({
-  eventStartDate,
-  eventEndDate,
-  calendarStartDate,
-  calendarEndDate,
-}: {
-  eventStartDate: Date;
-  eventEndDate: Date;
-  calendarStartDate: Date;
-  calendarEndDate: Date;
-}) {
-  // Check if the start date of the event is after the end date of the calendar or
-  // if the end date of the event is before the start date of the calendar
-  if (eventStartDate > calendarEndDate || eventEndDate < calendarStartDate) {
-    return false; // No overlap
-  }
-  return true; // Overlap
-}
-
-function createArrayOfWeeks(days) {
-  return Array(Math.ceil(days.length / 7))
-    .fill(0)
-    .map((_, index) => days.slice(index * 7, index * 7 + 7));
-}
-
 type CalendarEvent = {
   id: string;
   start_date: string;
@@ -93,7 +68,14 @@ function Calendar({
   };
 
   const handleNewBookingClick = () => {
-    dialogContext?.setDialog(<BookingForm propertyId={propertyId} />);
+    dialogContext?.setDialog(
+      <BookingForm
+        propertyId={propertyId}
+        onSuccess={() => {
+          dialogContext?.setOpen(false);
+        }}
+      />
+    );
     dialogContext?.setOpen(true);
   };
 
@@ -302,52 +284,27 @@ function Calendar({
 
 export default Calendar;
 
-/*
-const datesInMonth = Array(numDaysInMonth)
-    .fill(0)
-    .map((_, index) => new Date(year, month, index + 1));
-
-  // Determine the day of the week for the first day of the month
-  // const firstDayOfWeek = datesInMonth[0].getDay(); // OLD
-  let firstDayOfWeek = datesInMonth[0].getDay();
-  if (firstDayOfWeek < 0) {
-    firstDayOfWeek += 7;
+function checkDateOverlap({
+  eventStartDate,
+  eventEndDate,
+  calendarStartDate,
+  calendarEndDate,
+}: {
+  eventStartDate: Date;
+  eventEndDate: Date;
+  calendarStartDate: Date;
+  calendarEndDate: Date;
+}) {
+  // Check if the start date of the event is after the end date of the calendar or
+  // if the end date of the event is before the start date of the calendar
+  if (eventStartDate > calendarEndDate || eventEndDate < calendarStartDate) {
+    return false; // No overlap
   }
+  return true; // Overlap
+}
 
-  // Add empty days at the beginning and end of the array to fill out the first and last weeks
-  // const prevMonth = new Date(year, month + monthOffset - 1);
-  const prevMonth = new Date(year, month - 1);
-  const prevMonthNumDays = new Date(
-    prevMonth.getFullYear(),
-    prevMonth.getMonth() + 1,
-    0
-  ).getDate();
-  const nextMonth = new Date(year, month + 1);
-  // const emptyDaysStart = Array((firstDayOfWeek - 1 + 7) % 7)
-  const emptyDaysStart = Array((firstDayOfWeek + 7) % 7)
+function createArrayOfWeeks(days) {
+  return Array(Math.ceil(days.length / 7))
     .fill(0)
-    .map(
-      (_, index) =>
-        new Date(
-          prevMonth.getFullYear(),
-          prevMonth.getMonth(),
-          prevMonthNumDays - (firstDayOfWeek - 1 - index)
-        )
-    );
-
-  // console.log({ numDaysInMonth, datesInMonth, firstDayOfWeek, emptyDaysStart });
-  const emptyDaysEnd = Array(6 - datesInMonth[datesInMonth.length - 1].getDay())
-    .fill(0)
-    .map(
-      (_, index) =>
-        new Date(nextMonth.getFullYear(), nextMonth.getMonth(), index + 1)
-    );
-  const days = emptyDaysStart.concat(datesInMonth, emptyDaysEnd);
-
-
-// const newMonth = (month + 12) % 12;
-  // const newYear = year + Math.floor(month / 12);
-
-  // Render the calendar month
-
-  */
+    .map((_, index) => days.slice(index * 7, index * 7 + 7));
+}

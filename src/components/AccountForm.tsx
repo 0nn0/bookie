@@ -19,7 +19,7 @@ interface Props {
   session: Session;
 }
 
-const AccountDetails = ({ session }: Props) => {
+const AccountForm = ({ session }: Props) => {
   const supabase = useSupabaseClient<Database>();
   const queryClient = useQueryClient();
 
@@ -99,15 +99,7 @@ const AccountDetails = ({ session }: Props) => {
       },
       {
         onSuccess: () => {
-          console.log('success');
-          // invalidate query
           queryClient.invalidateQueries(['profile']);
-
-          // reset({
-          //   firstName,
-          //   lastName,
-          //   avatarFile: undefined,
-          // });
         },
       }
     );
@@ -182,4 +174,4 @@ const AccountDetails = ({ session }: Props) => {
   );
 };
 
-export default AccountDetails;
+export default AccountForm;
