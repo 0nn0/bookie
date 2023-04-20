@@ -3,12 +3,13 @@ import { useQuery } from '@tanstack/react-query';
 
 const useGetProfileQuery = () => {
   const user = useUser();
+  console.log('useGetProfileQuery', user?.id);
   const supabaseClient = useSupabaseClient();
 
   const fetchProfile = async () => {
     const { data, error, status } = await supabaseClient
       .from('profiles')
-      .select(`id, first_name, last_name, avatar_url, updated_at`)
+      .select(`id, first_name, last_name`)
       .eq('id', user?.id)
       .single();
 

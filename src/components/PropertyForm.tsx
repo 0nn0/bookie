@@ -7,8 +7,6 @@ import Button from '@/components/ui/Button';
 import FormInput from '@/components/ui/FormInput';
 import useAddPropertyMutation from '@/hooks/useAddPropertyMutation';
 
-import FormTextArea from './ui/FormTextArea';
-
 const schema = z.object({
   name: z.string().min(3, 'Please enter a valid name'),
 });
@@ -48,15 +46,6 @@ const PropertyForm = () => {
       <div>
         <FormInput label="Name" id="name" register={register} errors={errors} />
       </div>
-      <div>
-        <FormTextArea
-          label="Description"
-          id="description"
-          register={register}
-          errors={errors}
-        />
-      </div>
-
       <div>
         <Button
           type="submit"

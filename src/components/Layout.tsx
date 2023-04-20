@@ -1,4 +1,3 @@
-import { useUser } from '@supabase/auth-helpers-react';
 import Head from 'next/head';
 
 import Header from './Header';
@@ -10,15 +9,14 @@ type LayoutProps = {
 };
 
 const Layout = ({ title = '', description = '', children }: LayoutProps) => {
-  const user = useUser();
-
+  console.log('render Layout');
   return (
     <>
       <Head>
         <title>{`${title} | Bookie`}</title>
         <meta name="description" content={description} />
       </Head>
-      {user && <Header />}
+      <Header />
       <main className="pt-24">{children}</main>
     </>
   );

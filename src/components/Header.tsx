@@ -2,8 +2,7 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 
-import useGetProfileQuery from '@/hooks/useGetProfileQuery';
-
+import Avatar from './Avatar';
 import PropertyDropdown from './PropertyDropdown';
 import Button from './ui/Button';
 import Container from './ui/Container';
@@ -11,11 +10,6 @@ import Container from './ui/Container';
 const Header = () => {
   const supabaseClient = useSupabaseClient();
   const router = useRouter();
-
-  const { data } = useGetProfileQuery();
-
-  const firstName = data?.first_name;
-  const lastName = data?.last_name;
 
   return (
     <header className="fixed top-0 z-30 w-full bg-gray-800">
@@ -35,25 +29,7 @@ const Header = () => {
                   className="relative inline-flex h-8 w-8 overflow-hidden rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                   aria-label="User menu"
                 >
-                  <svg viewBox="0 0 32 32" className="absolute h-full w-full">
-                    <rect
-                      x={0}
-                      y={0}
-                      width={32}
-                      height={32}
-                      className="fill-slate-300"
-                    />
-                    <text
-                      className="fill-slate-800 text-xs font-semibold"
-                      x="16"
-                      y="16"
-                      textAnchor="middle"
-                      alignmentBaseline="central"
-                    >
-                      {firstName && firstName[0]}
-                      {lastName && lastName[0]}
-                    </text>
-                  </svg>
+                  <Avatar />
                 </button>
               </DropdownMenu.Trigger>
 

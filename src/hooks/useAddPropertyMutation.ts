@@ -10,13 +10,7 @@ const useAddPropertyMutation = () => {
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async ({
-      name,
-      description,
-    }: {
-      name: string;
-      description?: string;
-    }) => {
+    mutationFn: async ({ name }: { name: string }) => {
       if (!user?.id) throw new Error('User not logged in');
 
       const { data, error } = await supabase
@@ -24,7 +18,6 @@ const useAddPropertyMutation = () => {
         .insert([
           {
             name,
-            description,
           },
         ])
         .select('*');
