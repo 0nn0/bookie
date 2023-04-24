@@ -96,19 +96,16 @@ export interface Database {
       properties: {
         Row: {
           created_at: string
-          description: string | null
           id: string
           name: string | null
         }
         Insert: {
           created_at?: string
-          description?: string | null
           id?: string
           name?: string | null
         }
         Update: {
           created_at?: string
-          description?: string | null
           id?: string
           name?: string | null
         }
@@ -152,10 +149,28 @@ export interface Database {
       [_ in never]: never
     }
     Functions: {
-      booking_exists: {
-        Args: { sdate: string; edate: string; propid: string }
-        Returns: { property_id: string; start_date: string; end_date: string }[]
-      }
+      booking_exists:
+        | {
+            Args: { sdate: string; edate: string; propid: string }
+            Returns: {
+              property_id: string
+              start_date: string
+              end_date: string
+            }[]
+          }
+        | {
+            Args: {
+              sdate: string
+              edate: string
+              propid: string
+              statusid: string
+            }
+            Returns: {
+              property_id: string
+              start_date: string
+              end_date: string
+            }[]
+          }
       delete_avatar: {
         Args: { avatar_url: string }
         Returns: Record<string, unknown>[]

@@ -1,5 +1,6 @@
 import { NextPage } from 'next';
 
+import AuthLayout from '@/components/AuthLayout';
 import BackLink from '@/components/BackLink';
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
@@ -10,7 +11,7 @@ import Container from '@/components/ui/Container';
 
 const NewProperty: NextPage = () => {
   return (
-    <Layout title="Create property">
+    <AuthLayout title="Create property">
       <Container>
         <div className="mb-4">
           <BackLink href={`/`}>Back</BackLink>
@@ -23,7 +24,7 @@ const NewProperty: NextPage = () => {
           </CardContent>
         </Card>
       </Container>
-    </Layout>
+    </AuthLayout>
   );
 };
 

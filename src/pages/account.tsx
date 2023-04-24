@@ -6,12 +6,11 @@ import {
 import { GetServerSideProps, NextPage } from 'next';
 
 import AccountForm from '@/components/AccountForm';
+import AuthLayout from '@/components/AuthLayout';
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
 import SectionHeading from '@/components/SectionHeading';
 import Container from '@/components/ui/Container';
-
-import Layout from '../components/Layout';
 
 interface Props {
   user: User;
@@ -20,7 +19,7 @@ interface Props {
 
 const Account: NextPage<Props> = ({ user, initialSession }) => {
   return (
-    <Layout title="Account">
+    <AuthLayout title="Account">
       <Container>
         <SectionHeading title="Account" />
 
@@ -30,7 +29,7 @@ const Account: NextPage<Props> = ({ user, initialSession }) => {
           </CardContent>
         </Card>
       </Container>
-    </Layout>
+    </AuthLayout>
   );
 };
 

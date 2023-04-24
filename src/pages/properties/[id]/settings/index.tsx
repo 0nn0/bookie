@@ -3,12 +3,12 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
+import AuthLayout from '@/components/AuthLayout';
 import Card from '@/components/Card';
 import CardContent from '@/components/CardContent';
 import Dialog from '@/components/Dialog';
 import { DialogContext } from '@/components/DialogContext';
 import ErrorState from '@/components/ErrorState';
-import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
 import PropertyContent from '@/components/PropertyContent';
 import PropertyDetailsForm from '@/components/PropertyDetailsForm';
@@ -29,7 +29,7 @@ const Settings: NextPage = () => {
   });
 
   return (
-    <Layout title="Settings">
+    <AuthLayout title="Settings">
       <Container>
         <PropertyNav propertyId={propertyId} roleId={RoleIdByName.Owner} />
 
@@ -65,7 +65,7 @@ const Settings: NextPage = () => {
           </Card>
         </PropertyContent>
       </Container>
-    </Layout>
+    </AuthLayout>
   );
 };
 

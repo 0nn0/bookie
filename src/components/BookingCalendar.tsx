@@ -37,10 +37,22 @@ const BookingCalendar = ({
       )}
       <div className="-ml-6 -mr-6">
         <Calendar
+          userId={userId}
           propertyId={propertyId}
           setCurrentMonth={setCurrentMonth}
           currentMonth={currentMonth}
-          events={data}
+          bookings={
+            data
+              ? data.map((booking) => ({
+                  id: booking.id,
+                  startDate: booking.start_date,
+                  endDate: booking.end_date,
+                  profileId: booking.fact_table.profiles.id,
+                  firstName: booking.fact_table.profiles.first_name,
+                  factTableId: booking.fact_table.id,
+                }))
+              : []
+          }
           isLoading={isLoading}
         />
       </div>

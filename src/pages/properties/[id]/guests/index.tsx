@@ -3,12 +3,12 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 
+import AuthLayout from '@/components/AuthLayout';
 import { DialogContext } from '@/components/DialogContext';
 import ErrorState from '@/components/ErrorState';
 import FloatingActionButton from '@/components/FloatingActionButton';
 import GuestList from '@/components/GuestList';
 import InviteGuestForm from '@/components/InviteGuestForm';
-import Layout from '@/components/Layout';
 import LoadingState from '@/components/LoadingState';
 import PropertyContent from '@/components/PropertyContent';
 import PropertyNav from '@/components/PropertyNav';
@@ -50,7 +50,7 @@ const Guests = ({ roleId }: { roleId: string }) => {
   }
 
   return (
-    <Layout title={data.name}>
+    <AuthLayout title={data.name}>
       <Container>
         <PropertyNav propertyId={propertyId} roleId={roleId} />
         <PropertyContent>
@@ -72,7 +72,7 @@ const Guests = ({ roleId }: { roleId: string }) => {
           </div>
         </PropertyContent>
       </Container>
-    </Layout>
+    </AuthLayout>
   );
 };
 

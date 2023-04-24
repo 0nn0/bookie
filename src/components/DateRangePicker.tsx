@@ -25,12 +25,14 @@ import Spinner from './Spinner';
 function DateRangePicker({
   propertyId,
   onChange,
+  excludeBookingId,
 }: {
   propertyId: string;
   onChange: (dateRange: { start: Date; end: Date }) => void;
+  excludeBookingId?: string;
 }) {
-  const [startDate, setStartDate] = useState<Date | null>(null);
-  const [endDate, setEndDate] = useState<Date | null>(null);
+  const [startDate, setStartDate] = useState<Date | null>();
+  const [endDate, setEndDate] = useState<Date | null>();
 
   const [currentMonth, setCurrentMonth] = useState(
     format(new Date(), 'MM-yyyy')
@@ -38,11 +40,13 @@ function DateRangePicker({
 
   const firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
 
-  const { isLoading, data, error, isError } = useGetBookingsQuery({
+  let { isLoading, data, error, isError } = useGetBookingsQuery({
     propertyId,
     month: parse(currentMonth, 'MM-yyyy', new Date()).getMonth() + 1,
     year: parse(currentMonth, 'MM-yyyy', new Date()).getFullYear(),
   });
+
+  data = data?.filter((booking) => booking.id !== excludeBookingId);
 
   if (isError) {
     return (

@@ -1,5 +1,6 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
+import { format } from 'date-fns';
 
 import { StatusIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
@@ -14,12 +15,30 @@ const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
       startDate,
       endDate,
     }: {
-      startDate: string;
-      endDate: string;
+      startDate: Date;
+      endDate: Date;
     }) => {
       if (!user?.id) throw new Error('User not logged in');
 
-      // get the fact_table id
+      const formattedStartDate = format(startDate, 'yyyy-MM-dd');
+      const formattedEndDate = format(endDate, 'yyyy-MM-dd');
+
+      // 1. Check if dates are available
+      const { data: existingBookings, error: existingError } =
+        await supabase.rpc('booking_exists', {
+          sdate: formattedStartDate,
+          edate: formattedEndDate,
+          propid: propertyId,
+          statusid: StatusIdByName.Booked,
+        });
+
+      if (existingError instanceof Error) console.log(existingError.message);
+
+      if (existingBookings && existingBookings.length > 0) {
+        window.alert('Selected dates are not available');
+      }
+
+      // 2. Get fact table id
       const { data: factTableData, error: factTableError } = await supabase
         .from('fact_table')
         .select('id')
@@ -27,28 +46,26 @@ const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
         .eq('profile_id', user.id)
         .single();
 
+      if (factTableError instanceof Error) {
+        throw new Error(factTableError.message);
+      }
+
       if (factTableData?.id) {
-        const { data, error } = await supabase
-          .from('bookings')
-          .insert([
-            {
-              fact_table_id: factTableData.id,
-              start_date: startDate,
-              end_date: endDate,
-              status_id: StatusIdByName.Booked,
-            },
-          ])
-          .select('*');
+        // 3. Insert new booking
+        const { data, error } = await supabase.from('bookings').insert([
+          {
+            start_date: formattedStartDate,
+            end_date: formattedEndDate,
+            fact_table_id: factTableData?.id,
+            status_id: StatusIdByName.Booked,
+          },
+        ]);
 
         if (error instanceof Error) {
           throw new Error(error.message);
         }
 
         return data;
-      } else {
-        if (factTableError instanceof Error) {
-          throw new Error(factTableError.message);
-        }
       }
     },
 

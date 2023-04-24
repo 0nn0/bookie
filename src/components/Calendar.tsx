@@ -15,35 +15,47 @@ import {
 } from 'date-fns';
 import { Dispatch, SetStateAction, useContext } from 'react';
 
+import useAddBookingMutation from '@/hooks/useAddBookingMutation';
+
+import BookingDetails from './BookingDetails';
 import BookingForm from './BookingForm';
+import CalendarEvent from './CalendarEvent';
 import { DialogContext } from './DialogContext';
 import FloatingActionButton from './FloatingActionButton';
 import Spinner from './Spinner';
 
-type CalendarEvent = {
+type Booking = {
   id: string;
-  start_date: string;
-  end_date: string;
-  first_name: string;
+  startDate: string;
+  endDate: string;
+  firstName: string;
+  factTableId: string;
+  profileId: string;
 };
 
 function Calendar({
+  userId,
   propertyId,
   currentMonth,
   setCurrentMonth,
-  events = [],
+  bookings = [],
   isLoading,
 }: {
+  userId: string;
   propertyId: string;
   setCurrentMonth: Dispatch<SetStateAction<string>>;
   currentMonth: string;
-  events: CalendarEvent[];
+  bookings: Booking[];
   isLoading: boolean;
 }) {
-  let dialogContext = useContext(DialogContext);
-  let firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
+  const dialogContext = useContext(DialogContext);
+  const firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
 
-  let days = eachDayOfInterval({
+  const mutation = useAddBookingMutation({
+    propertyId,
+  });
+
+  const days = eachDayOfInterval({
     start: startOfWeek(startOfMonth(firstDayCurrentMonth)),
     end: endOfWeek(endOfMonth(firstDayCurrentMonth)),
   });
@@ -52,14 +64,14 @@ function Calendar({
   const weeks = createArrayOfWeeks(days);
 
   const handlePrevMonth = () => {
-    let firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
-    let firstDayPrevMonth = add(firstDayCurrentMonth, { months: -1 });
+    const firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
+    const firstDayPrevMonth = add(firstDayCurrentMonth, { months: -1 });
     setCurrentMonth(format(firstDayPrevMonth, 'MM-yyyy'));
   };
 
   const handleNextMonth = () => {
-    let firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
-    let firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
+    const firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
+    const firstDayNextMonth = add(firstDayCurrentMonth, { months: 1 });
     setCurrentMonth(format(firstDayNextMonth, 'MM-yyyy'));
   };
 
@@ -71,9 +83,42 @@ function Calendar({
     dialogContext?.setDialog(
       <BookingForm
         propertyId={propertyId}
-        onSuccess={() => {
-          dialogContext?.setOpen(false);
+        isLoading={mutation.isLoading}
+        onSubmit={(formData) => {
+          mutation.mutate(
+            {
+              startDate: formData.rangeCalendar.start,
+              endDate: formData.rangeCalendar.end,
+            },
+            {
+              onSuccess: () => {
+                dialogContext?.setOpen(false);
+              },
+            }
+          );
         }}
+      />
+    );
+    dialogContext?.setOpen(true);
+  };
+
+  const handleExistingBookingClick = ({
+    propertyId,
+    bookingId,
+    startDate,
+    endDate,
+  }: {
+    propertyId: string;
+    bookingId: string;
+    startDate: Date;
+    endDate: Date;
+  }) => {
+    dialogContext?.setDialog(
+      <BookingDetails
+        propertyId={propertyId}
+        bookingId={bookingId}
+        startDate={startDate}
+        endDate={endDate}
       />
     );
     dialogContext?.setOpen(true);
@@ -160,82 +205,81 @@ function Calendar({
                 key={index}
                 className="relative flex border-b border-solid border-b-gray-200"
               >
-                {events.map((event, index) => {
-                  const eventStartDate = parse(
-                    event.start_date,
-                    'yyyy-MM-dd',
-                    new Date()
-                  );
+                <div className="absolute z-10 w-full pt-8">
+                  <div className="grid grid-cols-7">
+                    {bookings.map((booking, index) => {
+                      const bookingStartDate = parse(
+                        booking.startDate,
+                        'yyyy-MM-dd',
+                        new Date()
+                      );
 
-                  const eventEndDate = parse(
-                    event.end_date,
-                    'yyyy-MM-dd',
-                    new Date()
-                  );
+                      const bookingEndDate = parse(
+                        booking.endDate,
+                        'yyyy-MM-dd',
+                        new Date()
+                      );
 
-                  const dateOverlap = checkDateOverlap({
-                    eventStartDate,
-                    eventEndDate,
-                    calendarStartDate: week[0],
-                    calendarEndDate: week[6],
-                  });
+                      const dateOverlap = checkDateOverlap({
+                        bookingStartDate,
+                        bookingEndDate,
+                        calendarStartDate: week[0],
+                        calendarEndDate: week[6],
+                      });
 
-                  if (!dateOverlap) return null;
+                      if (!dateOverlap) return null;
 
-                  const startColumn =
-                    eventStartDate < week[0] ? 1 : eventStartDate.getDay() + 1;
+                      const startColumn =
+                        bookingStartDate < week[0]
+                          ? 1
+                          : bookingStartDate.getDay() + 1;
 
-                  const endColumn =
-                    eventEndDate > week[6]
-                      ? 8
-                      : Math.min(eventEndDate.getDay() + 2, 8);
+                      const endColumn =
+                        bookingEndDate > week[6]
+                          ? 8
+                          : Math.min(bookingEndDate.getDay() + 2, 8);
 
-                  return (
-                    <div key={event.id} className="absolute z-10 w-full pt-8">
-                      <div className="grid grid-cols-7">
-                        <button
-                          className={classNames(
-                            'mx-0.5 mb-px rounded-md bg-pink-50 py-1 text-white ',
-                            isPast(eventEndDate) &&
-                              'text-pink-300 hover:text-pink-400',
-                            !isPast(eventEndDate) &&
-                              'text-pink-600 hover:bg-pink-100',
-                            {
-                              'col-start-1': startColumn === 1,
-                              'col-start-2': startColumn === 2,
-                              'col-start-3': startColumn === 3,
-                              'col-start-4': startColumn === 4,
-                              'col-start-5': startColumn === 5,
-                              'col-start-6': startColumn === 6,
-                              'col-start-7': startColumn === 7,
-                              'col-end-2': endColumn === 2,
-                              'col-end-3': endColumn === 3,
-                              'col-end-4': endColumn === 4,
-                              'col-end-5': endColumn === 5,
-                              'col-end-6': endColumn === 6,
-                              'col-end-7': endColumn === 7,
-                              'col-end-8': endColumn === 8,
-                            }
-                          )}
+                      return (
+                        <div
+                          key={booking.id}
+                          className={classNames({
+                            'col-start-1': startColumn === 1,
+                            'col-start-2': startColumn === 2,
+                            'col-start-3': startColumn === 3,
+                            'col-start-4': startColumn === 4,
+                            'col-start-5': startColumn === 5,
+                            'col-start-6': startColumn === 6,
+                            'col-start-7': startColumn === 7,
+                            'col-end-2': endColumn === 2,
+                            'col-end-3': endColumn === 3,
+                            'col-end-4': endColumn === 4,
+                            'col-end-5': endColumn === 5,
+                            'col-end-6': endColumn === 6,
+                            'col-end-7': endColumn === 7,
+                            'col-end-8': endColumn === 8,
+                          })}
                         >
-                          <div className="flex items-center">
-                            {/* <Avatar
-                        size={20}
-                        avatarUrl="67ca44d9-e6e9-442e-b0e3-3db579da3760/avatar.jpg"
-                      /> */}
-                            <div
-                              className={classNames(
-                                'ml-1 truncate font-semibold '
-                              )}
-                            >
-                              {event.fact_table.profiles.first_name}
-                            </div>
+                          <div className="mx-0.5">
+                            <CalendarEvent
+                              title={booking.firstName}
+                              isPast={isPast(bookingEndDate)}
+                              onClick={() => {
+                                console.log({ userId, profileId: booking });
+                                if (userId === booking.profileId)
+                                  handleExistingBookingClick({
+                                    propertyId: propertyId,
+                                    bookingId: booking.id,
+                                    startDate: bookingStartDate,
+                                    endDate: bookingEndDate,
+                                  });
+                              }}
+                            />
                           </div>
-                        </button>
-                      </div>
-                    </div>
-                  );
-                })}
+                        </div>
+                      );
+                    })}
+                  </div>
+                </div>
 
                 {week.map((date, index) => {
                   return (
@@ -285,25 +329,28 @@ function Calendar({
 export default Calendar;
 
 function checkDateOverlap({
-  eventStartDate,
-  eventEndDate,
+  bookingStartDate,
+  bookingEndDate,
   calendarStartDate,
   calendarEndDate,
 }: {
-  eventStartDate: Date;
-  eventEndDate: Date;
+  bookingStartDate: Date;
+  bookingEndDate: Date;
   calendarStartDate: Date;
   calendarEndDate: Date;
 }) {
   // Check if the start date of the event is after the end date of the calendar or
   // if the end date of the event is before the start date of the calendar
-  if (eventStartDate > calendarEndDate || eventEndDate < calendarStartDate) {
+  if (
+    bookingStartDate > calendarEndDate ||
+    bookingEndDate < calendarStartDate
+  ) {
     return false; // No overlap
   }
   return true; // Overlap
 }
 
-function createArrayOfWeeks(days) {
+function createArrayOfWeeks(days: Date[]) {
   return Array(Math.ceil(days.length / 7))
     .fill(0)
     .map((_, index) => days.slice(index * 7, index * 7 + 7));

@@ -11,6 +11,7 @@ import useUpdateProfileMutation from '@/hooks/useUpdateProfileMutation';
 import DeleteAccountButton from './DeleteAccountButton';
 import Button from './ui/Button';
 import FormInput from './ui/FormInput';
+import Headline from './ui/Headline';
 
 interface Props {
   session: Session;
@@ -115,8 +116,10 @@ const AccountForm = ({ session }: Props) => {
       <div className="mt-12 mb-12">
         <hr />
       </div>
-      <h3 className="text-base font-semibold">Delete account</h3>
-      <p className="mb-4 text-base text-gray-500">
+      <Headline level={4} className="font-semibold text-gray-900">
+        Danger zone
+      </Headline>
+      <p className="mt-1 mb-4 text-base text-gray-600">
         No longer want to use this sevice? You can delete your account here.
         This action is not reversible. All information related to this account,
         like any properties that you created, will be deleted permanently.

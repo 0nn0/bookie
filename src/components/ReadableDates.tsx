@@ -1,19 +1,25 @@
+import { format } from 'date-fns';
+
 import { getReadableDates } from '@/lib/date';
 
 const ReadableDates = ({
   startDate,
   endDate,
 }: {
-  startDate: string;
-  endDate: string;
+  startDate: Date;
+  endDate: Date;
 }) => {
   const dates = getReadableDates(startDate, endDate);
 
   return (
     <>
-      <time dateTime={startDate}>{dates.readableStartDate}</time>
+      <time dateTime={format(startDate, 'yyyy-MM-dd')}>
+        {dates.readableStartDate}
+      </time>
       {' - '}
-      <time dateTime={endDate}>{dates.readableEndDate}</time>
+      <time dateTime={format(endDate, 'yyyy-MM-dd')}>
+        {dates.readableEndDate}
+      </time>
     </>
   );
 };
