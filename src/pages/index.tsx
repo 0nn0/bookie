@@ -22,18 +22,6 @@ const Home = ({ initialSession }: { initialSession: any }) => {
     return (
       <Layout>
         <Container>
-          <header className="mb-6">
-            <nav>
-              <ul className="flex gap-4">
-                <li>
-                  <Link href="/login">Login</Link>
-                </li>
-                <li>
-                  <Link href="/signup">Signup</Link>
-                </li>
-              </ul>
-            </nav>
-          </header>
           <Headline level={1}>
             Effortlessly manage your vacation home with Bookie
           </Headline>
