@@ -1,5 +1,6 @@
 import React from 'react';
 
+import useDeleteBookingMutation from '@/hooks/useDeleteBookingMutation';
 import useUpdateBookingMutation from '@/hooks/useUpdateBookingMutation';
 
 import BookingForm from './BookingForm';
@@ -22,7 +23,12 @@ export default function BookingDetails({
   const [showForm, setShowForm] = React.useState(false);
   const dialogContext = React.useContext(DialogContext);
 
-  const mutation = useUpdateBookingMutation({
+  const updateMutation = useUpdateBookingMutation({
+    propertyId,
+    bookingId,
+  });
+
+  const deleteMutation = useDeleteBookingMutation({
     propertyId,
     bookingId,
   });
@@ -52,8 +58,14 @@ export default function BookingDetails({
             <Button
               fullWidth
               intent="error"
+              loading={deleteMutation.isLoading}
+              disabled={deleteMutation.isLoading}
               onClick={() => {
-                window.alert('Not implemented yet');
+                deleteMutation.mutate(undefined, {
+                  onSuccess: () => {
+                    dialogContext?.setOpen(false);
+                  },
+                });
               }}
             >
               Delete booking
@@ -65,10 +77,10 @@ export default function BookingDetails({
       {showForm && (
         <BookingForm
           propertyId={propertyId}
-          isLoading={mutation.isLoading}
+          isLoading={updateMutation.isLoading}
           bookingId={bookingId}
           onSubmit={(formData) => {
-            return mutation.mutate(
+            return updateMutation.mutate(
               {
                 startDate: formData.rangeCalendar.start,
                 endDate: formData.rangeCalendar.end,
