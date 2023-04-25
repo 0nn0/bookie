@@ -7,5 +7,3 @@ export const StatusIdByName = {
   Booked: '102c80ee-bbbd-4ec5-9e0f-a06ba07e2daa',
   Canceled: 'aaeecc55-2888-4543-8b62-1a0c08166b56',
 } as const;
-
-export const STORAGE_BUCKET = 'media';

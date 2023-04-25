@@ -1,8 +1,6 @@
 import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 
-import { PropertiesByUser } from '@/pages/api/properties';
-
 const useGetGuestsQuery = ({ propertyId }: { propertyId: string }) => {
   const user = useUser();
   const supabaseClient = useSupabaseClient();
@@ -11,7 +9,7 @@ const useGetGuestsQuery = ({ propertyId }: { propertyId: string }) => {
     return await supabaseClient
       .from('fact_table')
       .select(
-        'id, role_id, profiles(id, email, first_name, last_name, avatar_url, last_sign_in_at)'
+        'id, role_id, profiles(id, email, first_name, last_name, last_sign_in_at)'
       )
       .eq('property_id', propertyId)
       // exclude the current user
@@ -19,7 +17,7 @@ const useGetGuestsQuery = ({ propertyId }: { propertyId: string }) => {
       .throwOnError();
   };
 
-  return useQuery<unknown, unknown, PropertiesByUser>({
+  return useQuery<unknown, unknown, unknown>({
     queryKey: ['guests', propertyId],
     queryFn: async () => fetchGuests().then((result) => result.data),
   });

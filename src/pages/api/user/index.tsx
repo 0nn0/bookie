@@ -2,8 +2,6 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { createClient } from '@supabase/supabase-js';
 import { NextApiRequest, NextApiResponse } from 'next';
 
-import { STORAGE_BUCKET } from '@/constants/constants';
-
 const supabaseAdmin = createClient(
   process.env.NEXT_PUBLIC_SUPABASE_URL,
   process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY
@@ -65,28 +63,7 @@ export default async function handler(
       }
     }
 
-    // 6. get all files related to user and delete them from storage
-    const { data: userFiles, error: userFilesError } = await supabase.storage
-      .from(STORAGE_BUCKET)
-      .list(session.user.id);
-
-    console.log({ userFiles, userFilesError });
-
-    const filesToDelete = userFiles?.map(
-      (file) => `${session.user.id}/${file.name}`
-    );
-
-    if (filesToDelete && filesToDelete.length > 0) {
-      console.log({ filesToDelete });
-
-      const { error: deleteFilesError } = await supabase.storage
-        .from(STORAGE_BUCKET)
-        .remove(filesToDelete);
-
-      console.log({ deleteFilesError });
-    }
-
-    // 7. delete user from profiles
+    // 6. delete user from profiles
     const { error: deleteProfilesError } = await supabase
       .from('profiles')
       .delete()
