@@ -2,7 +2,6 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 
-import { StatusIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
 
 const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
@@ -29,7 +28,6 @@ const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
           sdate: formattedStartDate,
           edate: formattedEndDate,
           propid: propertyId,
-          statusid: StatusIdByName.Booked,
         });
 
       if (existingError instanceof Error) console.log(existingError.message);
@@ -57,7 +55,6 @@ const useAddBookingMutation = ({ propertyId }: { propertyId: string }) => {
             start_date: formattedStartDate,
             end_date: formattedEndDate,
             fact_table_id: factTableData?.id,
-            status_id: StatusIdByName.Booked,
           },
         ]);
 

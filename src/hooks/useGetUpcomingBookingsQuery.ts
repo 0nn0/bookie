@@ -1,8 +1,6 @@
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 
-import { StatusIdByName } from '@/constants/constants';
-
 const useGetUpcomingBookingsQuery = ({
   propertyId,
 }: {
@@ -16,7 +14,6 @@ const useGetUpcomingBookingsQuery = ({
       .select('id, start_date, end_date, fact_table!inner(id)')
       .eq('fact_table.property_id', propertyId)
       .gte('end_date', new Date().toISOString())
-      .eq('status_id', StatusIdByName.Booked)
       .order('start_date', { ascending: true })
       .throwOnError();
   };

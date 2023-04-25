@@ -16,7 +16,6 @@ export interface Database {
           fact_table_id: string
           id: string
           start_date: string
-          status_id: string
           updated_at: string
         }
         Insert: {
@@ -25,7 +24,6 @@ export interface Database {
           fact_table_id: string
           id?: string
           start_date: string
-          status_id: string
           updated_at?: string
         }
         Update: {
@@ -34,7 +32,6 @@ export interface Database {
           fact_table_id?: string
           id?: string
           start_date?: string
-          status_id?: string
           updated_at?: string
         }
       }
@@ -123,23 +120,6 @@ export interface Database {
         }
         Update: {
           created_at?: string
-          id?: string
-          name?: string
-        }
-      }
-      status: {
-        Row: {
-          created_at: string | null
-          id: string
-          name: string
-        }
-        Insert: {
-          created_at?: string | null
-          id?: string
-          name: string
-        }
-        Update: {
-          created_at?: string | null
           id?: string
           name?: string
         }

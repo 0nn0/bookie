@@ -2,7 +2,6 @@ import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 
-import { StatusIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
 
 const useUpdateBookingMutation = ({
@@ -35,7 +34,6 @@ const useUpdateBookingMutation = ({
       //     sdate: formattedStartDate,
       //     edate: formattedEndDate,
       //     propid: propertyId,
-      //     statusid: StatusIdByName.Booked,
       //   });
 
       // if (existingError instanceof Error) console.log(existingError.message);
