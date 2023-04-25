@@ -1,14 +1,16 @@
-<h2 align="center">Bookie</h1>
+<h2 align="center">Bookie</h2>
 <p align="center">
-    Manage your shared holiday home<br />
+    Manage your holiday home through a shared calendar<br />
     <a href="https://bookie-twentytwo.vercel.app/">View app</a>
 </p>
 
----
+![Preview of UI](preview.png)
 
-A small web application that allows you to manage your shared holiday home through a calendar.
+## About this project
 
-It is built with the following technologies:
+Bookie is a user-friendly platform designed to assist families and friends in managing their jointly owned vacation homes.
+
+### Tech stack
 
 - [ReactJS](https://react.dev/)
 - [NextJS](https://nextjs.org/)
@@ -17,7 +19,7 @@ It is built with the following technologies:
 
 ## Getting Started
 
-### Prerequisites
+### Requirements
 
 - Node.js (version 18.2.0)
 - npm
@@ -38,22 +40,13 @@ It is built with the following technologies:
 
 The app is hosted on [Vercel](https://vercel.com/). Every commit pushed to the `main` branch will trigger a Production Deployment.
 
+## Database
+
+### Diagram
+
+![Database diagram](database-diagram.png)
+
 ## Dates
 
 Dates in the Postgres database are stored in the the ISO 8601 format (YYYY-MM-DD). There is no time information stored.
 When working with dates in the front-end, a date is parsed to a Date object using date-fns.
-
-## Todo
-
-### High priority
-
-- Add ability to change booking dates
-
-### Medium priority
-
-- Add Supabase setup to readme
-- Add preview to readme
-- Merge PropertyForm (new) and PropertyDetailsForm (update)
-- Design list items in Guests (currently placeholder for avatar and empty line for name)
-- Create constant for filters
-- Remove bookings, avatar image when deleting account
