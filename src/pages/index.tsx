@@ -1,10 +1,14 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import Link from 'next/link';
+import { useContext } from 'react';
 
 import AuthLayout from '@/components/AuthLayout';
+import { DialogContext } from '@/components/DialogContext';
+import FloatingActionButton from '@/components/FloatingActionButton';
 import Layout from '@/components/Layout';
 import PropertyContent from '@/components/PropertyContent';
+import PropertyForm from '@/components/PropertyForm';
 import PropertyList from '@/components/PropertyList';
 import SectionHeading from '@/components/SectionHeading';
 import Button from '@/components/ui/Button';
@@ -12,6 +16,8 @@ import Container from '@/components/ui/Container';
 import Headline from '@/components/ui/Headline';
 
 const Home = ({ initialSession }: { initialSession: any }) => {
+  const dialogContext = useContext(DialogContext);
+
   if (!initialSession?.user)
     return (
       <Layout>
@@ -74,10 +80,17 @@ const Home = ({ initialSession }: { initialSession: any }) => {
       </Layout>
     );
 
-  const action = {
-    href: '/properties/new',
-    label: 'Add property',
-  };
+  function handleShowPropertyForm() {
+    dialogContext?.setDialog(
+      <PropertyForm
+        onSuccess={() => {
+          dialogContext.setOpen(false);
+        }}
+      />
+    );
+
+    dialogContext?.setOpen(true);
+  }
 
   return (
     <AuthLayout title="Home">
@@ -85,9 +98,19 @@ const Home = ({ initialSession }: { initialSession: any }) => {
         <PropertyContent>
           <SectionHeading
             title="Properties"
-            action={<Button href={action.href}>{action.label}</Button>}
+            action={
+              <Button
+                onClick={handleShowPropertyForm}
+                className="hidden sm:inline-flex"
+              >
+                Add property
+              </Button>
+            }
           />
           <PropertyList />
+          <div className="sm:hidden">
+            <FloatingActionButton onClick={handleShowPropertyForm} />
+          </div>
         </PropertyContent>
       </Container>
     </AuthLayout>

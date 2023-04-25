@@ -1,5 +1,4 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/router';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -13,9 +12,8 @@ const schema = z.object({
 
 export type FormSchema = z.infer<typeof schema>;
 
-const PropertyForm = () => {
+const PropertyForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   const addPropertyMutation = useAddPropertyMutation();
-  const router = useRouter();
 
   const {
     register,
@@ -34,9 +32,7 @@ const PropertyForm = () => {
         name: formData.name,
       },
       {
-        onSuccess: () => {
-          router.push('/');
-        },
+        onSuccess,
       }
     );
   };
@@ -49,6 +45,7 @@ const PropertyForm = () => {
       <div>
         <Button
           type="submit"
+          fullWidth
           disabled={addPropertyMutation.isLoading || isSubmitting}
           loading={addPropertyMutation.isLoading || isSubmitting}
         >
