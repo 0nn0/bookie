@@ -17,6 +17,7 @@ export default function Avatar() {
         y="16"
         textAnchor="middle"
         alignmentBaseline="central"
+        dominantBaseline="middle"
       >
         {firstName && firstName[0]}
         {lastName && lastName[0]}
