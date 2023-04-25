@@ -51,12 +51,13 @@ function DeleteButton({
   return (
     <Button
       intent="error"
+      loading={mutation.isLoading}
       disabled={mutation.isLoading}
       onClick={() => {
         mutation.mutate(propertyId);
       }}
     >
-      {mutation.isLoading ? 'Loading' : children}
+      {children}
     </Button>
   );
 }
