@@ -8,10 +8,10 @@ import { z } from 'zod';
 import useGetProfileQuery from '@/hooks/useGetProfileQuery';
 import useUpdateProfileMutation from '@/hooks/useUpdateProfileMutation';
 
+import Button from '../ui/Button';
+import FormInput from '../ui/FormInput';
+import Headline from '../ui/Headline';
 import DeleteAccountButton from './DeleteAccountButton';
-import Button from './ui/Button';
-import FormInput from './ui/FormInput';
-import Headline from './ui/Headline';
 
 interface Props {
   session: Session;

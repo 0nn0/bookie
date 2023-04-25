@@ -3,9 +3,8 @@ import type { GetServerSideProps, NextPage } from 'next';
 import Link from 'next/link';
 import { useState } from 'react';
 
-import Layout from '@/components/Layout';
-import RequestOtpForm from '@/components/RequestOtpForm';
-import VerifyOtpForm from '@/components/VerifyOtpForm';
+import RequestOtpForm from '@/components/auth/RequestOtpForm';
+import VerifyOtpForm from '@/components/auth/VerifyOtpForm';
 
 const Signup: NextPage = () => {
   const [email, setEmail] = useState<string>();

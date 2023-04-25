@@ -3,8 +3,8 @@ import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import Button from './ui/Button';
-import FormInput from './ui/FormInput';
+import Button from '../ui/Button';
+import FormInput from '../ui/FormInput';
 
 interface Props {
   onSubmitSuccess: (email: string) => void;

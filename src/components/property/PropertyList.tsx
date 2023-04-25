@@ -4,10 +4,10 @@ import Link from 'next/link';
 import { RoleIdByName } from '@/constants/constants';
 import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
 
-import Card from './Card';
-import EmptyState from './EmptyState';
-import ErrorState from './ErrorState';
-import LoadingState from './LoadingState';
+import Card from '../layout/Card';
+import EmptyState from '../layout/EmptyState';
+import ErrorState from '../layout/ErrorState';
+import LoadingState from '../layout/LoadingState';
 
 const PropertyList = () => {
   const { isLoading, data, error } = useGetPropertiesQuery();

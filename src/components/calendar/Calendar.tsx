@@ -17,12 +17,12 @@ import { Dispatch, SetStateAction, useContext } from 'react';
 
 import useAddBookingMutation from '@/hooks/useAddBookingMutation';
 
+import { DialogContext } from '../dialog/DialogContext';
+import FloatingActionButton from '../ui/FloatingActionButton';
+import Spinner from '../ui/Spinner';
 import BookingDetails from './BookingDetails';
 import BookingForm from './BookingForm';
 import CalendarEvent from './CalendarEvent';
-import { DialogContext } from './DialogContext';
-import FloatingActionButton from './FloatingActionButton';
-import Spinner from './Spinner';
 
 type Booking = {
   id: string;

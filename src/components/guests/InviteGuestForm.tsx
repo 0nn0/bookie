@@ -4,8 +4,8 @@ import { z } from 'zod';
 
 import useAddGuestMutation from '@/hooks/useAddGuestMutation';
 
-import Button from './ui/Button';
-import FormInput from './ui/FormInput';
+import Button from '../ui/Button';
+import FormInput from '../ui/FormInput';
 
 const schema = z.object({
   firstName: z.string().min(2, 'Please enter a valid first name'),

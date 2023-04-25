@@ -3,18 +3,18 @@ import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 
-import AuthLayout from '@/components/AuthLayout';
-import { DialogContext } from '@/components/DialogContext';
-import ErrorState from '@/components/ErrorState';
-import FloatingActionButton from '@/components/FloatingActionButton';
-import GuestList from '@/components/GuestList';
-import InviteGuestForm from '@/components/InviteGuestForm';
-import LoadingState from '@/components/LoadingState';
-import PropertyContent from '@/components/PropertyContent';
-import PropertyNav from '@/components/PropertyNav';
-import SectionHeading from '@/components/SectionHeading';
+import { DialogContext } from '@/components/dialog/DialogContext';
+import GuestList from '@/components/guests/GuestList';
+import InviteGuestForm from '@/components/guests/InviteGuestForm';
+import AuthLayout from '@/components/layout/AuthLayout';
+import ErrorState from '@/components/layout/ErrorState';
+import LoadingState from '@/components/layout/LoadingState';
+import SectionHeading from '@/components/layout/SectionHeading';
+import PropertyContent from '@/components/property/PropertyContent';
+import PropertyNav from '@/components/property/PropertyNav';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
+import FloatingActionButton from '@/components/ui/FloatingActionButton';
 import { RoleIdByName } from '@/constants/constants';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 

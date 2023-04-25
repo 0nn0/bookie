@@ -1,7 +1,7 @@
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
-import Button from './ui/Button';
-import Headline from './ui/Headline';
+import Button from '../ui/Button';
+import Headline from '../ui/Headline';
 
 type Button = {
   label: string;

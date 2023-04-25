@@ -2,10 +2,10 @@ import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 
-import AuthLayout from '@/components/AuthLayout';
-import BookingCalendar from '@/components/BookingCalendar';
-import PropertyContent from '@/components/PropertyContent';
-import PropertyNav from '@/components/PropertyNav';
+import BookingCalendar from '@/components/calendar/BookingCalendar';
+import AuthLayout from '@/components/layout/AuthLayout';
+import PropertyContent from '@/components/property/PropertyContent';
+import PropertyNav from '@/components/property/PropertyNav';
 import Container from '@/components/ui/Container';
 
 const CalendarPage = ({ user, roleId }: { user: any; roleId: string }) => {

@@ -3,9 +3,9 @@ import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { useRouter } from 'next/router';
 import { useContext } from 'react';
 
-import Dialog from './Dialog';
-import { DialogContext } from './DialogContext';
-import Button from './ui/Button';
+import Dialog from '../dialog/Dialog';
+import { DialogContext } from '../dialog/DialogContext';
+import Button from '../ui/Button';
 
 const DeleteAccountButton = () => {
   const router = useRouter();

@@ -3,17 +3,17 @@ import { GetServerSideProps, NextPage } from 'next';
 import { useRouter } from 'next/router';
 import React, { useContext } from 'react';
 
-import AuthLayout from '@/components/AuthLayout';
-import Card from '@/components/Card';
-import CardContent from '@/components/CardContent';
-import Dialog from '@/components/Dialog';
-import { DialogContext } from '@/components/DialogContext';
-import ErrorState from '@/components/ErrorState';
-import LoadingState from '@/components/LoadingState';
-import PropertyContent from '@/components/PropertyContent';
-import PropertyDetailsForm from '@/components/PropertyDetailsForm';
-import PropertyNav from '@/components/PropertyNav';
-import SectionHeading from '@/components/SectionHeading';
+import Dialog from '@/components/dialog/Dialog';
+import { DialogContext } from '@/components/dialog/DialogContext';
+import AuthLayout from '@/components/layout/AuthLayout';
+import Card from '@/components/layout/Card';
+import CardContent from '@/components/layout/CardContent';
+import ErrorState from '@/components/layout/ErrorState';
+import LoadingState from '@/components/layout/LoadingState';
+import SectionHeading from '@/components/layout/SectionHeading';
+import PropertyContent from '@/components/property/PropertyContent';
+import PropertyDetailsForm from '@/components/property/PropertyDetailsForm';
+import PropertyNav from '@/components/property/PropertyNav';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import { RoleIdByName } from '@/constants/constants';
@@ -41,7 +41,7 @@ const Settings: NextPage = () => {
             <CardContent>
               {isLoading && <LoadingState />}
 
-              {isError && (
+              {error instanceof Error && (
                 <ErrorState>
                   {JSON.stringify(error.message, null, 2)}
                 </ErrorState>
@@ -113,7 +113,7 @@ function DeleteButton({
       <Button intent="error" onClick={handleClick}>
         {mutation.isLoading || mutation.isSuccess ? 'Loading' : children}
       </Button>
-      {mutation.isError && (
+      {mutation.error instanceof Error && (
         <div className="mt-2 text-sm text-red-600">
           {mutation.error?.message}
         </div>

@@ -2,10 +2,10 @@ import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
 import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useRouter } from 'next/router';
 
-import Avatar from './Avatar';
-import PropertyDropdown from './PropertyDropdown';
-import Button from './ui/Button';
-import Container from './ui/Container';
+import PropertyDropdown from '../property/PropertyDropdown';
+import Avatar from '../ui/Avatar';
+import Button from '../ui/Button';
+import Container from '../ui/Container';
 
 const Header = () => {
   const supabaseClient = useSupabaseClient();

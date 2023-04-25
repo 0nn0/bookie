@@ -3,11 +3,11 @@ import React from 'react';
 import useDeleteBookingMutation from '@/hooks/useDeleteBookingMutation';
 import useUpdateBookingMutation from '@/hooks/useUpdateBookingMutation';
 
+import Button from '../ui/Button';
+import Headline from '../ui/Headline';
+import { DialogContext } from './../dialog/DialogContext';
 import BookingForm from './BookingForm';
-import { DialogContext } from './DialogContext';
 import ReadableDates from './ReadableDates';
-import Button from './ui/Button';
-import Headline from './ui/Headline';
 
 export default function BookingDetails({
   propertyId,

@@ -4,7 +4,7 @@ import { useRouter } from 'next/router';
 
 import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
 
-import Button from './ui/Button';
+import Button from '../ui/Button';
 
 const PropertyDropdown = () => {
   const router = useRouter();
@@ -15,7 +15,7 @@ const PropertyDropdown = () => {
     return <div>Loading...</div>;
   }
 
-  if (error) {
+  if (error instanceof Error) {
     return <div>Error: {error.message}</div>;
   }
 

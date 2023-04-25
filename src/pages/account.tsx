@@ -5,11 +5,11 @@ import {
 } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps, NextPage } from 'next';
 
-import AccountForm from '@/components/AccountForm';
-import AuthLayout from '@/components/AuthLayout';
-import Card from '@/components/Card';
-import CardContent from '@/components/CardContent';
-import SectionHeading from '@/components/SectionHeading';
+import AccountForm from '@/components/account/AccountForm';
+import AuthLayout from '@/components/layout/AuthLayout';
+import Card from '@/components/layout/Card';
+import CardContent from '@/components/layout/CardContent';
+import SectionHeading from '@/components/layout/SectionHeading';
 import Container from '@/components/ui/Container';
 
 interface Props {

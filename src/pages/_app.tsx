@@ -6,7 +6,7 @@ import type { AppProps } from 'next/app';
 import Head from 'next/head';
 import { useState } from 'react';
 
-import { DialogProvider } from '@/components/DialogContext';
+import { DialogProvider } from '@/components/dialog/DialogContext';
 import { Database } from '@/lib/database.types';
 
 import '../styles/globals.css';

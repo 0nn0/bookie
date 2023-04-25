@@ -5,8 +5,8 @@ import React from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import Button from './ui/Button';
-import FormInput from './ui/FormInput';
+import Button from '../ui/Button';
+import FormInput from '../ui/FormInput';
 
 interface Props {
   email: string;

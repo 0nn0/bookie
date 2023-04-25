@@ -3,8 +3,8 @@ import { useState } from 'react';
 
 import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
 
+import ErrorState from '../layout/ErrorState';
 import Calendar from './Calendar';
-import ErrorState from './ErrorState';
 
 const BookingCalendar = ({
   userId,

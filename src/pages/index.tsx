@@ -3,16 +3,16 @@ import { GetServerSideProps } from 'next';
 import Link from 'next/link';
 import { useContext } from 'react';
 
-import AuthLayout from '@/components/AuthLayout';
-import { DialogContext } from '@/components/DialogContext';
-import FloatingActionButton from '@/components/FloatingActionButton';
-import Layout from '@/components/Layout';
-import PropertyContent from '@/components/PropertyContent';
-import PropertyForm from '@/components/PropertyForm';
-import PropertyList from '@/components/PropertyList';
-import SectionHeading from '@/components/SectionHeading';
+import { DialogContext } from '@/components/dialog/DialogContext';
+import AuthLayout from '@/components/layout/AuthLayout';
+import Layout from '@/components/layout/Layout';
+import SectionHeading from '@/components/layout/SectionHeading';
+import PropertyContent from '@/components/property/PropertyContent';
+import PropertyForm from '@/components/property/PropertyForm';
+import PropertyList from '@/components/property/PropertyList';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
+import FloatingActionButton from '@/components/ui/FloatingActionButton';
 import Headline from '@/components/ui/Headline';
 
 const Home = ({ initialSession }: { initialSession: any }) => {

@@ -20,7 +20,7 @@ import { useState } from 'react';
 import useGetBookingsQuery from '@/hooks/useGetBookingsQuery';
 import { getMaxAvailableEndDate } from '@/utils/utils';
 
-import Spinner from './Spinner';
+import Spinner from '../ui/Spinner';
 
 function DateRangePicker({
   propertyId,
