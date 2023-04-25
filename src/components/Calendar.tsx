@@ -287,8 +287,6 @@ function Calendar({
                       className={classNames(
                         'h-20 flex-1  border-r-gray-200 bg-white py-1 px-2',
                         {
-                          // 'bg-white': isCurrentMonth,
-                          // 'bg-gray-100': !isCurrentMonth,
                           'border-r': index !== 6,
                         }
                       )}

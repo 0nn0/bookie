@@ -40,7 +40,7 @@ function DateRangePicker({
 
   const firstDayCurrentMonth = parse(currentMonth, 'MM-yyyy', new Date());
 
-  let { isLoading, data, error, isError } = useGetBookingsQuery({
+  let { isLoading, data, error } = useGetBookingsQuery({
     propertyId,
     month: parse(currentMonth, 'MM-yyyy', new Date()).getMonth() + 1,
     year: parse(currentMonth, 'MM-yyyy', new Date()).getFullYear(),
@@ -48,7 +48,7 @@ function DateRangePicker({
 
   data = data?.filter((booking) => booking.id !== excludeBookingId);
 
-  if (isError) {
+  if (error instanceof Error) {
     return (
       <div className="text-center lg:col-start-8 lg:col-end-13 lg:row-start-1 xl:col-start-9">
         <p>{error?.message}</p>
