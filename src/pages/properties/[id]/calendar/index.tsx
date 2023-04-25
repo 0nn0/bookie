@@ -7,7 +7,6 @@ import BookingCalendar from '@/components/BookingCalendar';
 import PropertyContent from '@/components/PropertyContent';
 import PropertyNav from '@/components/PropertyNav';
 import Container from '@/components/ui/Container';
-import { RoleIdByName } from '@/constants/constants';
 
 const CalendarPage = ({ user, roleId }: { user: any; roleId: string }) => {
   const { query } = useRouter();

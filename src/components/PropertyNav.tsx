@@ -1,7 +1,6 @@
 import {
   CalendarDaysIcon,
   Cog6ToothIcon,
-  InformationCircleIcon,
   UserGroupIcon,
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
@@ -18,32 +17,30 @@ const PropertyNav = ({
   roleId: string;
 }) => {
   const { asPath } = useRouter();
-  let tabs = [
+
+  // Only show submenu to owners
+  if (roleId === RoleIdByName.Guest) return null;
+
+  const tabs = [
     {
       name: 'Calendar',
       href: `/properties/${propertyId}/calendar`,
       current: true,
       Icon: CalendarDaysIcon,
     },
+    {
+      name: 'Guests',
+      href: `/properties/${propertyId}/guests`,
+      current: false,
+      Icon: UserGroupIcon,
+    },
+    {
+      name: 'Settings',
+      href: `/properties/${propertyId}/settings`,
+      current: false,
+      Icon: Cog6ToothIcon,
+    },
   ];
-
-  if (roleId === RoleIdByName.Owner) {
-    tabs = [
-      ...tabs,
-      {
-        name: 'Guests',
-        href: `/properties/${propertyId}/guests`,
-        current: false,
-        Icon: UserGroupIcon,
-      },
-      {
-        name: 'Settings',
-        href: `/properties/${propertyId}/settings`,
-        current: false,
-        Icon: Cog6ToothIcon,
-      },
-    ];
-  }
 
   return (
     <div className="fixed left-0 bottom-0 z-30 flex w-full border-t border-gray-200 bg-gray-50 px-4 pb-3 pt-2">
