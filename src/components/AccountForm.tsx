@@ -30,7 +30,6 @@ const AccountForm = ({ session }: Props) => {
   const {
     reset,
     register,
-    setValue,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<FormSchema>({
@@ -55,8 +54,8 @@ const AccountForm = ({ session }: Props) => {
 
     mutation.mutate(
       {
-        first_name: firstName,
-        last_name: lastName,
+        first_name: firstName.trim(),
+        last_name: lastName.trim(),
       },
       {
         onSuccess: () => {
