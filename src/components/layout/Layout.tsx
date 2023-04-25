@@ -30,7 +30,7 @@ const Layout = ({ title = '', description = '', children }: LayoutProps) => {
                   <Link href="/login">Login</Link>
                 </div>
                 <div>
-                  <Link href="/signup">Signup</Link>
+                  <Link href="/signup">Sign up</Link>
                 </div>
               </div>
             </div>

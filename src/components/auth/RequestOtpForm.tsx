@@ -11,17 +11,18 @@ interface Props {
   isSignUp: boolean;
 }
 
+const schema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+});
+
+type FormSchema = z.infer<typeof schema>;
+
 const RequestOtpForm = ({ onSubmitSuccess, isSignUp }: Props) => {
   const supabase = useSupabaseClient();
 
-  const schema = z.object({
-    email: z.string().email('Please enter a valid email address'),
-  });
-
-  type FormSchema = z.infer<typeof schema>;
-
   const {
     register,
+    setError,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<FormSchema>({
@@ -38,7 +39,13 @@ const RequestOtpForm = ({ onSubmitSuccess, isSignUp }: Props) => {
         },
       });
       if (error) {
-        throw error;
+        setError('email', {
+          type: 'manual',
+          message:
+            'You can only request a login code once every 60 seconds. Please try again in minute.',
+        });
+
+        return;
       }
 
       onSubmitSuccess(formData.email);

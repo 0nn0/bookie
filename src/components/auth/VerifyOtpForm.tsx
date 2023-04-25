@@ -14,19 +14,20 @@ interface Props {
   // verifyOtpType: 'magiclink' | 'signup';
 }
 
+const schema = z.object({
+  email: z.string().email('Please enter a valid email address'),
+  otp: z.string().min(6, 'Please enter a valid OTP'),
+});
+
+type FormSchema = z.infer<typeof schema>;
+
 const VerifyOtpForm = ({ email, isSignUp }: Props) => {
   const supabase = useSupabaseClient();
   const router = useRouter();
 
-  const schema = z.object({
-    email: z.string().email('Please enter a valid email address'),
-    otp: z.string().min(6, 'Please enter a valid OTP'),
-  });
-
-  type FormSchema = z.infer<typeof schema>;
-
   const {
     register,
+    setError,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<FormSchema>({
@@ -38,20 +39,27 @@ const VerifyOtpForm = ({ email, isSignUp }: Props) => {
 
   const submit = async (formData: FormSchema) => {
     try {
-      const { data, error } = await supabase.auth.verifyOtp({
+      const { error } = await supabase.auth.verifyOtp({
         email: formData.email,
         token: formData.otp,
         type: isSignUp ? 'signup' : 'magiclink',
       });
 
       if (error) {
-        console.log({ data, error });
+        setError('otp', {
+          type: 'manual',
+          message: 'Login code is incorrect',
+        });
+
+        return;
       }
 
       router.push('/');
     } catch (error: any) {
-      console.log({ error });
-      // alert(error.error_description || error.message);
+      setError('otp', {
+        type: 'manual',
+        message: error.message,
+      });
     }
   };
 
@@ -106,11 +114,6 @@ const VerifyOtpForm = ({ email, isSignUp }: Props) => {
           {isSignUp ? 'Create new account' : 'Continue with login code'}
         </Button>
       </div>
-      {/* <div>
-        {errorMessage && (
-          <div className="text-sm text-red-500">{errorMessage}</div>
-        )}
-      </div> */}
     </form>
   );
 };
