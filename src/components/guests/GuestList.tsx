@@ -1,9 +1,9 @@
 import useGetGuestsQuery from '@/hooks/useGetGuestsQuery';
 
-import EmptyState from '../EmptyState';
-import ErrorState from '../ErrorState';
-import LoadingState from '../LoadingState';
 import Card from '../layout/Card';
+import EmptyState from '../layout/EmptyState';
+import ErrorState from '../layout/ErrorState';
+import LoadingState from '../layout/LoadingState';
 import GuestListItem from './GuestListItem';
 
 const GuestList = ({ propertyId }: { propertyId: string }) => {

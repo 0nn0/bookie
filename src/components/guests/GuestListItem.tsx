@@ -1,6 +1,5 @@
+import Button from '@/components/ui/Button';
 import useDeleteGuestMutation from '@/hooks/useDeleteGuestMutation';
-
-import Button from './ui/Button';
 
 const GuestListItem = ({
   id,
