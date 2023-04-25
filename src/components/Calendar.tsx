@@ -264,15 +264,14 @@ function Calendar({
                               title={booking.firstName}
                               isPast={isPast(bookingEndDate)}
                               onClick={() => {
-                                console.log({ userId, profileId: booking });
-                                if (userId === booking.profileId)
-                                  handleExistingBookingClick({
-                                    propertyId: propertyId,
-                                    bookingId: booking.id,
-                                    startDate: bookingStartDate,
-                                    endDate: bookingEndDate,
-                                  });
+                                handleExistingBookingClick({
+                                  propertyId: propertyId,
+                                  bookingId: booking.id,
+                                  startDate: bookingStartDate,
+                                  endDate: bookingEndDate,
+                                });
                               }}
+                              disabled={userId !== booking.profileId}
                             />
                           </div>
                         </div>
