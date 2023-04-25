@@ -3,7 +3,6 @@ import { useQuery } from '@tanstack/react-query';
 
 const useGetProfileQuery = () => {
   const user = useUser();
-  console.log('useGetProfileQuery', user?.id);
   const supabaseClient = useSupabaseClient();
 
   const fetchProfile = async () => {
