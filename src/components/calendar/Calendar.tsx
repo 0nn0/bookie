@@ -304,6 +304,7 @@ function Calendar({
                             !isSameMonth(date, firstDayCurrentMonth) &&
                             'text-gray-300',
                           isToday(date) &&
+                            isSameMonth(date, firstDayCurrentMonth) &&
                             '-ml-1 rounded-md bg-gray-700 px-2 py-1 font-semibold text-white'
                         )}
                       >
