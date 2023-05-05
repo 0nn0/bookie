@@ -40,7 +40,6 @@ const PropertyNav = () => {
 
   return (
     <div className="fixed left-0 bottom-0 z-30 flex w-full border-t border-gray-200 bg-gray-50 px-4 pb-3 pt-2">
-      <input type="text" />
       <div className="mx-auto max-w-5xl flex-1">
         <nav className="flex flex-1 gap-1 pb-2" aria-label="Tabs">
           {tabs.map((tab) => {
