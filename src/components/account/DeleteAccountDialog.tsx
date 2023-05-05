@@ -5,9 +5,8 @@ import { useContext } from 'react';
 
 import Dialog from '../dialog/Dialog';
 import { DialogContext } from '../dialog/DialogContext';
-import Button from '../ui/Button';
 
-const DeleteAccountButton = () => {
+const DeleteAccountDialog = () => {
   const router = useRouter();
   const supabase = useSupabaseClient();
   const queryClient = useQueryClient();
@@ -37,35 +36,27 @@ const DeleteAccountButton = () => {
     },
   });
 
-  const handleClick = () => {
-    dialogContext?.setDialog(
-      <Dialog
-        title="Are you sure?"
-        body="This action cannot be undone. This will permanently delete your account."
-        confirmButton={{
-          label: 'Yes, delete account',
-          disabled: mutation.isLoading,
-          onClick: () => {
-            mutation.mutate();
-          },
-        }}
-        cancelButton={{
-          label: 'No, keep account',
-          onClick: () => {
-            dialogContext?.setOpen(false);
-          },
-        }}
-      />
-    );
-
-    dialogContext?.setOpen(true);
-  };
-
   return (
-    <Button intent="error" onClick={handleClick} disabled={mutation.isLoading}>
-      Delete account
-    </Button>
+    <Dialog
+      title="Are you sure?"
+      body="This action cannot be undone. This will permanently delete your account."
+      confirmButton={{
+        label: 'Yes, delete account',
+        disabled: mutation.isLoading,
+        onClick: () => {
+          mutation.mutate();
+        },
+        loading: mutation.isLoading,
+      }}
+      cancelButton={{
+        label: 'No, keep account',
+        disabled: mutation.isLoading,
+        onClick: () => {
+          dialogContext?.setOpen(false);
+        },
+      }}
+    />
   );
 };
 
-export default DeleteAccountButton;
+export default DeleteAccountDialog;

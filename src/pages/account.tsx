@@ -10,6 +10,7 @@ import AuthLayout from '@/components/layout/AuthLayout';
 import Card from '@/components/layout/Card';
 import CardContent from '@/components/layout/CardContent';
 import SectionHeading from '@/components/layout/SectionHeading';
+import PropertyContent from '@/components/property/PropertyContent';
 import Container from '@/components/ui/Container';
 
 interface Props {
@@ -22,12 +23,13 @@ const Account: NextPage<Props> = ({ user, initialSession }) => {
     <AuthLayout title="Account">
       <Container>
         <SectionHeading title="Account" />
-
-        <Card>
-          <CardContent>
-            <AccountForm session={initialSession} />
-          </CardContent>
-        </Card>
+        <PropertyContent>
+          <Card>
+            <CardContent>
+              <AccountForm session={initialSession} />
+            </CardContent>
+          </Card>
+        </PropertyContent>
       </Container>
     </AuthLayout>
   );

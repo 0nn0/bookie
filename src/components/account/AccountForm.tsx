@@ -1,23 +1,25 @@
 import { zodResolver } from '@hookform/resolvers/zod';
 import { Session } from '@supabase/auth-helpers-react';
 import { useQueryClient } from '@tanstack/react-query';
-import { useEffect } from 'react';
+import { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import useGetProfileQuery from '@/hooks/useGetProfileQuery';
 import useUpdateProfileMutation from '@/hooks/useUpdateProfileMutation';
 
+import { DialogContext } from '../dialog/DialogContext';
 import Button from '../ui/Button';
 import FormInput from '../ui/FormInput';
 import Headline from '../ui/Headline';
-import DeleteAccountButton from './DeleteAccountButton';
+import DeleteAccountDialog from './DeleteAccountDialog';
 
 interface Props {
   session: Session;
 }
 
 const AccountForm = ({ session }: Props) => {
+  const dialogContext = useContext(DialogContext);
   const queryClient = useQueryClient();
 
   const schema = z.object({
@@ -64,6 +66,11 @@ const AccountForm = ({ session }: Props) => {
       }
     );
   };
+
+  function handleDeleteButtonClick() {
+    dialogContext?.setDialog(<DeleteAccountDialog />);
+    dialogContext?.setOpen(true);
+  }
 
   if (isLoading) {
     return <div>Loading...</div>;
@@ -123,7 +130,9 @@ const AccountForm = ({ session }: Props) => {
         This action is not reversible. All information related to this account,
         like any properties that you created, will be deleted permanently.
       </p>
-      <DeleteAccountButton />
+      <Button intent="error" onClick={handleDeleteButtonClick}>
+        Delete account
+      </Button>
     </>
   );
 };

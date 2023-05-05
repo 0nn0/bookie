@@ -7,6 +7,7 @@ type Button = {
   label: string;
   onClick: () => void;
   disabled?: boolean;
+  loading?: boolean;
 };
 
 type DialogProps = {
@@ -17,6 +18,7 @@ type DialogProps = {
 };
 
 const Dialog = ({ title, body, confirmButton, cancelButton }: DialogProps) => {
+  console.log('LOADING?', confirmButton.loading);
   return (
     <>
       <div className="sm:flex sm:items-start">
@@ -41,6 +43,7 @@ const Dialog = ({ title, body, confirmButton, cancelButton }: DialogProps) => {
           intent="error"
           className="w-full justify-center sm:w-auto sm:justify-start"
           onClick={confirmButton.onClick}
+          loading={confirmButton.loading}
         >
           {confirmButton.label}
         </Button>
