@@ -9,17 +9,13 @@ import { useRouter } from 'next/router';
 
 import { RoleIdByName } from '@/constants/constants';
 
-const PropertyNav = ({
-  propertyId,
-  roleId,
-}: {
-  propertyId: string;
-  roleId: string;
-}) => {
-  const { asPath } = useRouter();
+const PropertyNav = () => {
+  const { asPath, query } = useRouter();
+  const propertyId = query?.id as string;
 
+  // TODO:
   // Only show submenu to owners
-  if (roleId === RoleIdByName.Guest) return null;
+  // if (roleId === RoleIdByName.Guest) return null;
 
   const tabs = [
     {
@@ -44,6 +40,7 @@ const PropertyNav = ({
 
   return (
     <div className="fixed left-0 bottom-0 z-30 flex w-full border-t border-gray-200 bg-gray-50 px-4 pb-3 pt-2">
+      <input type="text" />
       <div className="mx-auto max-w-5xl flex-1">
         <nav className="flex flex-1 gap-1 pb-2" aria-label="Tabs">
           {tabs.map((tab) => {

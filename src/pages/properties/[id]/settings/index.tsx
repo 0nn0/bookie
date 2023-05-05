@@ -1,25 +1,26 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { GetServerSideProps, NextPage } from 'next';
+import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
-import { useContext } from 'react';
+import { ReactElement, useContext } from 'react';
 
 import { DialogContext } from '@/components/dialog/DialogContext';
-import AuthLayout from '@/components/layout/AuthLayout';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import Card from '@/components/layout/Card';
 import CardContent from '@/components/layout/CardContent';
 import ErrorState from '@/components/layout/ErrorState';
 import LoadingState from '@/components/layout/LoadingState';
+import PropertyLayout from '@/components/layout/PropertyLayout';
 import SectionHeading from '@/components/layout/SectionHeading';
 import DeletePropertyDialog from '@/components/property/DeletePropertyDialog';
 import PropertyContent from '@/components/property/PropertyContent';
 import PropertyDetailsForm from '@/components/property/PropertyDetailsForm';
-import PropertyNav from '@/components/property/PropertyNav';
 import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import { RoleIdByName } from '@/constants/constants';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
+import { NextPageWithLayout } from '@/pages/_app';
 
-const Settings: NextPage = () => {
+const SettingsPage: NextPageWithLayout = () => {
   const router = useRouter();
   const propertyId = router.query.id as string;
 
@@ -29,55 +30,57 @@ const Settings: NextPage = () => {
   });
 
   return (
-    <AuthLayout title="Settings">
-      <Container>
-        <PropertyNav propertyId={propertyId} roleId={RoleIdByName.Owner} />
+    <Container>
+      <PropertyContent>
+        <div className="mb-6">
+          <SectionHeading title="Settings" />
+        </div>
+        <Card>
+          <CardContent>
+            {isLoading && <LoadingState />}
 
-        <PropertyContent>
-          <div className="mb-6">
-            <SectionHeading title="Settings" />
-          </div>
-          <Card>
-            <CardContent>
-              {isLoading && <LoadingState />}
+            {error instanceof Error && (
+              <ErrorState>{JSON.stringify(error.message, null, 2)}</ErrorState>
+            )}
 
-              {error instanceof Error && (
-                <ErrorState>
-                  {JSON.stringify(error.message, null, 2)}
-                </ErrorState>
-              )}
-
-              {data && (
-                <>
-                  <PropertyDetailsForm name={data.name} />
-                  <br />
-                  <br />
-                  <br />
-                  <div className="mt-12 mb-12">
-                    <hr />
-                  </div>
-                  <Button
-                    intent="error"
-                    onClick={() => {
-                      dialogContext?.setDialog(
-                        <DeletePropertyDialog propertyId={propertyId} />
-                      );
-                      dialogContext?.setOpen(true);
-                    }}
-                  >
-                    Delete property
-                  </Button>
-                </>
-              )}
-            </CardContent>
-          </Card>
-        </PropertyContent>
-      </Container>
-    </AuthLayout>
+            {data && (
+              <>
+                <PropertyDetailsForm name={data.name} />
+                <br />
+                <br />
+                <br />
+                <div className="mt-12 mb-12">
+                  <hr />
+                </div>
+                <Button
+                  intent="error"
+                  onClick={() => {
+                    dialogContext?.setDialog(
+                      <DeletePropertyDialog propertyId={propertyId} />
+                    );
+                    dialogContext?.setOpen(true);
+                  }}
+                >
+                  Delete property
+                </Button>
+              </>
+            )}
+          </CardContent>
+        </Card>
+      </PropertyContent>
+    </Container>
   );
 };
 
-export default Settings;
+SettingsPage.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AuthenticatedLayout title="Property">
+      <PropertyLayout>{page}</PropertyLayout>
+    </AuthenticatedLayout>
+  );
+};
+
+export default SettingsPage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx);

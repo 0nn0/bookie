@@ -1,7 +1,7 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import type { GetServerSideProps, NextPage } from 'next';
 
-const Logout: NextPage = () => {
+const LogoutPage: NextPage = () => {
   return null;
 };
 
@@ -22,4 +22,4 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   };
 };
 
-export default Logout;
+export default LogoutPage;

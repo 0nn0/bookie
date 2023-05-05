@@ -1,26 +1,37 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
+import { ReactElement } from 'react';
 
 import BookingCalendar from '@/components/calendar/BookingCalendar';
-import AuthLayout from '@/components/layout/AuthLayout';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
+import PropertyLayout from '@/components/layout/PropertyLayout';
 import PropertyContent from '@/components/property/PropertyContent';
-import PropertyNav from '@/components/property/PropertyNav';
 import Container from '@/components/ui/Container';
+import { NextPageWithLayout } from '@/pages/_app';
 
-const CalendarPage = ({ user, roleId }: { user: any; roleId: string }) => {
+type Props = {
+  user: any;
+};
+
+const CalendarPage: NextPageWithLayout<Props> = ({ user }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
   return (
-    <AuthLayout title="Bookings">
-      <Container>
-        <PropertyNav propertyId={propertyId} roleId={roleId} />
-        <PropertyContent>
-          <BookingCalendar userId={user.id} propertyId={propertyId} />
-        </PropertyContent>
-      </Container>
-    </AuthLayout>
+    <Container>
+      <PropertyContent>
+        <BookingCalendar userId={user.id} propertyId={propertyId} />
+      </PropertyContent>
+    </Container>
+  );
+};
+
+CalendarPage.getLayout = function getLayout(page: ReactElement) {
+  return (
+    <AuthenticatedLayout title="Calendar">
+      <PropertyLayout>{page}</PropertyLayout>
+    </AuthenticatedLayout>
   );
 };
 

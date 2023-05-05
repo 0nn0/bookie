@@ -4,11 +4,11 @@ import Header from './Header';
 
 type LayoutProps = {
   title: string;
-  description: string;
+  description?: string;
   children: React.ReactNode;
 };
 
-const AuthLayout = ({
+const AuthenticatedLayout = ({
   title = '',
   description = '',
   children,
@@ -25,4 +25,4 @@ const AuthLayout = ({
   );
 };
 
-export default AuthLayout;
+export default AuthenticatedLayout;

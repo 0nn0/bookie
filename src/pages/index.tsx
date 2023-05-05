@@ -1,10 +1,9 @@
 import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
-import Link from 'next/link';
-import { useContext } from 'react';
+import { ReactElement, useContext } from 'react';
 
 import { DialogContext } from '@/components/dialog/DialogContext';
-import AuthLayout from '@/components/layout/AuthLayout';
+import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import Layout from '@/components/layout/Layout';
 import SectionHeading from '@/components/layout/SectionHeading';
 import PropertyContent from '@/components/property/PropertyContent';
@@ -15,12 +14,12 @@ import Container from '@/components/ui/Container';
 import FloatingActionButton from '@/components/ui/FloatingActionButton';
 import Headline from '@/components/ui/Headline';
 
-const Home = ({ initialSession }: { initialSession: any }) => {
+const HomePage = ({ initialSession }: { initialSession: any }) => {
   const dialogContext = useContext(DialogContext);
 
   if (!initialSession?.user)
     return (
-      <Layout>
+      <Layout title="Bookie">
         <Container>
           <Headline level={1}>
             Effortlessly manage your vacation home with Bookie
@@ -81,31 +80,33 @@ const Home = ({ initialSession }: { initialSession: any }) => {
   }
 
   return (
-    <AuthLayout title="Home">
-      <Container>
-        <PropertyContent>
-          <SectionHeading
-            title="Properties"
-            action={
-              <Button
-                onClick={handleShowPropertyForm}
-                className="hidden sm:inline-flex"
-              >
-                Add property
-              </Button>
-            }
-          />
-          <PropertyList />
-          <div className="sm:hidden">
-            <FloatingActionButton onClick={handleShowPropertyForm} />
-          </div>
-        </PropertyContent>
-      </Container>
-    </AuthLayout>
+    <Container>
+      <PropertyContent>
+        <SectionHeading
+          title="Properties"
+          action={
+            <Button
+              onClick={handleShowPropertyForm}
+              className="hidden sm:inline-flex"
+            >
+              Add property
+            </Button>
+          }
+        />
+        <PropertyList />
+        <div className="sm:hidden">
+          <FloatingActionButton onClick={handleShowPropertyForm} />
+        </div>
+      </PropertyContent>
+    </Container>
   );
 };
 
-export default Home;
+HomePage.getLayout = function getLayout(page: ReactElement) {
+  return <AuthenticatedLayout title="Home">{page}</AuthenticatedLayout>;
+};
+
+export default HomePage;
 
 export const getServerSideProps: GetServerSideProps = async (ctx) => {
   const supabase = createServerSupabaseClient(ctx);
