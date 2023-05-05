@@ -20,12 +20,7 @@ const PropertyDropdown = () => {
   }
 
   // get name of selected property
-  const selectedProperty = data.find((item) => {
-    const { properties } = item;
-    if (properties) {
-      return properties.id === router.query.id;
-    }
-  });
+  const selectedProperty = data?.find((item) => item.id === router.query.id);
 
   // check if account page
   const isAccountPage = router.pathname === '/account';
@@ -47,7 +42,7 @@ const PropertyDropdown = () => {
         <DropdownMenu.Trigger asChild>
           <Button intent="dark">
             <span className="min-w-0 overflow-hidden text-ellipsis">
-              {selectedProperty?.properties?.name || 'Properties'}
+              {selectedProperty?.name || 'Properties'}
             </span>
             <ChevronDownIcon
               className="-mr-0.5 ml-2 h-4 w-4 flex-shrink-0 flex-grow-0 basis-4"
@@ -72,25 +67,24 @@ const PropertyDropdown = () => {
             Properties
           </DropdownMenu.Item>
 
-          {data.length > 0 && (
+          {data && data.length > 0 && (
             <DropdownMenu.Separator className="m-1 h-px bg-gray-200" />
           )}
 
-          {data.map((item) => {
-            const { id, role_id, properties } = item;
-            if (properties) {
-              return (
-                <DropdownMenu.Item
-                  key={id}
-                  className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
-                  onSelect={() => {
-                    router.push(`/properties/${properties.id}/calendar`);
-                  }}
-                >
-                  {properties.name}
-                </DropdownMenu.Item>
-              );
-            }
+          {data?.map((item) => {
+            const { id, name } = item;
+
+            return (
+              <DropdownMenu.Item
+                key={id}
+                className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
+                onSelect={() => {
+                  router.push(`/properties/${id}/calendar`);
+                }}
+              >
+                {name}
+              </DropdownMenu.Item>
+            );
           })}
 
           <DropdownMenu.Arrow className="fill-white" />

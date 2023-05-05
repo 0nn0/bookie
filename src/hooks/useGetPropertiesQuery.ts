@@ -6,13 +6,14 @@ const useGetPropertiesQuery = (roleId?: string) => {
   const supabaseClient = useSupabaseClient();
 
   const fetchProperties = async () => {
-    let query = supabaseClient
-      .from('fact_table')
-      .select('id, roles(id, name), properties(id, name)')
-      .eq('profile_id', user?.id);
+    const query = supabaseClient
+      .from('properties')
+      .select('id, name, fact_table(id, profile_id, role_id)')
+      .eq('fact_table.profile_id', user?.id)
+      .order('name', { ascending: true });
 
     if (roleId) {
-      query.eq('role_id', roleId);
+      query.eq('fact_table.role_id', roleId);
     }
 
     query.throwOnError();
