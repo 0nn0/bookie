@@ -24,15 +24,13 @@ Bookie is a user-friendly platform designed to assist families and friends in ma
 - Node.js (version 18.2.0)
 - npm
 
-## Development
-
 ### Setup
 
 - Run `npm i` to install depencies
 - Copy `.example.env` and rename it to `.env`
 - Add the various Supabase keys to the `.env` file
 
-### Development mode
+### Development
 
 - Run `npm run dev` to start the development server, and open [http://localhost:3000](http://localhost:3000) with your browser
 
@@ -40,13 +38,13 @@ Bookie is a user-friendly platform designed to assist families and friends in ma
 
 The app is hosted on [Vercel](https://vercel.com/). Every commit pushed to the `main` branch will trigger a Production Deployment.
 
-## Database
+## Other information
 
-### Diagram
+### Database diagram
 
 ![Database diagram](database-diagram.png)
 
-## Dates
+### Using dates
 
 Dates in the Postgres database are stored in the the ISO 8601 format (YYYY-MM-DD). There is no time information stored.
 When working with dates in the front-end, a date is parsed to a Date object using date-fns.
