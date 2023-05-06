@@ -54,7 +54,7 @@ const VerifyOtpForm = ({ email, isSignUp }: Props) => {
         return;
       }
 
-      router.push('/');
+      router.push('/properties');
     } catch (error: any) {
       setError('otp', {
         type: 'manual',
