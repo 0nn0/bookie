@@ -45,7 +45,10 @@ const PropertiesPage: NextPageWithLayout = () => {
         />
         <PropertyList />
         <div className="sm:hidden">
-          <FloatingActionButton onClick={handleShowPropertyForm} />
+          <FloatingActionButton
+            onClick={handleShowPropertyForm}
+            takePropertyNavIntoAccount={false}
+          />
         </div>
       </PropertyContent>
     </Container>

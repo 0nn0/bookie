@@ -15,6 +15,7 @@ import {
 } from 'date-fns';
 import { Dispatch, SetStateAction, useContext } from 'react';
 
+import { RoleIdByName } from '@/constants/constants';
 import useAddBookingMutation from '@/hooks/useAddBookingMutation';
 
 import { DialogContext } from '../dialog/DialogContext';
@@ -35,6 +36,7 @@ type Booking = {
 
 function Calendar({
   userId,
+  roleId,
   propertyId,
   currentMonth,
   setCurrentMonth,
@@ -42,6 +44,7 @@ function Calendar({
   isLoading,
 }: {
   userId: string;
+  roleId: string;
   propertyId: string;
   setCurrentMonth: Dispatch<SetStateAction<string>>;
   currentMonth: string;
@@ -169,7 +172,10 @@ function Calendar({
             New booking
           </button>
           <div className="sm:hidden">
-            <FloatingActionButton onClick={handleNewBookingClick} />
+            <FloatingActionButton
+              onClick={handleNewBookingClick}
+              takePropertyNavIntoAccount={roleId === RoleIdByName.Owner}
+            />
           </div>
         </div>
       </header>

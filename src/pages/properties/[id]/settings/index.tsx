@@ -1,4 +1,8 @@
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import {
+  Session,
+  User,
+  createServerSupabaseClient,
+} from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { ReactElement, useContext } from 'react';
@@ -20,7 +24,15 @@ import { RoleIdByName } from '@/constants/constants';
 import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 import { NextPageWithLayout } from '@/pages/_app';
 
-const SettingsPage: NextPageWithLayout = () => {
+const SettingsPage = ({
+  initialSession,
+  user,
+  roleId,
+}: {
+  initialSession: Session;
+  user: User;
+  roleId: string;
+} & NextPageWithLayout) => {
   const router = useRouter();
   const propertyId = router.query.id as string;
 
@@ -30,54 +42,54 @@ const SettingsPage: NextPageWithLayout = () => {
   });
 
   return (
-    <Container>
-      <PropertyContent>
-        <div className="mb-6">
-          <SectionHeading title="Settings" />
-        </div>
-        <Card>
-          <CardContent>
-            {isLoading && <LoadingState />}
+    <PropertyLayout roleId={roleId}>
+      <Container>
+        <PropertyContent>
+          <div className="mb-6">
+            <SectionHeading title="Settings" />
+          </div>
+          <Card>
+            <CardContent>
+              {isLoading && <LoadingState />}
 
-            {error instanceof Error && (
-              <ErrorState>{JSON.stringify(error.message, null, 2)}</ErrorState>
-            )}
+              {error instanceof Error && (
+                <ErrorState>
+                  {JSON.stringify(error.message, null, 2)}
+                </ErrorState>
+              )}
 
-            {data && (
-              <>
-                <PropertyDetailsForm name={data.name} />
-                <br />
-                <br />
-                <br />
-                <div className="mt-12 mb-12">
-                  <hr />
-                </div>
-                <Button
-                  intent="error"
-                  onClick={() => {
-                    dialogContext?.setDialog(
-                      <DeletePropertyDialog propertyId={propertyId} />
-                    );
-                    dialogContext?.setOpen(true);
-                  }}
-                >
-                  Delete property
-                </Button>
-              </>
-            )}
-          </CardContent>
-        </Card>
-      </PropertyContent>
-    </Container>
+              {data && (
+                <>
+                  <PropertyDetailsForm name={data.name} />
+                  <br />
+                  <br />
+                  <br />
+                  <div className="mt-12 mb-12">
+                    <hr />
+                  </div>
+                  <Button
+                    intent="error"
+                    onClick={() => {
+                      dialogContext?.setDialog(
+                        <DeletePropertyDialog propertyId={propertyId} />
+                      );
+                      dialogContext?.setOpen(true);
+                    }}
+                  >
+                    Delete property
+                  </Button>
+                </>
+              )}
+            </CardContent>
+          </Card>
+        </PropertyContent>
+      </Container>
+    </PropertyLayout>
   );
 };
 
 SettingsPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <AuthenticatedLayout title="Property">
-      <PropertyLayout>{page}</PropertyLayout>
-    </AuthenticatedLayout>
-  );
+  return <AuthenticatedLayout title="Property">{page}</AuthenticatedLayout>;
 };
 
 export default SettingsPage;
@@ -106,7 +118,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
   // check if user is owner of this property
   const { data } = await supabase
     .from('fact_table')
-    .select()
+    .select('role_id')
     .eq('profile_id', session.user.id)
     .eq('property_id', ctx.params.id)
     .eq('role_id', RoleIdByName.Owner)
@@ -114,10 +126,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
 
   if (!data) {
     return {
-      redirect: {
-        destination: `/properties/${ctx.params.id}/error`,
-        permanent: false,
-      },
+      notFound: true,
     };
   }
 
@@ -125,6 +134,7 @@ export const getServerSideProps: GetServerSideProps = async (ctx) => {
     props: {
       initialSession: session,
       user: session.user,
+      roleId: data.role_id,
     },
   };
 };

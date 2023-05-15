@@ -7,17 +7,11 @@ import classNames from 'classnames';
 import Link from 'next/link';
 import { useRouter } from 'next/router';
 
-import { RoleIdByName } from '@/constants/constants';
-
 const PropertyNav = () => {
   const { asPath, query } = useRouter();
   const propertyId = query?.id as string;
 
-  // TODO:
-  // Only show submenu to owners
-  // if (roleId === RoleIdByName.Guest) return null;
-
-  const tabs = [
+  let tabs = [
     {
       name: 'Calendar',
       href: `/properties/${propertyId}/calendar`,
@@ -51,7 +45,7 @@ const PropertyNav = () => {
                 key={tab.name}
                 href={tab.href}
                 className={classNames(
-                  'flex-1 items-center justify-center rounded-lg pb-3 pt-1 text-xs font-normal focus:bg-gray-200',
+                  'flex-1 items-center justify-center rounded-lg pb-3 pt-1 text-xs font-normal',
                   isCurrent
                     ? ' text-indigo-600'
                     : 'text-gray-500  hover:text-gray-700'

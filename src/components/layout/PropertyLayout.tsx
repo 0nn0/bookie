@@ -1,13 +1,16 @@
+import { RoleIdByName } from '@/constants/constants';
+
 import PropertyNav from '../property/PropertyNav';
 
 type LayoutProps = {
   children: React.ReactNode;
+  roleId: string;
 };
 
-const PropertyLayout = ({ children }: LayoutProps) => {
+const PropertyLayout = ({ children, roleId }: LayoutProps) => {
   return (
     <>
-      <PropertyNav />
+      {roleId === RoleIdByName.Owner && <PropertyNav />}
       {children}
     </>
   );

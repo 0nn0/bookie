@@ -1,4 +1,7 @@
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
+import {
+  User,
+  createServerSupabaseClient,
+} from '@supabase/auth-helpers-nextjs';
 import { GetServerSideProps } from 'next';
 import { useRouter } from 'next/router';
 import { ReactElement } from 'react';
@@ -11,28 +14,31 @@ import Container from '@/components/ui/Container';
 import { NextPageWithLayout } from '@/pages/_app';
 
 type Props = {
-  user: any;
+  user: User;
+  roleId: string;
 };
 
-const CalendarPage: NextPageWithLayout<Props> = ({ user }) => {
+const CalendarPage: NextPageWithLayout<Props> = ({ user, roleId }) => {
   const { query } = useRouter();
   const propertyId = query?.id as string;
 
   return (
-    <Container>
-      <PropertyContent>
-        <BookingCalendar userId={user.id} propertyId={propertyId} />
-      </PropertyContent>
-    </Container>
+    <PropertyLayout roleId={roleId}>
+      <Container>
+        <PropertyContent>
+          <BookingCalendar
+            userId={user.id}
+            roleId={roleId}
+            propertyId={propertyId}
+          />
+        </PropertyContent>
+      </Container>
+    </PropertyLayout>
   );
 };
 
 CalendarPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <AuthenticatedLayout title="Calendar">
-      <PropertyLayout>{page}</PropertyLayout>
-    </AuthenticatedLayout>
-  );
+  return <AuthenticatedLayout title="Calendar">{page}</AuthenticatedLayout>;
 };
 
 export default CalendarPage;

@@ -7,8 +7,6 @@ import { DialogContext } from '@/components/dialog/DialogContext';
 import GuestList from '@/components/guests/GuestList';
 import InviteGuestForm from '@/components/guests/InviteGuestForm';
 import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
-import ErrorState from '@/components/layout/ErrorState';
-import LoadingState from '@/components/layout/LoadingState';
 import PropertyLayout from '@/components/layout/PropertyLayout';
 import SectionHeading from '@/components/layout/SectionHeading';
 import PropertyContent from '@/components/property/PropertyContent';
@@ -16,7 +14,6 @@ import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import FloatingActionButton from '@/components/ui/FloatingActionButton';
 import { RoleIdByName } from '@/constants/constants';
-import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 import { NextPageWithLayout } from '@/pages/_app';
 
 type Props = {
@@ -28,18 +25,6 @@ const GuestsPage: NextPageWithLayout<Props> = ({ roleId }) => {
   const propertyId = query?.id as string;
 
   const dialogContext = useContext(DialogContext);
-
-  const { isLoading, data, error } = useGetPropertyQuery({
-    propertyId,
-  });
-
-  if (isLoading) {
-    return <LoadingState />;
-  }
-
-  if (error instanceof Error) {
-    return <ErrorState>{error.message}</ErrorState>;
-  }
 
   function handleInviteGuest() {
     dialogContext?.setDialog(
@@ -55,35 +40,36 @@ const GuestsPage: NextPageWithLayout<Props> = ({ roleId }) => {
   }
 
   return (
-    <Container>
-      <PropertyContent>
-        <SectionHeading
-          title="Guests"
-          action={
-            <Button
-              onClick={handleInviteGuest}
-              className="hidden items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:inline-flex sm:w-auto"
-            >
-              Invite guest
-            </Button>
-          }
-        />
+    <PropertyLayout roleId={roleId}>
+      <Container>
+        <PropertyContent>
+          <SectionHeading
+            title="Guests"
+            action={
+              <Button
+                onClick={handleInviteGuest}
+                className="hidden items-center justify-center rounded-md border border-transparent bg-indigo-600 px-4 py-2 text-sm font-medium text-white shadow-sm hover:bg-indigo-700 focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 sm:inline-flex sm:w-auto"
+              >
+                Invite guest
+              </Button>
+            }
+          />
 
-        <GuestList propertyId={propertyId} />
-        <div className="sm:hidden">
-          <FloatingActionButton onClick={handleInviteGuest} />
-        </div>
-      </PropertyContent>
-    </Container>
+          <GuestList propertyId={propertyId} />
+          <div className="sm:hidden">
+            <FloatingActionButton
+              onClick={handleInviteGuest}
+              takePropertyNavIntoAccount={true}
+            />
+          </div>
+        </PropertyContent>
+      </Container>
+    </PropertyLayout>
   );
 };
 
 GuestsPage.getLayout = function getLayout(page: ReactElement) {
-  return (
-    <AuthenticatedLayout title="Guests">
-      <PropertyLayout>{page}</PropertyLayout>
-    </AuthenticatedLayout>
-  );
+  return <AuthenticatedLayout title="Guests">{page}</AuthenticatedLayout>;
 };
 
 export default GuestsPage;

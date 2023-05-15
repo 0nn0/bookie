@@ -8,9 +8,11 @@ import Calendar from './Calendar';
 
 const BookingCalendar = ({
   userId,
+  roleId,
   propertyId,
 }: {
   userId: string;
+  roleId: string;
   propertyId: string;
 }) => {
   const [currentMonth, setCurrentMonth] = useState(
@@ -38,6 +40,7 @@ const BookingCalendar = ({
       <div className="-ml-6 -mr-6">
         <Calendar
           userId={userId}
+          roleId={roleId}
           propertyId={propertyId}
           setCurrentMonth={setCurrentMonth}
           currentMonth={currentMonth}
