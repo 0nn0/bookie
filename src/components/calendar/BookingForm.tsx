@@ -2,8 +2,6 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import useGetUpcomingBookingsQuery from '@/hooks/useGetUpcomingBookingsQuery';
-
 import Button from '../ui/Button';
 import FormErrorMessage from '../ui/FormErrorMessage';
 import DateRangePicker from './DateRangePicker';
@@ -43,11 +41,6 @@ const BookingForm = ({
   onSubmit: (formData: FormData) => void;
   onCancel?: () => void;
 }) => {
-  const { isLoading: isLoadingUpcomingBookings, error } =
-    useGetUpcomingBookingsQuery({
-      propertyId,
-    });
-
   const {
     control,
     handleSubmit,
@@ -55,14 +48,6 @@ const BookingForm = ({
   } = useForm<FormData>({
     resolver: zodResolver(schema),
   });
-
-  if (isLoadingUpcomingBookings) {
-    return <p>Loading...</p>;
-  }
-
-  if (error instanceof Error) {
-    return <p>{error?.message}</p>;
-  }
 
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
