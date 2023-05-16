@@ -20,7 +20,9 @@ const PropertyDropdown = () => {
   }
 
   // get name of selected property
-  const selectedProperty = data?.find((item) => item.id === router.query.id);
+  const selectedProperty = data?.find(
+    (item) => item.properties.id === router.query.id
+  );
 
   // check if account page
   const isAccountPage = router.pathname === '/account';
@@ -42,7 +44,7 @@ const PropertyDropdown = () => {
         <DropdownMenu.Trigger asChild>
           <Button intent="dark">
             <span className="min-w-0 overflow-hidden text-ellipsis">
-              {selectedProperty?.name || 'Properties'}
+              {selectedProperty?.properties.name || 'Properties'}
             </span>
             <ChevronDownIcon
               className="-mr-0.5 ml-2 h-4 w-4 flex-shrink-0 flex-grow-0 basis-4"
@@ -72,7 +74,7 @@ const PropertyDropdown = () => {
           )}
 
           {data?.map((item) => {
-            const { id, name } = item;
+            const { id, name } = item.properties;
 
             return (
               <DropdownMenu.Item

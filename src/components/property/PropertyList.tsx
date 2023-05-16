@@ -28,12 +28,12 @@ const PropertyList = () => {
     <Card>
       <ul role="list" className="divide-y divide-gray-200">
         {data.map((item) => {
-          const { id, name, fact_table } = item;
+          const { role_id, properties } = item;
 
           return (
-            <li key={id}>
+            <li key={properties.id}>
               <Link
-                href={`/properties/${id}/calendar`}
+                href={`/properties/${properties.id}/calendar`}
                 className="block hover:bg-gray-50"
               >
                 <div className="flex items-center px-4 py-4 sm:px-6">
@@ -41,16 +41,14 @@ const PropertyList = () => {
                     <div className="min-w-0 flex-1 md:grid md:grid-cols-2 md:gap-4">
                       <div>
                         <p className="truncate text-sm font-medium text-indigo-600">
-                          {name}
+                          {properties.name}
                         </p>
                       </div>
 
                       <div className="">
                         <div>
                           <p className="text-sm text-gray-900">
-                            {fact_table.role_id === RoleIdByName.Owner
-                              ? 'Owner'
-                              : 'Guest'}
+                            {role_id === RoleIdByName.Owner ? 'Owner' : 'Guest'}
                           </p>
                         </div>
                       </div>

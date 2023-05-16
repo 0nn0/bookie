@@ -7,10 +7,10 @@ const useGetPropertiesQuery = (roleId?: string) => {
 
   const fetchProperties = async () => {
     const query = supabaseClient
-      .from('properties')
-      .select('id, name, fact_table(id, profile_id, role_id)')
-      .eq('fact_table.profile_id', user?.id)
-      .order('name', { ascending: true });
+      .from('fact_table')
+      .select('id, profile_id, role_id, properties(id, name)')
+      .eq('profile_id', user?.id)
+      .order('name', { ascending: true, foreignTable: 'properties' });
 
     if (roleId) {
       query.eq('fact_table.role_id', roleId);
