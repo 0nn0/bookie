@@ -1,9 +1,13 @@
+'use client';
+
 import React from 'react';
 
+import { useSupabase } from '@/app/supabase-provider';
 import useGetProfileQuery from '@/hooks/useGetProfileQuery';
 
 export default function Avatar() {
-  const { data } = useGetProfileQuery();
+  const { session } = useSupabase();
+  const { data } = useGetProfileQuery(session?.user.id);
 
   const firstName = data?.first_name;
   const lastName = data?.last_name;

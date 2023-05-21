@@ -1,23 +1,23 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 
+import { useSupabase } from '@/app/supabase-provider';
+
 const useGetPropertyQuery = ({ propertyId }: { propertyId: string }) => {
-  const supabaseClient = useSupabaseClient();
-  const user = useUser();
+  const { supabase, session } = useSupabase();
 
   const fetchProperty = async (propertyId: string) => {
-    if (!user?.id) throw new Error('User not logged in');
+    if (!session?.user.id) throw new Error('User not logged in');
 
     // check if user is owner or guest of property
-    const { data } = await supabaseClient
+    const { data } = await supabase
       .from('fact_table')
       .select('id, role_id')
       .eq('property_id', propertyId)
-      .eq('profile_id', user.id)
+      .eq('profile_id', session.user.id)
       .single();
 
     if (data) {
-      const { data: propertyData, error: propertyError } = await supabaseClient
+      const { data: propertyData, error: propertyError } = await supabase
         .from('properties')
         .select('*')
         .eq('id', propertyId)

@@ -1,27 +1,22 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 
+import { useSupabase } from '@/app/supabase-provider';
+
 const useGetProfileQuery = () => {
-  const user = useUser();
-  const supabaseClient = useSupabaseClient();
+  const { supabase, session } = useSupabase();
 
   const fetchProfile = async () => {
-    const { data, error, status } = await supabaseClient
+    return await supabase
       .from('profiles')
       .select(`id, first_name, last_name`)
-      .eq('id', user?.id)
+      .eq('id', session?.user.id)
       .single();
-
-    if (error && status !== 406) {
-      throw error;
-    }
-
-    return data;
   };
 
   return useQuery({
     queryKey: ['profile'],
-    queryFn: () => fetchProfile(),
+    queryFn: async () => fetchProfile().then((result) => result.data),
+    enabled: !!session?.user.id,
   });
 };
 

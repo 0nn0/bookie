@@ -1,24 +1,22 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { useSupabase } from '@/app/supabase-provider';
 import { RoleIdByName } from '@/constants/constants';
-import { Database } from '@/lib/database.types';
 
 const useDeletePropertyMutation = ({ propertyId }: { propertyId: string }) => {
-  const user = useUser();
-  const supabase = useSupabaseClient<Database>();
+  const { supabase, session } = useSupabase();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async (propertyId: string) => {
-      if (!user?.id) throw new Error('User not logged in');
+      if (!session?.user.id) throw new Error('User not logged in');
 
       // check if user is owner
       const { data, error } = await supabase
         .from('fact_table')
         .select()
         .eq('property_id', propertyId)
-        .eq('profile_id', user.id)
+        .eq('profile_id', session?.user.id)
         .eq('role_id', RoleIdByName.Owner);
 
       if (error) {

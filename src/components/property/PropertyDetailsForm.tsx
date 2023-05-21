@@ -1,5 +1,7 @@
+'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useRouter } from 'next/router';
+import { useParams, useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
@@ -14,8 +16,8 @@ const schema = z.object({
 export type FormSchema = z.infer<typeof schema>;
 
 const PropertyDetailsForm = ({ name }: { name: string }) => {
-  const { query } = useRouter();
-  const propertyId = query?.id as string;
+  const params = useParams();
+  const propertyId = params.id;
 
   const updatePropertyMutation = useUpdatePropertyMutation({ propertyId });
 

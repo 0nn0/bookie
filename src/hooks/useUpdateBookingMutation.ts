@@ -1,8 +1,7 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 import { format } from 'date-fns';
 
-import { Database } from '@/lib/database.types';
+import { useSupabase } from '@/app/supabase-provider';
 
 const useUpdateBookingMutation = ({
   propertyId,
@@ -11,8 +10,7 @@ const useUpdateBookingMutation = ({
   propertyId: string;
   bookingId: string;
 }) => {
-  const user = useUser();
-  const supabase = useSupabaseClient<Database>();
+  const { supabase, session } = useSupabase();
   const queryClient = useQueryClient();
 
   return useMutation({
@@ -23,7 +21,7 @@ const useUpdateBookingMutation = ({
       startDate: Date;
       endDate: Date;
     }) => {
-      if (!user?.id) throw new Error('User not logged in');
+      if (!session?.user.id) throw new Error('User not logged in');
 
       const formattedStartDate = format(startDate, 'yyyy-MM-dd');
       const formattedEndDate = format(endDate, 'yyyy-MM-dd');

@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CalendarDaysIcon,
   Cog6ToothIcon,
@@ -5,29 +7,24 @@ import {
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
-const PropertyNav = () => {
-  const { asPath, query } = useRouter();
-  const propertyId = query?.id as string;
-
-  let tabs = [
+const PropertyNav = ({ propertyId }: { propertyId: string }) => {
+  const pathname = usePathname();
+  const tabs = [
     {
       name: 'Calendar',
       href: `/properties/${propertyId}/calendar`,
-      current: true,
       Icon: CalendarDaysIcon,
     },
     {
       name: 'Guests',
       href: `/properties/${propertyId}/guests`,
-      current: false,
       Icon: UserGroupIcon,
     },
     {
       name: 'Settings',
       href: `/properties/${propertyId}/settings`,
-      current: false,
       Icon: Cog6ToothIcon,
     },
   ];
@@ -37,7 +34,7 @@ const PropertyNav = () => {
       <div className="mx-auto max-w-5xl flex-1">
         <nav className="flex flex-1 gap-1 pb-2" aria-label="Tabs">
           {tabs.map((tab) => {
-            const isCurrent = asPath.startsWith(tab.href);
+            const isCurrent = pathname.startsWith(tab.href);
             const { Icon } = tab;
 
             return (

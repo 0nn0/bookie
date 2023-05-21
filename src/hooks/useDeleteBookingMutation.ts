@@ -1,7 +1,6 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { Database } from '@/lib/database.types';
+import { useSupabase } from '@/app/supabase-provider';
 
 const useDeleteBookingMutation = ({
   propertyId,
@@ -10,20 +9,19 @@ const useDeleteBookingMutation = ({
   propertyId: string;
   bookingId: string;
 }) => {
-  const user = useUser();
-  const supabase = useSupabaseClient<Database>();
+  const { supabase, session } = useSupabase();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async () => {
-      if (!user?.id) throw new Error('User not logged in');
+      if (!session?.user.id) throw new Error('User not logged in');
 
       // check if booking is from the logged in user
       const { data, error } = await supabase
         .from('bookings')
         .select('id, fact_table!inner(id, profile_id)')
         .eq('id', bookingId)
-        .eq('fact_table.profile_id', user.id);
+        .eq('fact_table.profile_id', session?.user.id);
 
       if (error) {
         throw new Error(error.message);

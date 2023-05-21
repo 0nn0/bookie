@@ -1,7 +1,6 @@
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { Database } from '@/lib/database.types';
+import { useSupabase } from '@/app/supabase-provider';
 
 const useDeleteGuestMutation = ({
   propertyId,
@@ -10,11 +9,11 @@ const useDeleteGuestMutation = ({
   propertyId: string;
   guestId: string;
 }) => {
-  const supabase = useSupabaseClient<Database>();
+  const { supabase, session } = useSupabase();
   const queryClient = useQueryClient();
 
   return useMutation({
-    mutationFn: async (propertyId: string) => {
+    mutationFn: async () => {
       // delete all bookings
       const { error: bookingsError } = await supabase
         .from('bookings')

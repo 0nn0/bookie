@@ -16,14 +16,16 @@ export default async function handler(
 ) {
   // validate request body
   const schema = z.object({
-    firstName: z.string(),
-    lastName: z.string(),
+    firstName: z.string().min(2),
+    lastName: z.string().min(2),
     email: z.string().email(),
     propertyId: z.string(),
   });
 
-  if (!schema.safeParse(req.body).success) {
-    res.status(400).json({ message: 'Invalid request body' });
+  const result = schema.safeParse(req.body);
+
+  if (!result.success) {
+    res.status(400).json({ message: 'Invalid request payload' });
     return;
   }
 
@@ -116,7 +118,7 @@ export default async function handler(
       return res.status(409).json({ error: 'User is already a guest' });
     }
 
-    return res.status(200).json({});
+    return res.status(201).json({});
   }
 
   return res.status(405).json({ error: 'Method not allowed' });

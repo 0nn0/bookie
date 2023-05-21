@@ -1,14 +1,13 @@
-import { ReactElement } from 'react';
+import Link from 'next/link';
 
-import Layout from '@/components/layout/Layout';
 import Container from '@/components/ui/Container';
 import Headline from '@/components/ui/Headline';
 
-import { NextPageWithLayout } from './_app';
-
-const HomePage: NextPageWithLayout = () => {
+export default function Page() {
+  console.log('renders server only');
   return (
     <Container>
+      <Link href="/properties">Properties</Link>
       <Headline level={1}>
         Effortlessly manage your vacation home with Bookie
       </Headline>
@@ -53,10 +52,4 @@ const HomePage: NextPageWithLayout = () => {
       </div>
     </Container>
   );
-};
-
-HomePage.getLayout = function getLayout(page: ReactElement) {
-  return <Layout title="Bookie">{page}</Layout>;
-};
-
-export default HomePage;
+}

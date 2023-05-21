@@ -1,7 +1,8 @@
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { useSupabase } from '@/app/supabase-provider';
 
 import Button from '../ui/Button';
 import FormInput from '../ui/FormInput';
@@ -17,8 +18,8 @@ const schema = z.object({
 
 type FormSchema = z.infer<typeof schema>;
 
-const RequestOtpForm = ({ onSubmitSuccess, isSignUp }: Props) => {
-  const supabase = useSupabaseClient();
+export default function RequestOtpForm({ onSubmitSuccess, isSignUp }: Props) {
+  const { supabase } = useSupabase();
 
   const {
     register,
@@ -84,6 +85,4 @@ const RequestOtpForm = ({ onSubmitSuccess, isSignUp }: Props) => {
       </div>
     </form>
   );
-};
-
-export default RequestOtpForm;
+}

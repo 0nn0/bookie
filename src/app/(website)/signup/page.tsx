@@ -1,22 +1,19 @@
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import type { GetServerSideProps, NextPage } from 'next';
+'use client';
+
 import Link from 'next/link';
 import { useState } from 'react';
 
 import RequestOtpForm from '@/components/auth/RequestOtpForm';
 import VerifyOtpForm from '@/components/auth/VerifyOtpForm';
-import Layout from '@/components/layout/Layout';
 
-import { NextPageWithLayout } from './_app';
-
-const SignupPage: NextPageWithLayout = () => {
+export default function Page() {
   const [email, setEmail] = useState<string>();
 
   return (
     <div className="mx-auto max-w-7xl px-4 sm:px-6 lg:px-8">
       <div className="flex min-h-full flex-col justify-center py-12 sm:px-6 lg:px-8">
         <div className="sm:mx-auto sm:w-full sm:max-w-md">
-          <h2 className="mt-6 text-center text-3xl font-extrabold text-gray-900">
+          <h2 className="mt-6 text-center text-3xl font-bold text-gray-900">
             Sign up
           </h2>
         </div>
@@ -49,30 +46,4 @@ const SignupPage: NextPageWithLayout = () => {
       </div>
     </div>
   );
-};
-
-SignupPage.getLayout = function getLayout(page: React.ReactElement) {
-  return <Layout title="Login">{page}</Layout>;
-};
-
-export default SignupPage;
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (session)
-    return {
-      redirect: {
-        destination: '/',
-        permanent: false,
-      },
-    };
-
-  return {
-    props: {},
-  };
-};
+}

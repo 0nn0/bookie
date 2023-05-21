@@ -1,9 +1,8 @@
-import { createServerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { GetServerSideProps } from 'next';
-import { ReactElement, useContext } from 'react';
+'use client';
+
+import { useContext } from 'react';
 
 import { DialogContext } from '@/components/dialog/DialogContext';
-import AuthenticatedLayout from '@/components/layout/AuthenticatedLayout';
 import SectionHeading from '@/components/layout/SectionHeading';
 import PropertyContent from '@/components/property/PropertyContent';
 import PropertyForm from '@/components/property/PropertyForm';
@@ -12,9 +11,7 @@ import Button from '@/components/ui/Button';
 import Container from '@/components/ui/Container';
 import FloatingActionButton from '@/components/ui/FloatingActionButton';
 
-import { NextPageWithLayout } from '../_app';
-
-const PropertiesPage: NextPageWithLayout = () => {
+export default function Page() {
   const dialogContext = useContext(DialogContext);
 
   function handleShowPropertyForm() {
@@ -53,32 +50,4 @@ const PropertiesPage: NextPageWithLayout = () => {
       </PropertyContent>
     </Container>
   );
-};
-
-PropertiesPage.getLayout = function getLayout(page: ReactElement) {
-  return <AuthenticatedLayout title="Properties">{page}</AuthenticatedLayout>;
-};
-
-export default PropertiesPage;
-
-export const getServerSideProps: GetServerSideProps = async (ctx) => {
-  const supabase = createServerSupabaseClient(ctx);
-
-  const {
-    data: { session },
-  } = await supabase.auth.getSession();
-
-  if (!session)
-    return {
-      redirect: {
-        destination: '/login',
-        permanent: false,
-      },
-    };
-
-  return {
-    props: {
-      initialSession: session,
-    },
-  };
-};
+}

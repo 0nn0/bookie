@@ -1,14 +1,17 @@
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
+'use client';
+
 import { useMutation, useQueryClient } from '@tanstack/react-query';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
+
+import { useSupabase } from '@/app/supabase-provider';
 
 import Dialog from '../dialog/Dialog';
 import { DialogContext } from '../dialog/DialogContext';
 
 const DeleteAccountDialog = () => {
   const router = useRouter();
-  const supabase = useSupabaseClient();
+  const { supabase } = useSupabase();
   const queryClient = useQueryClient();
   const dialogContext = useContext(DialogContext);
 

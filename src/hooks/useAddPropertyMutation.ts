@@ -1,17 +1,15 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { useSupabase } from '@/app/supabase-provider';
 import { RoleIdByName } from '@/constants/constants';
-import { Database } from '@/lib/database.types';
 
 const useAddPropertyMutation = () => {
-  const user = useUser();
-  const supabase = useSupabaseClient<Database>();
+  const { supabase, session } = useSupabase();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ name }: { name: string }) => {
-      if (!user?.id) throw new Error('User not logged in');
+      if (!session?.user.id) throw new Error('User not logged in');
 
       const { data, error } = await supabase
         .from('properties')
@@ -35,7 +33,7 @@ const useAddPropertyMutation = () => {
       const { data: dataNewGuestsOwners, error: errorNewGuestsOwners } =
         await supabase.from('fact_table').insert([
           {
-            profile_id: user.id,
+            profile_id: session.user.id,
             property_id: propertyId,
             role_id: RoleIdByName.Owner,
           },

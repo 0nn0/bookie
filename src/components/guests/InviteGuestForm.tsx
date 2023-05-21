@@ -1,3 +1,5 @@
+'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
@@ -24,6 +26,7 @@ const InviteGuestForm = ({
 }) => {
   const {
     register,
+    setError,
     handleSubmit,
     formState: { isSubmitting, errors },
   } = useForm<FormSchema>({
@@ -35,6 +38,13 @@ const InviteGuestForm = ({
   const onSubmit = async (formData: FormSchema) => {
     mutation.mutate(formData, {
       onSuccess,
+      onError: () => {
+        setError('email', {
+          type: 'manual',
+          message:
+            'Unforunately something went wrong. If the issue persists, please contact owner.',
+        });
+      },
     });
   };
 

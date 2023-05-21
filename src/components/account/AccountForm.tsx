@@ -1,10 +1,12 @@
+'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { Session } from '@supabase/auth-helpers-react';
 import { useQueryClient } from '@tanstack/react-query';
 import { useContext, useEffect } from 'react';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import { useSupabase } from '@/app/supabase-provider';
 import useGetProfileQuery from '@/hooks/useGetProfileQuery';
 import useUpdateProfileMutation from '@/hooks/useUpdateProfileMutation';
 
@@ -14,20 +16,17 @@ import FormInput from '../ui/FormInput';
 import Headline from '../ui/Headline';
 import DeleteAccountDialog from './DeleteAccountDialog';
 
-interface Props {
-  session: Session;
-}
+const schema = z.object({
+  firstName: z.string().min(2, 'First name must be at least 2 characters'),
+  lastName: z.string().min(2, 'Last name must be at least 2 characters'),
+});
 
-const AccountForm = ({ session }: Props) => {
+type FormSchema = z.infer<typeof schema>;
+
+export default function AccountForm() {
+  const { session } = useSupabase();
   const dialogContext = useContext(DialogContext);
   const queryClient = useQueryClient();
-
-  const schema = z.object({
-    firstName: z.string().min(2, 'First name must be at least 2 characters'),
-    lastName: z.string().min(2, 'Last name must be at least 2 characters'),
-  });
-
-  type FormSchema = z.infer<typeof schema>;
 
   const {
     reset,
@@ -41,13 +40,13 @@ const AccountForm = ({ session }: Props) => {
   const { isLoading, data } = useGetProfileQuery();
 
   useEffect(() => {
-    if (data) {
+    if (data?.first_name && data?.last_name) {
       reset({
         firstName: data.first_name,
         lastName: data.last_name,
       });
     }
-  }, [data, reset]);
+  }, [data?.first_name, data?.last_name, reset]);
 
   const mutation = useUpdateProfileMutation();
 
@@ -84,7 +83,7 @@ const AccountForm = ({ session }: Props) => {
             <FormInput
               id="email"
               label="Email address"
-              value={session.user.email}
+              value={session?.user.email}
               register={register}
               errors={errors}
               disabled
@@ -135,6 +134,4 @@ const AccountForm = ({ session }: Props) => {
       </Button>
     </>
   );
-};
-
-export default AccountForm;
+}

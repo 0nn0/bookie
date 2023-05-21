@@ -1,9 +1,11 @@
+'use client';
+
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useRouter } from 'next/router';
-import React from 'react';
+import { useRouter } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
+
+import { useSupabase } from '@/app/supabase-provider';
 
 import Button from '../ui/Button';
 import FormInput from '../ui/FormInput';
@@ -21,8 +23,8 @@ const schema = z.object({
 
 type FormSchema = z.infer<typeof schema>;
 
-const VerifyOtpForm = ({ email, isSignUp }: Props) => {
-  const supabase = useSupabaseClient();
+export default function VerifyOtpForm({ email, isSignUp }: Props) {
+  const { supabase } = useSupabase();
   const router = useRouter();
 
   const {
@@ -42,7 +44,7 @@ const VerifyOtpForm = ({ email, isSignUp }: Props) => {
       const { error } = await supabase.auth.verifyOtp({
         email: formData.email,
         token: formData.otp,
-        type: isSignUp ? 'signup' : 'magiclink',
+        type: isSignUp ? 'invite' : 'email',
       });
 
       if (error) {
@@ -116,6 +118,4 @@ const VerifyOtpForm = ({ email, isSignUp }: Props) => {
       </div>
     </form>
   );
-};
-
-export default VerifyOtpForm;
+}

@@ -1,16 +1,14 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
-import { Database } from '@/lib/database.types';
+import { useSupabase } from '@/app/supabase-provider';
 
 const useUpdatePropertyMutation = ({ propertyId }: { propertyId: string }) => {
-  const user = useUser();
-  const supabase = useSupabaseClient<Database>();
+  const { supabase, session } = useSupabase();
   const queryClient = useQueryClient();
 
   return useMutation({
     mutationFn: async ({ name }: { name: string }) => {
-      if (!user?.id) throw new Error('User not logged in');
+      if (!session?.user.id) throw new Error('User not logged in');
 
       return await supabase
         .from('properties')
