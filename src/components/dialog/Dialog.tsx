@@ -18,7 +18,6 @@ type DialogProps = {
 };
 
 const Dialog = ({ title, body, confirmButton, cancelButton }: DialogProps) => {
-  console.log('LOADING?', confirmButton.loading);
   return (
     <>
       <div className="sm:flex sm:items-start">
@@ -28,7 +27,7 @@ const Dialog = ({ title, body, confirmButton, cancelButton }: DialogProps) => {
             aria-hidden="true"
           />
         </div>
-        <div className="mt-3 text-center sm:mt-0 sm:ml-4 md:text-left">
+        <div className="mt-3 text-center sm:ml-4 sm:mt-0 md:text-left">
           <Headline className="text-center md:text-left" level={4}>
             {title}
           </Headline>

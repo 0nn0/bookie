@@ -26,6 +26,7 @@ const DeleteAccountDialog = () => {
       });
     },
     onSuccess: async () => {
+      return;
       console.log('invalidating queries...');
       queryClient.invalidateQueries();
 

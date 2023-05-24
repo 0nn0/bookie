@@ -25,7 +25,7 @@ const useAddGuestMutation = ({ propertyId }: { propertyId: string }) => {
 
         const body = await result.json();
 
-        if (result.status === 201) {
+        if (result.ok) {
           return body;
         }
 

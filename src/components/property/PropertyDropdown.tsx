@@ -2,13 +2,16 @@
 
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { useRouter } from 'next/navigation';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
 
 import Button from '../ui/Button';
 
 export default function PropertyDropdown() {
+  const params = useParams();
+  const propertyId = params?.id;
+  const pathname = usePathname();
   const router = useRouter();
 
   const { isLoading, data, error } = useGetPropertiesQuery();
@@ -23,11 +26,11 @@ export default function PropertyDropdown() {
 
   // get name of selected property
   const selectedProperty = data?.find(
-    (item) => item.properties.id === router.query?.id
+    (item) => item.properties.id === propertyId
   );
 
   // check if account page
-  const isAccountPage = router.pathname === '/account';
+  const isAccountPage = pathname === '/account';
 
   return (
     <DropdownMenu.Root>

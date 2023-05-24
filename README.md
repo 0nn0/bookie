@@ -21,7 +21,7 @@ Bookie is a user-friendly platform designed to assist families and friends in ma
 
 ### Requirements
 
-- Node.js (version 18.2.0)
+- Node.js (version 18.16.0)
 - npm
 
 ### Setup
@@ -48,3 +48,14 @@ The app is hosted on [Vercel](https://vercel.com/). Every commit pushed to the `
 
 Dates in the Postgres database are stored in the the ISO 8601 format (YYYY-MM-DD). There is no time information stored.
 When working with dates in the front-end, a date is parsed to a Date object using date-fns.
+
+### Tasks
+
+- Add invite accepted state to landingpage OR create custom page to which users that click Accept invite get redirected to
+- Loading skeleton
+- Invite emails
+- Showing calendar directly in overlay and add spinner to heading (to avoid jump in modal content size)
+- Ask for first and last name after account creation
+- Check order of actions in invite api endpoint when inviting guest
+- Move first/last name to metadata
+- Fix booking query keys

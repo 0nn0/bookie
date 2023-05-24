@@ -23,53 +23,53 @@ const useDeletePropertyMutation = ({ propertyId }: { propertyId: string }) => {
         throw new Error(error.message);
       }
 
-      if (data && data.length > 0) {
-        // get all bookings for property
-        const { data: bookingsData, error: getBookingsError } = await supabase
-          .from('bookings')
-          .select('id, fact_table!inner(id, property_id)')
-          .eq('fact_table.property_id', propertyId);
-
-        if (getBookingsError) {
-          throw new Error(getBookingsError.message);
-        }
-
-        const bookingIds = bookingsData?.map((item) => item.id);
-
-        // delete all bookings for this property
-        const { error: deleteBookingsError } = await supabase
-          .from('bookings')
-          .delete()
-          .in('id', bookingIds);
-
-        if (deleteBookingsError) {
-          throw new Error(deleteBookingsError.message);
-        }
-
-        // delete all fact_table records for this property
-        const { error } = await supabase
-          .from('fact_table')
-          .delete()
-          .eq('property_id', propertyId);
-
-        if (error) {
-          throw new Error(error.message);
-        }
-
-        // delete property
-        const { data: propertyData, error: propertyError } = await supabase
-          .from('properties')
-          .delete()
-          .eq('id', propertyId);
-
-        if (propertyError) {
-          throw new Error(propertyError.message);
-        }
-
-        return propertyData;
+      if (!data || data.length === 0) {
+        throw new Error('User is not owner');
       }
 
-      throw new Error('User is not owner');
+      // get all bookings for property
+      const { data: bookingsData, error: getBookingsError } = await supabase
+        .from('bookings')
+        .select('id, fact_table!inner(id, property_id)')
+        .eq('fact_table.property_id', propertyId);
+
+      if (getBookingsError) {
+        throw new Error(getBookingsError.message);
+      }
+
+      const bookingIds = bookingsData?.map((item) => item.id);
+
+      // delete all bookings for this property
+      const { error: deleteBookingsError } = await supabase
+        .from('bookings')
+        .delete()
+        .in('id', bookingIds);
+
+      if (deleteBookingsError) {
+        throw new Error(deleteBookingsError.message);
+      }
+
+      // delete all guests/owners for any property that they own
+      const { error: factTableError } = await supabase
+        .from('fact_table')
+        .delete()
+        .eq('property_id', propertyId);
+
+      if (factTableError) {
+        throw new Error(factTableError.message);
+      }
+
+      // delete property
+      const { data: propertyData, error: propertyError } = await supabase
+        .from('properties')
+        .delete()
+        .eq('id', propertyId);
+
+      if (propertyError) {
+        throw new Error(propertyError.message);
+      }
+
+      return propertyData;
     },
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ['properties'] });
