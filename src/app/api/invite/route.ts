@@ -23,14 +23,18 @@ export async function POST(request: Request) {
     return new NextResponse('Invalid request payload', { status: 400 });
   }
 
-  const supabase = createRouteHandlerClient<Database>({ cookies });
+  const supabase = createRouteHandlerClient<Database>(
+    { cookies },
+    {
+      // service role key is required to invite user by email
+      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
+    }
+  );
 
   // check if user is authenticated
   const {
     data: { session },
   } = await supabase.auth.getSession();
-
-  console.log({ session });
 
   if (!session) {
     return new NextResponse('Not authenticated', { status: 401 });
@@ -38,7 +42,7 @@ export async function POST(request: Request) {
 
   const { firstName, lastName, email, propertyId } = requestBody;
 
-  // check if use is an owner (authorised to invite guests)
+  // check if user is an owner (authorised to invite guests)
   const { data: ownerData, error: ownerError } = await supabase
     .from('fact_table')
     .select()
@@ -64,7 +68,6 @@ export async function POST(request: Request) {
 
   if (inviteError) {
     // e.g. user already exists
-    console.log('inviteError', inviteError.message);
 
     // get user id from email
     const { data: user, error: userError } = await supabase
@@ -76,6 +79,11 @@ export async function POST(request: Request) {
     profileId = user?.id;
   } else {
     profileId = inviteData?.user.id;
+
+    await supabase
+      .from('profiles')
+      .update({ first_name: firstName, last_name: lastName })
+      .eq('email', email);
   }
 
   if (!profileId) {
@@ -102,5 +110,5 @@ export async function POST(request: Request) {
     return new NextResponse('User is already a guest', { status: 409 });
   }
 
-  return NextResponse.json({ message: 'User invited' });
+  return NextResponse.json('Guest deleted successfully');
 }

@@ -40,11 +40,7 @@ const InviteGuestForm = ({
 
   const onSubmit = async (formData: FormSchema) => {
     mutation.mutate(formData, {
-      onSuccess: (data) => {
-        if (data.ok) {
-          onSuccess();
-        }
-      },
+      onSuccess,
       onError: () => {
         setError('email', {
           type: 'manual',
