@@ -4,10 +4,13 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
+import Button from '@/components/ui/Button';
+import ErrorMessage from '@/components/ui/ErrorMessage';
+import Input from '@/components/ui/Input';
+import Label from '@/components/ui/Label';
 import useAddGuestMutation from '@/hooks/useAddGuestMutation';
 
-import Button from '../ui/Button';
-import FormInput from '../ui/FormInput';
+import Stack from '../layout/Stack';
 
 const schema = z.object({
   firstName: z.string().min(2, 'Please enter a valid first name'),
@@ -37,7 +40,11 @@ const InviteGuestForm = ({
 
   const onSubmit = async (formData: FormSchema) => {
     mutation.mutate(formData, {
-      onSuccess,
+      onSuccess: (data) => {
+        if (data.ok) {
+          onSuccess();
+        }
+      },
       onError: () => {
         setError('email', {
           type: 'manual',
@@ -49,43 +56,35 @@ const InviteGuestForm = ({
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <FormInput
-          label="First name"
-          id="firstName"
-          register={register}
-          errors={errors}
-        />
-      </div>
-      <div>
-        <FormInput
-          label="Last name"
-          id="lastName"
-          register={register}
-          errors={errors}
-        />
-      </div>
-      <div>
-        <FormInput
-          label="Email address"
-          id="email"
-          type="email"
-          register={register}
-          errors={errors}
-        />
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack>
+        <div>
+          <Label htmlFor="firstName">First name</Label>
+          <Input id="firstName" register={register} />
+          <ErrorMessage>{errors.firstName?.message}</ErrorMessage>
+        </div>
+        <div>
+          <Label htmlFor="lastName">Last name</Label>
+          <Input id="lastName" register={register} />
+          <ErrorMessage>{errors.lastName?.message}</ErrorMessage>
+        </div>
+        <div>
+          <Label htmlFor="email">Email address</Label>
+          <Input id="email" type="email" register={register} />
+          <ErrorMessage>{errors.email?.message}</ErrorMessage>
+        </div>
 
-      <div>
-        <Button
-          fullWidth
-          type="submit"
-          disabled={mutation.isLoading || isSubmitting}
-          loading={mutation.isLoading || isSubmitting}
-        >
-          Invite guest
-        </Button>
-      </div>
+        <div>
+          <Button
+            fullWidth
+            type="submit"
+            disabled={mutation.isLoading || isSubmitting}
+            loading={mutation.isLoading || isSubmitting}
+          >
+            Invite guest
+          </Button>
+        </div>
+      </Stack>
     </form>
   );
 };

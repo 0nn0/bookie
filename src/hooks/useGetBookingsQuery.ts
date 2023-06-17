@@ -1,4 +1,4 @@
-import { useQuery, useQueryClient } from '@tanstack/react-query';
+import { useQuery } from '@tanstack/react-query';
 import { format } from 'date-fns';
 
 import { useSupabase } from '@/app/supabase-provider';
@@ -13,7 +13,6 @@ const useGetBookingsQuery = ({
   propertyId: string;
 }) => {
   const { supabase } = useSupabase();
-  const queryClient = useQueryClient();
 
   const fetchBookings = async () => {
     const daysInMonth = new Date(year, month, 0).getDate();
@@ -44,12 +43,7 @@ const useGetBookingsQuery = ({
 
   return useQuery({
     queryKey: ['bookings', propertyId, `${month}-${year}`],
-    queryFn: async () => {
-      return await fetchBookings().then((result) => result.data);
-    },
-    onSuccess: () => {
-      queryClient.invalidateQueries({ queryKey: ['bookings', propertyId] });
-    },
+    queryFn: async () => fetchBookings().then((result) => result.data),
   });
 };
 export default useGetBookingsQuery;

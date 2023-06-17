@@ -4,7 +4,6 @@ const envVariables = z.object({
   NEXT_PUBLIC_SUPABASE_URL: z.string(),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: z.string(),
   NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY: z.string(),
-  NEXT_PUBLIC_BUCKET_NAME: z.string(),
 });
 
 envVariables.parse(process.env);

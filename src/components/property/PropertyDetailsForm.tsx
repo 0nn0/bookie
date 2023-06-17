@@ -1,13 +1,18 @@
 'use client';
 
 import { zodResolver } from '@hookform/resolvers/zod';
-import { useParams, useRouter } from 'next/navigation';
+import { useParams } from 'next/navigation';
 import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import Button from '@/components/ui/Button';
-import FormInput from '@/components/ui/FormInput';
+import ErrorMessage from '@/components/ui/ErrorMessage';
+import Input from '@/components/ui/Input';
+import Label from '@/components/ui/Label';
+import useGetPropertyQuery from '@/hooks/useGetPropertyQuery';
 import useUpdatePropertyMutation from '@/hooks/useUpdatePropertyMutation';
+
+import Stack from '../layout/Stack';
 
 const schema = z.object({
   name: z.string().min(3, 'Please enter a valid name'),
@@ -39,20 +44,25 @@ const PropertyDetailsForm = ({ name }: { name: string }) => {
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <FormInput label="Name" id="name" register={register} errors={errors} />
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack>
+        <div>
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" register={register} />
+          <ErrorMessage>{errors?.name?.message}</ErrorMessage>
+        </div>
 
-      <div>
-        <Button
-          type="submit"
-          disabled={updatePropertyMutation.isLoading || isSubmitting}
-          loading={updatePropertyMutation.isLoading || isSubmitting}
-        >
-          Update
-        </Button>
-      </div>
+        <div>
+          <Button
+            fullWidth
+            type="submit"
+            disabled={updatePropertyMutation.isLoading || isSubmitting}
+            loading={updatePropertyMutation.isLoading || isSubmitting}
+          >
+            Update
+          </Button>
+        </div>
+      </Stack>
     </form>
   );
 };

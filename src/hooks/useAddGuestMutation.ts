@@ -1,5 +1,7 @@
 import { useMutation, useQueryClient } from '@tanstack/react-query';
 
+import { InviteRequestBody } from '@/app/api/invite/route';
+
 const useAddGuestMutation = ({ propertyId }: { propertyId: string }) => {
   const queryClient = useQueryClient();
 
@@ -10,17 +12,19 @@ const useAddGuestMutation = ({ propertyId }: { propertyId: string }) => {
       email: string;
     }) => {
       try {
+        const requestBody: InviteRequestBody = {
+          firstName: formData.firstName,
+          lastName: formData.lastName,
+          email: formData.email,
+          propertyId: propertyId,
+        };
+
         const result = await fetch('/api/invite', {
           method: 'POST',
           headers: {
             'Content-Type': 'application/json',
           },
-          body: JSON.stringify({
-            firstName: formData.firstName,
-            lastName: formData.lastName,
-            email: formData.email,
-            propertyId: propertyId,
-          }),
+          body: JSON.stringify(requestBody),
         });
 
         const body = await result.json();

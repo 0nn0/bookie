@@ -11,7 +11,7 @@ import Button from '../ui/Button';
 import Container from '../ui/Container';
 
 export default function Header() {
-  const { supabase } = useSupabase();
+  const { supabase, session } = useSupabase();
   const router = useRouter();
 
   return (
@@ -32,7 +32,10 @@ export default function Header() {
                   className="relative inline-flex h-8 w-8 overflow-hidden rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                   aria-label="User menu"
                 >
-                  <Avatar />
+                  <Avatar
+                    firstName={session?.user.user_metadata.first_name}
+                    lastName={session?.user.user_metadata.last_name}
+                  />
                 </button>
               </DropdownMenu.Trigger>
 
@@ -48,7 +51,7 @@ export default function Header() {
                       router.push('/account');
                     }}
                   >
-                    Your Account
+                    Account
                   </DropdownMenu.Item>
                   <DropdownMenu.Item
                     className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"

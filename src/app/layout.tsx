@@ -1,5 +1,5 @@
-import { createServerComponentSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { cookies, headers } from 'next/headers';
+import { createServerComponentClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 
 import { DialogProvider } from '@/components/dialog/DialogContext';
 
@@ -12,8 +12,7 @@ export default async function RootLayout({
 }: {
   children: React.ReactNode;
 }) {
-  const supabase = createServerComponentSupabaseClient({
-    headers,
+  const supabase = createServerComponentClient({
     cookies,
   });
   const {

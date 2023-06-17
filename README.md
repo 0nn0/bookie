@@ -59,3 +59,4 @@ When working with dates in the front-end, a date is parsed to a Date object usin
 - Check order of actions in invite api endpoint when inviting guest
 - Move first/last name to metadata
 - Fix booking query keys
+- Fix: receiving a login code when using sign up while already having an account

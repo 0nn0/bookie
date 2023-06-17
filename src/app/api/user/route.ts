@@ -1,15 +1,20 @@
-import { createRouteHandlerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { cookies, headers } from 'next/headers';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 
 import { RoleIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
 
 export async function DELETE() {
-  const supabase = createRouteHandlerSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
+  const supabase = createRouteHandlerClient<Database>(
+    {
+      cookies,
+    },
+    {
+      // service role key is required to delete a user
+      supabaseKey: process.env.NEXT_PUBLIC_SUPABASE_SERVICE_ROLE_KEY,
+    }
+  );
 
   // check if user is authenticated
   const {
@@ -103,6 +108,5 @@ export async function DELETE() {
 
   console.log({ userDeleteError });
 
-  //   res.status(200).json({ message: 'User deleted' });
   return new NextResponse('User deleted', { status: 200 });
 }

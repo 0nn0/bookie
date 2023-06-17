@@ -1,37 +1,36 @@
-import { createRouteHandlerSupabaseClient } from '@supabase/auth-helpers-nextjs';
-import { cookies, headers } from 'next/headers';
+import { createRouteHandlerClient } from '@supabase/auth-helpers-nextjs';
+import { cookies } from 'next/headers';
 import { NextResponse } from 'next/server';
 import { z } from 'zod';
 
 import { RoleIdByName } from '@/constants/constants';
 import { Database } from '@/lib/database.types';
 
+const requestBodySchema = z.object({
+  firstName: z.string().min(2),
+  lastName: z.string().min(2),
+  email: z.string().email(),
+  propertyId: z.string().uuid(),
+});
+
+export type InviteRequestBody = z.infer<typeof requestBodySchema>;
+
 export async function POST(request: Request) {
   const requestBody = await request.json();
-
-  // validate request body
-  const schema = z.object({
-    firstName: z.string().min(2),
-    lastName: z.string().min(2),
-    email: z.string().email(),
-    propertyId: z.string(),
-  });
-
-  const result = schema.safeParse(requestBody);
+  const result = requestBodySchema.safeParse(requestBody);
 
   if (!result.success) {
     return new NextResponse('Invalid request payload', { status: 400 });
   }
 
-  const supabase = createRouteHandlerSupabaseClient<Database>({
-    headers,
-    cookies,
-  });
+  const supabase = createRouteHandlerClient<Database>({ cookies });
 
   // check if user is authenticated
   const {
     data: { session },
   } = await supabase.auth.getSession();
+
+  console.log({ session });
 
   if (!session) {
     return new NextResponse('Not authenticated', { status: 401 });
@@ -56,8 +55,8 @@ export async function POST(request: Request) {
   const { data: inviteData, error: inviteError } =
     await supabase.auth.admin.inviteUserByEmail(email, {
       data: {
-        firstName,
-        lastName,
+        first_name: firstName,
+        last_name: lastName,
       },
     });
 
@@ -83,15 +82,6 @@ export async function POST(request: Request) {
     return new NextResponse('Could not find user', { status: 500 });
   }
 
-  // update first and last name in profile table
-  const { error: updateError } = await supabase
-    .from('profiles')
-    .update({
-      first_name: firstName,
-      last_name: lastName,
-    })
-    .eq('id', profileId);
-
   // check if user is already a guest for this property
   const guest = await supabase
     .from('fact_table')
@@ -112,5 +102,5 @@ export async function POST(request: Request) {
     return new NextResponse('User is already a guest', { status: 409 });
   }
 
-  return NextResponse.json(requestBody);
+  return NextResponse.json({ message: 'User invited' });
 }

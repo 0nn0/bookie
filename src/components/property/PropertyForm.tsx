@@ -5,8 +5,12 @@ import { useForm } from 'react-hook-form';
 import { z } from 'zod';
 
 import Button from '@/components/ui/Button';
-import FormInput from '@/components/ui/FormInput';
+import ErrorMessage from '@/components/ui/ErrorMessage';
+import Input from '@/components/ui/Input';
+import Label from '@/components/ui/Label';
 import useAddPropertyMutation from '@/hooks/useAddPropertyMutation';
+
+import Stack from '../layout/Stack';
 
 const schema = z.object({
   name: z.string().min(3, 'Please enter a valid name'),
@@ -40,20 +44,24 @@ const PropertyForm = ({ onSuccess }: { onSuccess?: () => void }) => {
   };
 
   return (
-    <form className="space-y-6" onSubmit={handleSubmit(onSubmit)}>
-      <div>
-        <FormInput label="Name" id="name" register={register} errors={errors} />
-      </div>
-      <div>
-        <Button
-          type="submit"
-          fullWidth
-          disabled={addPropertyMutation.isLoading || isSubmitting}
-          loading={addPropertyMutation.isLoading || isSubmitting}
-        >
-          Add
-        </Button>
-      </div>
+    <form onSubmit={handleSubmit(onSubmit)}>
+      <Stack>
+        <div>
+          <Label htmlFor="name">Name</Label>
+          <Input id="name" register={register} />
+          <ErrorMessage>{errors.name?.message}</ErrorMessage>
+        </div>
+        <div>
+          <Button
+            type="submit"
+            fullWidth
+            disabled={addPropertyMutation.isLoading || isSubmitting}
+            loading={addPropertyMutation.isLoading || isSubmitting}
+          >
+            Add
+          </Button>
+        </div>
+      </Stack>
     </form>
   );
 };

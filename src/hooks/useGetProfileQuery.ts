@@ -6,11 +6,7 @@ const useGetProfileQuery = () => {
   const { supabase, session } = useSupabase();
 
   const fetchProfile = async () => {
-    return await supabase
-      .from('profiles')
-      .select(`id, first_name, last_name`)
-      .eq('id', session?.user.id)
-      .single();
+    return await supabase.auth.getUser(session?.user.id);
   };
 
   return useQuery({
