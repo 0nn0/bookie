@@ -1,14 +1,17 @@
+'use client';
+
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { useSupabaseClient } from '@supabase/auth-helpers-react';
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
+
+import { useSupabase } from '@/app/supabase-provider';
 
 import PropertyDropdown from '../property/PropertyDropdown';
 import Avatar from '../ui/Avatar';
 import Button from '../ui/Button';
 import Container from '../ui/Container';
 
-const Header = () => {
-  const supabaseClient = useSupabaseClient();
+export default function Header() {
+  const { supabase, session } = useSupabase();
   const router = useRouter();
 
   return (
@@ -29,7 +32,10 @@ const Header = () => {
                   className="relative inline-flex h-8 w-8 overflow-hidden rounded-full focus:outline-none focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:ring-offset-gray-100"
                   aria-label="User menu"
                 >
-                  <Avatar />
+                  <Avatar
+                    firstName={session?.user.user_metadata.first_name}
+                    lastName={session?.user.user_metadata.last_name}
+                  />
                 </button>
               </DropdownMenu.Trigger>
 
@@ -45,12 +51,12 @@ const Header = () => {
                       router.push('/account');
                     }}
                   >
-                    Your Account
+                    Account
                   </DropdownMenu.Item>
                   <DropdownMenu.Item
                     className="block cursor-pointer px-4 py-2 text-sm text-gray-700 hover:bg-gray-100"
                     onSelect={() => {
-                      supabaseClient.auth.signOut();
+                      supabase.auth.signOut();
                       router.push('/logout');
                     }}
                   >
@@ -65,6 +71,4 @@ const Header = () => {
       </Container>
     </header>
   );
-};
-
-export default Header;
+}

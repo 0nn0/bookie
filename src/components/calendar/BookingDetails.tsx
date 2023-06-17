@@ -1,3 +1,5 @@
+'use client';
+
 import React from 'react';
 
 import useDeleteBookingMutation from '@/hooks/useDeleteBookingMutation';
@@ -37,7 +39,7 @@ export default function BookingDetails({
     <div>
       {!showForm && (
         <>
-          <Headline level={5}>Booking details</Headline>
+          <Headline size="h2">Booking details</Headline>
 
           <p>
             Date: <ReadableDates startDate={startDate} endDate={endDate} />

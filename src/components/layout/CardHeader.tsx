@@ -14,7 +14,7 @@ export default function CardHeader({
     <div className="border-b border-gray-200 bg-white px-4 py-5 sm:px-6">
       <div className="-ml-4 -mt-2 flex flex-wrap items-center justify-between sm:flex-nowrap">
         <div className="ml-4 mt-2">
-          <Headline level={3}>{title}</Headline>
+          <Headline size="h3">{title}</Headline>
         </div>
 
         <div className="ml-4 mt-2 flex-shrink-0">

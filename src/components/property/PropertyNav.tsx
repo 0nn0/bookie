@@ -1,3 +1,5 @@
+'use client';
+
 import {
   CalendarDaysIcon,
   Cog6ToothIcon,
@@ -5,35 +7,24 @@ import {
 } from '@heroicons/react/24/outline';
 import classNames from 'classnames';
 import Link from 'next/link';
-import { useRouter } from 'next/router';
+import { usePathname } from 'next/navigation';
 
-import { RoleIdByName } from '@/constants/constants';
-
-const PropertyNav = () => {
-  const { asPath, query } = useRouter();
-  const propertyId = query?.id as string;
-
-  // TODO:
-  // Only show submenu to owners
-  // if (roleId === RoleIdByName.Guest) return null;
-
+const PropertyNav = ({ propertyId }: { propertyId: string }) => {
+  const pathname = usePathname();
   const tabs = [
     {
       name: 'Calendar',
       href: `/properties/${propertyId}/calendar`,
-      current: true,
       Icon: CalendarDaysIcon,
     },
     {
       name: 'Guests',
       href: `/properties/${propertyId}/guests`,
-      current: false,
       Icon: UserGroupIcon,
     },
     {
       name: 'Settings',
       href: `/properties/${propertyId}/settings`,
-      current: false,
       Icon: Cog6ToothIcon,
     },
   ];
@@ -43,7 +34,7 @@ const PropertyNav = () => {
       <div className="mx-auto max-w-5xl flex-1">
         <nav className="flex flex-1 gap-1 pb-2" aria-label="Tabs">
           {tabs.map((tab) => {
-            const isCurrent = asPath.startsWith(tab.href);
+            const isCurrent = pathname.startsWith(tab.href);
             const { Icon } = tab;
 
             return (
@@ -51,7 +42,7 @@ const PropertyNav = () => {
                 key={tab.name}
                 href={tab.href}
                 className={classNames(
-                  'flex-1 items-center justify-center rounded-lg pb-3 pt-1 text-xs font-normal focus:bg-gray-200',
+                  'flex-1 items-center justify-center rounded-lg pb-3 pt-1 text-xs font-normal',
                   isCurrent
                     ? ' text-indigo-600'
                     : 'text-gray-500  hover:text-gray-700'

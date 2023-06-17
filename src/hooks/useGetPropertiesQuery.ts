@@ -1,16 +1,16 @@
-import { useSupabaseClient, useUser } from '@supabase/auth-helpers-react';
 import { useQuery } from '@tanstack/react-query';
 
+import { useSupabase } from '@/app/supabase-provider';
+
 const useGetPropertiesQuery = (roleId?: string) => {
-  const user = useUser();
-  const supabaseClient = useSupabaseClient();
+  const { supabase, session } = useSupabase();
 
   const fetchProperties = async () => {
-    const query = supabaseClient
-      .from('properties')
-      .select('id, name, fact_table(id, profile_id, role_id)')
-      .eq('fact_table.profile_id', user?.id)
-      .order('name', { ascending: true });
+    const query = supabase
+      .from('fact_table')
+      .select('id, profile_id, role_id, properties(id, name)')
+      .eq('profile_id', session?.user?.id)
+      .order('name', { ascending: true, foreignTable: 'properties' });
 
     if (roleId) {
       query.eq('fact_table.role_id', roleId);
@@ -22,9 +22,9 @@ const useGetPropertiesQuery = (roleId?: string) => {
   };
 
   return useQuery({
-    queryKey: ['properties', roleId],
+    queryKey: ['properties'],
     queryFn: async () => fetchProperties().then((result) => result.data),
-    enabled: !!user,
+    enabled: !!session?.user.id,
   });
 };
 

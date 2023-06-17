@@ -1,12 +1,17 @@
+'use client';
+
 import { ChevronDownIcon } from '@heroicons/react/20/solid';
 import * as DropdownMenu from '@radix-ui/react-dropdown-menu';
-import { useRouter } from 'next/router';
+import { useParams, usePathname, useRouter } from 'next/navigation';
 
 import useGetPropertiesQuery from '@/hooks/useGetPropertiesQuery';
 
 import Button from '../ui/Button';
 
-const PropertyDropdown = () => {
+export default function PropertyDropdown() {
+  const params = useParams();
+  const propertyId = params?.id;
+  const pathname = usePathname();
   const router = useRouter();
 
   const { isLoading, data, error } = useGetPropertiesQuery();
@@ -20,10 +25,12 @@ const PropertyDropdown = () => {
   }
 
   // get name of selected property
-  const selectedProperty = data?.find((item) => item.id === router.query.id);
+  const selectedProperty = data?.find(
+    (item) => item.properties.id === propertyId
+  );
 
   // check if account page
-  const isAccountPage = router.pathname === '/account';
+  const isAccountPage = pathname === '/account';
 
   return (
     <DropdownMenu.Root>
@@ -42,7 +49,7 @@ const PropertyDropdown = () => {
         <DropdownMenu.Trigger asChild>
           <Button intent="dark">
             <span className="min-w-0 overflow-hidden text-ellipsis">
-              {selectedProperty?.name || 'Properties'}
+              {selectedProperty?.properties.name || 'Properties'}
             </span>
             <ChevronDownIcon
               className="-mr-0.5 ml-2 h-4 w-4 flex-shrink-0 flex-grow-0 basis-4"
@@ -72,7 +79,7 @@ const PropertyDropdown = () => {
           )}
 
           {data?.map((item) => {
-            const { id, name } = item;
+            const { id, name } = item.properties;
 
             return (
               <DropdownMenu.Item
@@ -92,6 +99,4 @@ const PropertyDropdown = () => {
       </DropdownMenu.Portal>
     </DropdownMenu.Root>
   );
-};
-
-export default PropertyDropdown;
+}

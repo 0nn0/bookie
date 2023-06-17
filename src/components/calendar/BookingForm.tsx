@@ -2,10 +2,9 @@ import { zodResolver } from '@hookform/resolvers/zod';
 import { Controller, useForm } from 'react-hook-form';
 import { z } from 'zod';
 
-import useGetUpcomingBookingsQuery from '@/hooks/useGetUpcomingBookingsQuery';
-
+import Stack from '../layout/Stack';
 import Button from '../ui/Button';
-import FormErrorMessage from '../ui/FormErrorMessage';
+import FormErrorMessage from '../ui/ErrorMessage';
 import DateRangePicker from './DateRangePicker';
 
 const schema = z
@@ -43,11 +42,6 @@ const BookingForm = ({
   onSubmit: (formData: FormData) => void;
   onCancel?: () => void;
 }) => {
-  const { isLoading: isLoadingUpcomingBookings, error } =
-    useGetUpcomingBookingsQuery({
-      propertyId,
-    });
-
   const {
     control,
     handleSubmit,
@@ -56,17 +50,9 @@ const BookingForm = ({
     resolver: zodResolver(schema),
   });
 
-  if (isLoadingUpcomingBookings) {
-    return <p>Loading...</p>;
-  }
-
-  if (error instanceof Error) {
-    return <p>{error?.message}</p>;
-  }
-
   return (
     <form onSubmit={handleSubmit(onSubmit)}>
-      <div className="space-y-6">
+      <Stack>
         {/* Fixed height to avoid jumping UI when switching between months of 4 to 5 weeks */}
         <div className="h-[380px]">
           <Controller
@@ -114,7 +100,7 @@ const BookingForm = ({
             </Button>
           </div>
         )}
-      </div>
+      </Stack>
     </form>
   );
 };

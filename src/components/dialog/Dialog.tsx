@@ -1,5 +1,7 @@
 import { ExclamationTriangleIcon } from '@heroicons/react/24/outline';
 
+import Text from '@/components/ui/Text';
+
 import Button from '../ui/Button';
 import Headline from '../ui/Headline';
 
@@ -10,15 +12,19 @@ type Button = {
   loading?: boolean;
 };
 
-type DialogProps = {
+const Dialog = ({
+  title,
+  body,
+  error,
+  confirmButton,
+  cancelButton,
+}: {
   title: string;
   body: React.ReactNode;
+  error?: string;
   confirmButton: Button;
   cancelButton: Button;
-};
-
-const Dialog = ({ title, body, confirmButton, cancelButton }: DialogProps) => {
-  console.log('LOADING?', confirmButton.loading);
+}) => {
   return (
     <>
       <div className="sm:flex sm:items-start">
@@ -28,13 +34,26 @@ const Dialog = ({ title, body, confirmButton, cancelButton }: DialogProps) => {
             aria-hidden="true"
           />
         </div>
-        <div className="mt-3 text-center sm:mt-0 sm:ml-4 md:text-left">
-          <Headline className="text-center md:text-left" level={4}>
+        <div className="mt-3 sm:ml-4 sm:mt-0 md:text-left">
+          <Headline className="text-center md:text-left" size="h3">
             {title}
           </Headline>
-          <div className="mt-2">
-            <p className="text-sm text-gray-500">{body}</p>
-          </div>
+          <Text
+            intent="secondary"
+            size="sm"
+            className="text-center md:text-left"
+          >
+            {body}
+          </Text>
+          {error && (
+            <Text
+              intent="error"
+              size="sm"
+              className="mt-2 text-center md:text-left"
+            >
+              {error}
+            </Text>
+          )}
         </div>
       </div>
       <div className="mt-8 flex flex-col gap-4 sm:flex sm:flex-row-reverse">

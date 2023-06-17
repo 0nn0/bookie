@@ -168,7 +168,9 @@ function DateRangePicker({
                 isSameMonthDate ? 'bg-white' : 'bg-gray-50',
                 (isSelectedDate || isTodayDate) && 'font-semibold',
                 isSelectedDate && 'bg-pink-50 text-pink-700',
-                !isSelectedDate &&
+                !isPastDate &&
+                  !isDateUnavailable &&
+                  !isSelectedDate &&
                   isSameMonthDate &&
                   !isTodayDate &&
                   'text-gray-900',
@@ -177,7 +179,6 @@ function DateRangePicker({
                   !isTodayDate &&
                   'text-gray-400',
                 isTodayDate && !isSelectedDate && 'text-gray-600',
-
                 dayIdx === 0 && 'rounded-tl-lg',
                 dayIdx === 6 && 'rounded-tr-lg',
                 dayIdx === days.length - 7 && 'rounded-bl-lg',

@@ -1,54 +1,38 @@
-import { cva } from 'class-variance-authority';
+import { VariantProps, cva } from 'class-variance-authority';
 import React, { ElementType } from 'react';
+import { twMerge } from 'tailwind-merge';
 
 const headlineStyles = cva([''], {
   variants: {
-    h1: {
-      true: ['text-4xl font-semibold'],
-    },
-    h2: {
-      true: ['text-3xl font-semibold'],
-    },
-    h3: {
-      true: ['text-2xl font-semibold'],
-    },
-    h4: {
-      true: ['text-xl font-semibold'],
-    },
-    h5: {
-      true: ['text-lg font-semibold'],
-    },
-    h6: {
-      true: ['text-md'],
-    },
-    bold: {
-      true: ['font-bold'],
+    size: {
+      h1: ['text-2xl font-semibold'],
+      h2: ['text-xl font-semibold'],
+      h3: ['text-base font-semibold'],
     },
   },
 });
 
-interface Props {
-  level: 1 | 2 | 3 | 4 | 5 | 6;
+type Props = VariantProps<typeof headlineStyles> & {
   children: React.ReactNode;
-  bold?: boolean;
+  tag?: ElementType;
   className?: string;
-}
+};
 
 const Headline = ({
-  level,
+  size,
   children,
-  bold,
+  tag = 'h1',
   className = '',
   ...props
 }: Props) => {
-  const HeadingTag = `h${level}` as ElementType;
+  const ElementTag = tag || size;
   return (
-    <HeadingTag
-      className={headlineStyles({ [`h${level}`]: true }) + ' ' + className}
+    <ElementTag
+      className={twMerge(headlineStyles({ size }), className)}
       {...props}
     >
       {children}
-    </HeadingTag>
+    </ElementTag>
   );
 };
 

@@ -1,4 +1,4 @@
-import { useRouter } from 'next/router';
+import { useRouter } from 'next/navigation';
 import { useContext } from 'react';
 
 import useDeletePropertyMutation from '@/hooks/useDeletePropertyMutation';
@@ -25,7 +25,7 @@ const DeletePropertyDialog = ({ propertyId }: { propertyId: string }) => {
             onSuccess: () => {
               console.log('redirecting...');
               dialogContext?.setOpen(false);
-              router.push('/');
+              router.push('/properties');
             },
           });
         },
